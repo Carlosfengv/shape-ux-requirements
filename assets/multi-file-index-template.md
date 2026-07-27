@@ -41,6 +41,7 @@
 | 14 | Traceability and decisions | Planned | Steps 1–13 | |
 | 15 | Human-readable UX requirement guide | Planned | Steps 1–14 | Summarize and link; do not duplicate dense control tables |
 | 16 | Automated, semantic, and readability validation | Planned | Steps 1–15 | |
+| 17 | Repair, revalidation, and final handoff summary | Planned | Step 16 | Do not mark complete with blocking findings |
 
 ## Document map
 
@@ -90,6 +91,37 @@ Delete unused planned rows instead of creating empty files.
 | Interaction-to-system contracts | | | | |
 | Accessibility and adaptation constraints | | | | |
 | Acceptance criteria | | | | |
+
+## Review and delivery summary
+
+### Delivery status
+
+| Item | Result |
+|---|---|
+| Delivery status | Complete / Complete with known limitations / Provisional / Blocked |
+| Confirmed baseline | |
+| Scope reviewed | |
+| Reviewed on | |
+
+### Artifact map
+
+| Artifact | What it contains | Status | Location |
+|---|---|---|---|
+
+### Review results
+
+| Review layer | Result | Findings repaired | Remaining limitation |
+|---|---|---|---|
+| Structural and deterministic | | | |
+| Evidence and baseline | | | |
+| Requirement and trace | | | |
+| UX and interaction | | | |
+| Human-readable document | | | |
+
+### Remaining decisions and recommended reading order
+
+| Item | Impact or purpose | Owner/next action | Location or related IDs |
+|---|---|---|---|
 
 ## Blocking questions
 

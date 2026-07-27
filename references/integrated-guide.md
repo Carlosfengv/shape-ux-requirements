@@ -14,6 +14,7 @@ Use this reference to present a reader-first UX requirement guide backed by an i
 - Placement rules
 - Example block
 - Appendix contract
+- Review and handoff contract
 
 ## Core structure
 
@@ -223,3 +224,7 @@ Use appendices for:
 - non-functional requirements;
 - traceability matrix;
 - evidence, decisions, assumptions, conflicts, and open research.
+
+## Review and handoff contract
+
+After composing the guide and supporting specifications, apply `review-and-handoff.md`: review, repair canonical sources, revalidate affected artifacts, persist the `Review and delivery summary`, and tell the user what was delivered, what each artifact contains, what was reviewed, what remains limited or blocked, what to read first, and what happens next.

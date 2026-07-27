@@ -44,7 +44,7 @@ Respond in the user's language unless asked otherwise. Use `ASCII`, not `ASII`, 
 - Read [references/human-readable-requirements.md](references/human-readable-requirements.md) before composing any UX/PM-facing requirement document.
 - Read [references/spec-and-traceability.md](references/spec-and-traceability.md) before producing specifications, matrices, or the final quality audit.
 - Read [references/integrated-guide.md](references/integrated-guide.md) before producing a full document, user manual, feature guide, or combined user-guide/specification deliverable.
-- Read [references/markdown-delivery.md](references/markdown-delivery.md) before choosing a single-file or multi-file deliverable, creating an execution plan, naming files, or validating Markdown navigation.
+- Read [references/markdown-delivery.md](references/markdown-delivery.md) before structuring artifacts, then [references/review-and-handoff.md](references/review-and-handoff.md) before final review, repair, completion status, or user handoff.
 
 Use templates from `assets/` only when the user wants a reusable artifact or when a full end-to-end deliverable is requested:
 
@@ -387,43 +387,17 @@ Before the final audit, apply `references/markdown-delivery.md` and deliver the 
 
 Use a dedicated output folder for a multi-file deliverable. Follow the current environment's artifact/output convention or a user-specified location.
 
-### Phase 12: Run the final audit
+### Phase 12: Review, repair, revalidate, and hand off
 
-Check:
+Apply `references/review-and-handoff.md`.
 
-- when a repository is available, applicable instructions and relevant code, tests, product copy, schemas, and documents were inspected before clarification;
-- repository evidence identifies repository-relative `path:line` locations where practical;
-- current implementation, documented intent, requested behavior, and the resulting delta are distinguished;
-- documentation/code drift and unverified repository inferences remain visible;
-- external claims include direct URLs, access dates, source class, product/version/region context, and limitations;
-- comparable-product findings are separated from project requirements and include an applicability judgment;
-- the background explains the current situation, evidence, impact, and why the requirement matters now;
-- business objectives, user objectives, non-goals, and success indicators are explicit;
-- primary target users, secondary users, affected parties, and document readers are not conflated;
-- each target scenario contains a trigger, context, user task, pain, and desired result;
-- every user-facing concept has one stable name and definition;
-- every material UX hypothesis has evidence or a validation task;
-- every requirement has a canonical definition, evidence, priority/release status, or an explicit owner for the missing decision;
-- the current baseline version and story set were explicitly confirmed before detailed IA, specifications, or ASCII UI, and later changes are recorded as deltas;
-- the global story map is outcome/task-led rather than page-led;
-- every primary scenario maps to a discoverable IA entry and complete task/decision flow;
-- every primary task/decision flow has an ASCII overview with completion, alternate, and recovery paths where applicable;
-- every material cross-role, asynchronous, or lifecycle transition is visible in an ASCII swimlane, sequence, or state flow;
-- every story maps to a user outcome;
-- every story ID has a canonical story definition with preconditions, outcome, and trace links;
-- every story has acceptance criteria;
-- every critical state and permission branch has behavior;
-- every user-visible `INT` behavior maps to an ASCII `UI`/`STATE` frame that shows its control, feedback, or result;
-- every UI action maps to a specification;
-- applicable frames define viewport, keyboard/focus, assistive-technology, text expansion, and adaptation behavior;
-- user-visible service, data, async, concurrency, or recovery behavior maps through an interaction-to-system contract;
-- every specification maps back to a requirement or decision;
-- every assumption and unresolved question remains visible;
-- destructive, irreversible, security-sensitive, or compliance-sensitive actions have explicit safeguards;
-- no final claim is presented with greater confidence than its source allows.
-- narrow delivery identifies omitted or blocked artifacts and either supplies the required ASCII UI supplement or records the exact follow-up needed;
+1. Run the deterministic validator, evidence/baseline audit, requirement/trace audit, UX/interaction review, and human-readable document review.
+2. Repair findings at their canonical source, update affected dependents, and rerun every affected check.
+3. Use `Complete` only when all required artifacts and reviews pass with no blocking issue; otherwise use `Complete with known limitations`, `Provisional`, or `Blocked`.
+4. Persist a `Review and delivery summary` in `index.md` for multi-file output or near the end of a single-file document.
+5. Give the user a self-contained handoff with artifact links, content coverage, review results, repairs, remaining risks, omissions, reading order, and next action.
 
-Report gaps instead of manufacturing missing coverage.
+Do not claim completion from validator success alone. Report gaps instead of manufacturing missing coverage.
 
 ## Output contract
 
@@ -449,6 +423,7 @@ For a first pass, output the alignment brief through candidate stories and pause
 14. Cross-cutting specifications
 15. Glossary
 16. Traceability, evidence, assumptions, conflicts, and research needs
+17. Review and delivery summary with artifact map, coverage, review results, remaining risks, reading order, and next action
 
 If clarification is still required, output only sections 1–7 and the next question batch. Do not bury the questions after a speculative full solution.
 
@@ -497,3 +472,4 @@ Reject or revise an output when:
 - user-visible service, async, concurrency, persistence, audit, or recovery behavior lacks an interaction-to-system contract when one is needed;
 - permissions, inheritance, precedence, lifecycle, or failure behavior remain ambiguous;
 - the traceability matrix exposes orphaned stories, screens, specs, or criteria.
+- review findings were not repaired and revalidated, or the user handoff omits document contents, coverage, review results, limitations, and reading order.

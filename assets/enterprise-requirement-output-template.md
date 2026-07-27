@@ -550,3 +550,39 @@ STATE-02 Processing
 
 | Item | Type | Impact | Validation/mitigation | Owner/status | ID |
 | --- | --- | --- | --- | --- | --- |
+
+## 15. Review and delivery summary
+
+### 15.1 Delivery status and artifact map
+
+| Item | Result |
+|---|---|
+| Delivery status | Complete / Complete with known limitations / Provisional / Blocked |
+| Confirmed baseline | |
+| Scope reviewed | |
+| Reviewed on | |
+
+| Artifact | What it contains | Status | Location |
+|---|---|---|---|
+
+### 15.2 Review results
+
+| Review layer | Result | Findings repaired | Remaining limitation |
+|---|---|---|---|
+| Structural and deterministic | | | |
+| Evidence and baseline | | | |
+| Requirement and trace | | | |
+| UX and interaction | | | |
+| Human-readable document | | | |
+
+### 15.3 Remaining decisions, risks, and next action
+
+| Decision, risk, or limitation | Impact | Owner/next action | Related IDs |
+|---|---|---|---|
+
+### 15.4 Recommended reading order
+
+1. Human-readable UX requirement guide
+2. Relevant page or cross-page task chapter
+3. Cross-cutting requirements and system contracts
+4. Traceability, evidence, decisions, and open questions

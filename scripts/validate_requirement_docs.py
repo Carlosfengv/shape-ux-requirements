@@ -149,6 +149,10 @@ FULL_PROFILE_REQUIREMENTS = (
 LINK_RE = re.compile(r"\[[^\]]*]\(([^)]+)\)")
 ID_RE = re.compile(r"\b([A-Z][A-Z0-9]{1,9})-[A-Z0-9][A-Z0-9-]*\b")
 MARKDOWN_LINK_RE = re.compile(r"\[[^\]]+]\([^)]+\)")
+REVIEW_HANDOFF_HEADING_RE = re.compile(
+    r"^#{1,6}\s+(?=.*(?:review|评审|审核|审查))(?=.*(?:delivery|handoff|交付)).+$",
+    re.IGNORECASE,
+)
 LOCALIZED_PLACEHOLDER_RE = re.compile(
     r"\[(?:"
     r"Feature Name|Page or core feature name|Subfeature name|Focused interaction|"
@@ -210,6 +214,7 @@ class Analysis:
     edges: dict[str, set[str]] = field(default_factory=lambda: defaultdict(set))
     ascii_flow_sites: set[Site] = field(default_factory=set)
     baseline_statuses: list[tuple[str, Site]] = field(default_factory=list)
+    review_handoff_sites: set[Site] = field(default_factory=set)
 
     def merge(self, other: "Analysis") -> None:
         self.findings.extend(other.findings)
@@ -221,6 +226,7 @@ class Analysis:
             self.edges[stable_id].update(neighbors)
         self.ascii_flow_sites.update(other.ascii_flow_sites)
         self.baseline_statuses.extend(other.baseline_statuses)
+        self.review_handoff_sites.update(other.review_handoff_sites)
 
 
 def parse_args() -> argparse.Namespace:
@@ -407,6 +413,8 @@ def inspect_file(path: Path, final: bool) -> Analysis:
             continue
 
         site = Site(path, line_number)
+        if REVIEW_HANDOFF_HEADING_RE.match(stripped):
+            analysis.review_handoff_sites.add(site)
         line_ids = extract_ids(line)
         for stable_id in line_ids:
             analysis.occurrences[stable_id].add(site)
@@ -687,6 +695,16 @@ def semantic_findings(analysis: Analysis, final: bool, profile: str) -> list[Fin
                 fallback_file,
                 1,
                 "full profile requires story-derived FUNC definitions",
+            )
+        )
+    if not analysis.review_handoff_sites:
+        findings.append(
+            Finding(
+                strict_severity,
+                "MISSING_REVIEW_HANDOFF",
+                fallback_file,
+                1,
+                "full profile requires a persisted Review and delivery summary section",
             )
         )
 

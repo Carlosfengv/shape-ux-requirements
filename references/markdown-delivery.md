@@ -85,7 +85,8 @@ When a planning tool is available, create and maintain a plan with exactly one a
 14. Produce cross-page workflows and cross-cutting requirements.
 15. Produce traceability, decisions, assumptions, and open questions.
 16. Compose or update the human-readable UX requirement guide from the canonical material.
-17. Run the deterministic validator and complete the semantic coverage and readability audits.
+17. Run the deterministic validator plus evidence, semantic coverage, UX/interaction, and readability reviews; repair findings and rerun affected checks.
+18. Persist the review and delivery summary, then give the user the artifact map, content coverage, review results, limitations, reading order, and next action.
 
 If no planning tool is available, put the same steps and statuses into `index.md`.
 
@@ -192,6 +193,9 @@ Check:
 - no canonical rule is duplicated with conflicting wording;
 - traceability covers all completed pages and requirements;
 - no unintended placeholders or stale status labels remain.
+- review findings were repaired at their canonical source and affected checks were rerun;
+- `index.md` or the single-file document contains a populated `Review and delivery summary`;
+- the final user handoff accurately reports artifact locations, contents, coverage, review results, limitations, omissions, reading order, and next action.
 
 For completed artifacts, run:
 
@@ -199,4 +203,4 @@ For completed artifacts, run:
 python3 <skill-directory>/scripts/validate_requirement_docs.py <output-path> --final --profile full
 ```
 
-The structural profile checks file/link integrity, table structure, localized ID headers, placeholders, baseline-status fields, final delivery statuses, index backlinks, and unknown ID prefixes. The full profile also requires a canonical `DEC-BASELINE` record linked to confirmed requirement/story coverage and detects duplicate canonical IDs, dangling references, untraced `CHG` records, missing required artifact classes, missing ASCII flow coverage when `FLOW` IDs exist, interaction behaviors without linked ASCII UI/state, stories without functional points or upstream/downstream trace, functional points without stories or user-facing surfaces, UI states without stories or behavioral rules, and orphaned acceptance criteria. It still cannot prove that a person actually approved the baseline, that a referenced frame visibly depicts the claimed behavior, that every diagram is comprehensible, or that the product logic, priority, terminology, or UX hypothesis is correct; complete those semantic judgments manually.
+The structural profile checks file/link integrity, table structure, localized ID headers, placeholders, baseline-status fields, final delivery statuses, index backlinks, and unknown ID prefixes. The full profile also requires a canonical `DEC-BASELINE` record linked to confirmed requirement/story coverage and a persisted review/handoff section; it detects duplicate canonical IDs, dangling references, untraced `CHG` records, missing required artifact classes, missing ASCII flow coverage when `FLOW` IDs exist, interaction behaviors without linked ASCII UI/state, stories without functional points or upstream/downstream trace, functional points without stories or user-facing surfaces, UI states without stories or behavioral rules, and orphaned acceptance criteria. It still cannot prove that a person actually approved the baseline, that review findings were genuinely repaired, that a referenced frame visibly depicts the claimed behavior, that every diagram is comprehensible, or that the product logic, priority, terminology, usability, accessibility, or UX hypothesis is correct; complete those judgments manually and report them honestly in the handoff.

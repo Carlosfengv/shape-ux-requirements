@@ -331,3 +331,36 @@ Use links rather than copying dense control material into the main guide.
 - Cross-cutting rules and system contracts:
 - Acceptance criteria and traceability:
 - Full decisions, assumptions, and source ledger:
+
+## 11. Review and delivery summary
+
+### Delivery status
+
+| Item | Result |
+|---|---|
+| Delivery status | Complete / Complete with known limitations / Provisional / Blocked |
+| Confirmed baseline | |
+| Scope reviewed | |
+| Reviewed on | |
+
+### Review results
+
+| Review layer | Result | Findings repaired | Remaining limitation |
+|---|---|---|---|
+| Structural and deterministic | | | |
+| Evidence and baseline | | | |
+| Requirement and trace | | | |
+| UX and interaction | | | |
+| Human-readable document | | | |
+
+### Remaining limitations and next action
+
+| Decision, risk, or limitation | Impact | Owner/next action | Related IDs |
+|---|---|---|---|
+
+Recommended reading order:
+
+1. This UX requirement guide
+2. Relevant page or cross-page task specification
+3. Cross-cutting requirements
+4. Traceability, evidence, and decisions
