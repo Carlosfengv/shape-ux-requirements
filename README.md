@@ -71,3 +71,17 @@ UX 需求梳理采用两阶段输出，避免在需求没有确认时过早进�
 表格会把名称、目标和描述放在前面，把稳定 ID 和关联 ID 放在最后，方便 PM 和 UX 阅读。
 
 最终输出为一个或多个 Markdown 文件。小型需求可以生成一份完整文档，复杂需求可以按页面、流程和规格拆分为多文件交付。
+
+## 安装与调用
+
+```bash
+mkdir -p ~/.codex/skills
+git clone https://github.com/Carlosfengv/shape-ux-requirements.git \
+  ~/.codex/skills/shape-ux-requirements
+```
+
+安装后通过 Skill ID 显式调用：
+
+```text
+请使用 $shape-ux-requirements 分析这个需求。
+```
