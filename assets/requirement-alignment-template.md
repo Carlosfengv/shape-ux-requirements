@@ -128,14 +128,46 @@ Confirmation does not convert assumptions into facts. Unresolved items remain vi
 
 ## 8. Confirmation decision
 
+### Current checkpoint and review scope
+
+| Item | Description |
+|---|---|
+| Current state | Alignment brief complete; detailed UX design paused |
+| Review now | Background, users, scenarios, scope, terminology, requirements, and Stories |
+| Not generated yet | Functional decomposition, page/task topology, detailed ASCII UI, specifications, and acceptance criteria |
+
+### If changes are needed
+
+Describe the item and desired change by section name, Story name, quoted wording, or optional ID. Include the reason/evidence when behavior or factual confidence changes.
+
+```text
+修改“目标用户”：主要用户改为租户管理员，安全审计员作为受影响角色。
+修改“批量操作 Story”：本期不支持批量执行，移入后续范围。
+```
+
+The affected content will be updated, its downstream impact summarized, and the changed slice presented for confirmation again.
+
+### If the baseline is confirmed
+
+`确认并进入「详细 UX 设计」` will:
+
+```text
+baseline becomes Confirmed
+  → derive user-recognizable functions
+  → establish page/task topology and interaction logic
+  → generate ASCII flows and visible UI states
+  → colocate specifications and acceptance criteria
+  → pause again only for a material contradiction or missing decision
+```
+
 | Decision | Baseline version | Story/scope coverage | Owner/date | Conditions or corrections | DEC ID |
 | --- | --- | --- | --- | --- | --- |
 
 Use the structured confirmation control when available:
 
-- Confirm baseline and continue
-- Confirm with corrections
-- Need more analysis
+- 修改需求与 Stories
+- 确认并进入「详细 UX 设计」
+- 补充分析后再确认
 
 ## 9. Change record
 

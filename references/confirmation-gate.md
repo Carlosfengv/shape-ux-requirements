@@ -6,6 +6,7 @@ Use this reference to separate requirement understanding from detailed design an
 
 - Decide when the gate applies
 - Produce the first-pass alignment brief
+- Use the confirmation handoff contract
 - Ask for confirmation
 - Lock the confirmed baseline
 - Produce the detailed specification
@@ -24,6 +25,57 @@ Do not repeat the gate when:
 - the requested change is editorial and does not alter users, scope, stories, rules, states, permissions, or outcomes.
 
 If a supposedly narrow change alters a story, scope boundary, role, lifecycle, permission, failure behavior, or success outcome, return to the gate for the affected slice.
+
+## Use the confirmation handoff contract
+
+Apply this contract whenever work pauses for the user to confirm an answer set, requirement slice, story baseline, change, or review decision.
+
+Every confirmation handoff must state:
+
+1. **Current checkpoint** — what has been prepared and its current status.
+2. **What to review** — the specific sections, stories, decisions, assumptions, or files that the user is confirming.
+3. **Modification path** — what can be changed and how to describe a correction.
+4. **Continuation path** — the named next phase, what it will produce, which artifacts or statuses will change, and where the process will pause again.
+
+Use action-specific choices instead of generic `Yes`, `No`, `Confirm`, or `Next` labels. When a structured choice component is available, the two primary choices are:
+
+- `修改当前内容` — keep the next phase paused and collect corrections;
+- `确认并进入「<next phase>」` — record the current decision and start the named phase.
+
+Add `需要补充分析` only when a material uncertainty genuinely warrants another path.
+
+For the modification path, tell the user that IDs are optional. Accept corrections by section name, story/function/page name, quoted wording, or a plain-language description. Ask for:
+
+- the item to change;
+- the desired wording, rule, scope, or outcome;
+- the reason or evidence when it changes behavior or factual confidence.
+
+Offer a compact example such as:
+
+```text
+修改“目标用户”：主要用户改为租户管理员，安全审计员作为受影响角色。
+修改“批量操作 Story”：本期不支持批量执行，移入后续范围。
+```
+
+After receiving corrections:
+
+1. update the canonical item and affected IDs;
+2. show a concise change summary with original meaning, revised meaning, and downstream impact;
+3. regenerate only affected material;
+4. present the affected confirmation slice again with the same modification and continuation paths.
+
+For the continuation path, never say only “进入下一步.” Name the expected state. For example:
+
+```text
+确认并进入「详细 UX 设计」
+→ baseline 0.2 becomes Confirmed
+→ derive functional points and page/task topology
+→ generate ASCII task flows and page/subfeature interaction states
+→ add colocated specifications and acceptance criteria
+→ pause again only if a material contradiction or missing decision appears
+```
+
+Do not make the user infer whether choosing continuation locks a baseline, creates files, changes scope status, or starts detailed ASCII UI generation.
 
 ## Produce the first-pass alignment brief
 
@@ -48,11 +100,11 @@ If blocking gaps remain, ask focused questions instead of presenting the brief a
 
 ## Ask for confirmation
 
-End the alignment brief with one explicit confirmation decision. When the host provides a structured choice component, offer:
+End the alignment brief with one explicit confirmation decision that follows the confirmation handoff contract. When the host provides a structured choice component, offer:
 
-- `Confirm baseline and continue` — lock the presented scope and stories, then begin detailed design;
-- `Confirm with corrections` — collect the exact corrections, update affected IDs, and present the changed baseline for confirmation;
-- `Need more analysis` — keep detailed design paused and investigate the named uncertainty.
+- `修改需求与 Stories` — keep detailed design paused, collect corrections by section/story name or optional ID, update affected content, and present the changed slice again;
+- `确认并进入「详细 UX 设计」` — lock the presented scope and stories, then derive functions, flows, pages, ASCII UI, specifications, and acceptance criteria;
+- `补充分析后再确认` — keep detailed design paused and investigate the named uncertainty.
 
 Do not treat silence, “looks interesting,” or feedback on only one story as confirmation of the full baseline. Record who confirmed it, when, which version, and any conditions.
 

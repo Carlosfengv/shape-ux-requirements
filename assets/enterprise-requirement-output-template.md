@@ -575,12 +575,26 @@ STATE-02 Processing
 | UX and interaction | | | |
 | Human-readable document | | | |
 
-### 15.3 Remaining decisions, risks, and next action
+### 15.3 Delivered document structure
+
+Replace this example with the headings that actually exist.
+
+```text
+[file-name].md
+├── Background, objectives, people, and scenarios
+├── Confirmed stories and functional decomposition
+├── Page/feature and task chapters with ASCII UI
+├── Colocated interaction and system specifications
+├── Cross-cutting requirements and traceability
+└── Review and delivery summary
+```
+
+### 15.4 Remaining decisions, risks, and next action
 
 | Decision, risk, or limitation | Impact | Owner/next action | Related IDs |
 |---|---|---|---|
 
-### 15.4 Recommended reading order
+### 15.5 Recommended reading order
 
 1. Human-readable UX requirement guide
 2. Relevant page or cross-page task chapter

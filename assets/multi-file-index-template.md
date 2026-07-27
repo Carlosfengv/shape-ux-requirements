@@ -108,6 +108,28 @@ Delete unused planned rows instead of creating empty files.
 | Artifact | What it contains | Status | Location |
 |---|---|---|---|
 
+### Delivered file structure
+
+Replace this planned example with the actual delivered files. Remove omitted or not-applicable entries.
+
+```text
+[output-folder]/
+├── index.md
+├── ux-requirement-guide.md
+├── 00c-requirement-alignment.md
+├── 01-background-goals-and-scope.md
+├── 02-target-users-and-scenarios.md
+├── 03-concepts-and-language.md
+├── 04-story-map-and-release-scope.md
+├── 05-information-architecture-and-task-flows.md
+├── 06-page-and-feature-map.md
+├── 10-[actual-page-or-feature].md
+├── 50-cross-page-workflows.md
+├── 80-cross-cutting-requirements.md
+├── 90-traceability.md
+└── 91-decisions-and-open-questions.md
+```
+
 ### Review results
 
 | Review layer | Result | Findings repaired | Remaining limitation |

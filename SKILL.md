@@ -19,7 +19,7 @@ Respond in the user's language unless asked otherwise. Use `ASCII`, not `ASII`, 
 4. Separate completeness, internal consistency, and factual accuracy. Verify factual accuracy only against provided sources, repository evidence, connected authoritative sources, or explicit domain-owner confirmation.
 5. Label facts, decisions, inferences, assumptions, unknowns, and conflicts. Never hide uncertainty in polished prose.
 6. For a new or materially revised requirement, stop at a user-confirmed requirement/story baseline before detailed IA, specifications, or ASCII UI; stop earlier when a blocking gap could materially change users, scope, permissions, object model, lifecycle, or risk behavior.
-7. Ask only 1–3 high-impact clarification questions per round. Prefer a structured choice/input component when available. Do not ask the user to type numeric menu selections when a choice component is available.
+7. Ask only 1–3 high-impact clarification questions per round. Prefer a structured choice/input component when available. At every confirmation pause, explicitly offer a modification path with correction guidance and a continuation path naming the next phase and its expected outputs/state.
 8. Continue with clearly labeled assumptions only when gaps are non-blocking or the user explicitly requests a provisional draft.
 9. Preserve engineering meaning while translating concepts into user-facing product language.
 10. Do not expose implementation concepts in the UI unless users need them to make decisions or complete tasks.
@@ -38,7 +38,7 @@ Respond in the user's language unless asked otherwise. Use `ASCII`, not `ASII`, 
 - Read [references/intake-readiness.md](references/intake-readiness.md) before assessing any new or revised input.
 - Read [references/problem-framing.md](references/problem-framing.md) before defining background, objectives, target users, document audiences, target scenarios, scope, or success measures.
 - Read [references/concept-language.md](references/concept-language.md) when the input contains engineering terminology, translated terms, unfamiliar domain objects, or naming work.
-- Read [references/stories-and-acceptance.md](references/stories-and-acceptance.md) before producing stories or acceptance criteria, then [references/confirmation-gate.md](references/confirmation-gate.md) before presenting a new or materially revised baseline for approval.
+- Read [references/stories-and-acceptance.md](references/stories-and-acceptance.md) before producing stories or acceptance criteria, then [references/confirmation-gate.md](references/confirmation-gate.md) before any user confirmation pause or baseline approval.
 - Read [references/information-architecture-and-task-flows.md](references/information-architecture-and-task-flows.md) after the story backbone and before defining navigation, cross-page journeys, role handoffs, or detailed screen structure.
 - Read [references/interaction-logic-principles.md](references/interaction-logic-principles.md) and [references/ascii-interactions.md](references/ascii-interactions.md) before organizing interaction logic or producing an ASCII UI/flow.
 - Read [references/human-readable-requirements.md](references/human-readable-requirements.md) before composing any UX/PM-facing requirement document.
@@ -186,7 +186,8 @@ If the status is `Clarification required`, `Evidence required`, or `Conflicted`:
 6. Wait for answers before asking the next batch.
 7. Update affected statements, conflicts, and questions after every answer.
 8. Record the decision owner or source when known.
-9. Repeat the readiness check.
+9. Summarize the update, then offer `修改当前内容` or a named continuation action with the next phase's expected outputs and state.
+10. Repeat the readiness check only after the user chooses to continue.
 
 Do not continue to final stories, UI, or specifications until blockers are resolved, unless the user explicitly asks for a provisional draft. Mark a provisional draft prominently and keep every unresolved decision visible.
 
@@ -263,7 +264,7 @@ Include unhappy paths, permission differences, bulk operations, long-running wor
 
 Place each story's full definition in its canonical page/subfeature or cross-page task chapter before the related operating steps and ASCII UI. Do not emit story IDs without story text, preconditions, outcome, and trace links.
 
-For a new or materially revised requirement, apply `references/confirmation-gate.md`, deliver the first-pass alignment brief, and stop until the user explicitly confirms the baseline. Skip or narrow the gate only under the reference's stated exceptions.
+For a new or materially revised requirement, apply `references/confirmation-gate.md`, deliver the first-pass alignment brief, and stop until the user explicitly chooses either guided modification or the named next phase. Skip or narrow the gate only under the reference's stated exceptions.
 
 ### Phase 7: Model information architecture and task flows
 
@@ -395,7 +396,7 @@ Apply `references/review-and-handoff.md`.
 2. Repair findings at their canonical source, update affected dependents, and rerun every affected check.
 3. Use `Complete` only when all required artifacts and reviews pass with no blocking issue; otherwise use `Complete with known limitations`, `Provisional`, or `Blocked`.
 4. Persist a `Review and delivery summary` in `index.md` for multi-file output or near the end of a single-file document.
-5. Give the user a self-contained handoff with artifact links, content coverage, review results, repairs, remaining risks, omissions, reading order, and next action.
+5. Give the user a self-contained handoff with the actual file/document tree, artifact links and purposes, content coverage, review results, repairs, remaining risks, omissions, reading order, and next action.
 
 Do not claim completion from validator success alone. Report gaps instead of manufacturing missing coverage.
 
@@ -423,7 +424,7 @@ For a first pass, output the alignment brief through candidate stories and pause
 14. Cross-cutting specifications
 15. Glossary
 16. Traceability, evidence, assumptions, conflicts, and research needs
-17. Review and delivery summary with artifact map, coverage, review results, remaining risks, reading order, and next action
+17. Review and delivery summary with the actual file/document structure, artifact map, coverage, review results, remaining risks, reading order, and next action
 
 If clarification is still required, output only sections 1–7 and the next question batch. Do not bury the questions after a speculative full solution.
 
@@ -472,4 +473,5 @@ Reject or revise an output when:
 - user-visible service, async, concurrency, persistence, audit, or recovery behavior lacks an interaction-to-system contract when one is needed;
 - permissions, inheritance, precedence, lifecycle, or failure behavior remain ambiguous;
 - the traceability matrix exposes orphaned stories, screens, specs, or criteria.
-- review findings were not repaired and revalidated, or the user handoff omits document contents, coverage, review results, limitations, and reading order.
+- a confirmation pause does not explain how to modify the current material or what the named next phase will produce;
+- review findings were not repaired and revalidated, or the user handoff omits the actual file/document structure, contents, coverage, review results, limitations, and reading order.

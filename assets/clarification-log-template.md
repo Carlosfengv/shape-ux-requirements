@@ -34,3 +34,13 @@
 
 | Change | Required update | Affected REQ/CON/US/UI/SPEC/AC IDs |
 | --- | --- | --- |
+
+## Current confirmation handoff
+
+| Item | Guidance |
+|---|---|
+| Current checkpoint | What was updated and its current readiness/status |
+| Review now | The answers, decisions, assumptions, or requirement slice awaiting confirmation |
+| Modify current content | Name the section, Story, quoted wording, or optional ID and describe the desired change |
+| Continue to | Name the next question batch or phase |
+| Expected next state | Files/content to be created or updated, status transition, and next possible pause |

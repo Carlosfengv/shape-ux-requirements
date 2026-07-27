@@ -8,6 +8,7 @@ Use this reference after all planned requirement artifacts exist. It defines the
 - Run the repair loop
 - Determine the delivery status
 - Persist the review and delivery summary
+- Show the delivered structure
 - Tell the user what was delivered
 - Required handoff checks
 
@@ -152,6 +153,15 @@ Use:
 | Artifact | What it contains | Status | Location |
 |---|---|---|---|
 
+### Delivered file/document structure
+
+```text
+<output-folder>/
+├── index.md
+├── <actual-file>.md
+└── <actual-file>.md
+```
+
 ### Coverage
 
 | Area | Included/Provisional/Omitted/Blocked/N/A | Summary | Follow-up |
@@ -182,6 +192,32 @@ Use:
 
 Keep the summary concise and link to canonical files instead of duplicating their contents.
 
+## Show the delivered structure
+
+After generation is complete, show the actual structure rather than a planned or generic template.
+
+For a multi-file delivery:
+
+- print a compact ASCII directory tree rooted at the output folder;
+- include only files that exist;
+- identify `index.md` or the primary reading entry;
+- follow the tree with an artifact table containing each file's purpose and status;
+- distinguish supporting evidence, reader-first guidance, page/task specifications, cross-cutting rules, and traceability files.
+
+For a single-file delivery, show both the file and its internal document hierarchy:
+
+```text
+feature-requirements.md
+├── Background, objectives, users, and scenarios
+├── Confirmed stories and functional decomposition
+├── Page/task chapters with ASCII UI and specifications
+├── Cross-cutting requirements
+├── Traceability and decisions
+└── Review and delivery summary
+```
+
+Use the headings that actually exist. Do not claim an appendix, page file, ASCII UI supplement, or traceability file was produced when it was omitted, blocked, or not applicable.
+
 ## Tell the user what was delivered
 
 After the persisted review record is complete, give the user a self-contained handoff message. Lead with the delivery outcome rather than the work performed.
@@ -189,7 +225,7 @@ After the persisted review record is complete, give the user a self-contained ha
 Include:
 
 1. delivery status, location, format, baseline version, and scope;
-2. document or file map with one-sentence descriptions;
+2. actual file/document tree and a file map with one-sentence descriptions;
 3. coverage of users, scenarios, stories, functions, pages, flows, ASCII UI states, specifications, and acceptance criteria;
 4. deterministic and manual review results;
 5. important repairs made during review;
@@ -206,6 +242,7 @@ Do not claim factual correctness, user approval, usability validation, accessibi
 Before yielding:
 
 - the persisted `Review and delivery summary` exists;
+- the displayed tree contains only delivered files and matches the artifact map;
 - all links in the handoff resolve to real artifacts;
 - file descriptions match their current contents and statuses;
 - reported coverage matches the document and validator results;

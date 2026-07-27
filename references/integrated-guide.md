@@ -227,4 +227,4 @@ Use appendices for:
 
 ## Review and handoff contract
 
-After composing the guide and supporting specifications, apply `review-and-handoff.md`: review, repair canonical sources, revalidate affected artifacts, persist the `Review and delivery summary`, and tell the user what was delivered, what each artifact contains, what was reviewed, what remains limited or blocked, what to read first, and what happens next.
+After composing the guide and supporting specifications, apply `review-and-handoff.md`: review, repair canonical sources, revalidate affected artifacts, persist the `Review and delivery summary`, and show the actual file/document structure, what each artifact contains, what was reviewed, what remains limited or blocked, what to read first, and what happens next.

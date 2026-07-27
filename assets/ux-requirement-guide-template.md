@@ -353,6 +353,20 @@ Use links rather than copying dense control material into the main guide.
 | UX and interaction | | | |
 | Human-readable document | | | |
 
+### Delivered document structure
+
+Replace this example with the headings that actually exist.
+
+```text
+[file-name].md
+├── Background, objectives, people, and scenarios
+├── Confirmed stories and functional points
+├── Page/task chapters with ASCII UI and local specifications
+├── Cross-cutting requirements
+├── Traceability, evidence, and decisions
+└── Review and delivery summary
+```
+
 ### Remaining limitations and next action
 
 | Decision, risk, or limitation | Impact | Owner/next action | Related IDs |

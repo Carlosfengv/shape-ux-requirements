@@ -169,7 +169,8 @@ After the user selects or enters an answer:
 2. Record the selected option's implications and rejected alternatives when material.
 3. Update or close the related `Q` ID.
 4. Reassess affected blockers.
-5. Ask the next batch only if blocking gaps remain.
+5. Summarize what changed and apply the confirmation handoff contract from `confirmation-gate.md`: offer a modification path and name the next question batch or readiness phase with its expected state.
+6. Ask the next batch only if blocking gaps remain and the user chooses to continue.
 
 ## Baseline after clarification
 
