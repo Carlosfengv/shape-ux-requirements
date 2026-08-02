@@ -40,7 +40,7 @@ Use task-led chapters instead when one workflow spans several pages. Do not orga
 
 ## Confirmation boundary
 
-For a new or materially revised requirement, first deliver the reader-friendly alignment brief from `assets/requirement-alignment-template.md`. It contains evidence, background, objectives, people, scenarios, terminology, scope, and complete candidate stories, but not final IA, detailed specifications, or ASCII UI. Compose the integrated guide only after the user explicitly confirms that baseline.
+For a new or materially revised requirement, first write the reader-friendly alignment sections from `assets/requirement-alignment-template.md` into `ux-requirements.md`. They contain evidence, background, objectives, people, scenarios, terminology, scope, and complete candidate stories, but not final IA, detailed specifications, or ASCII UI. After explicit confirmation, extend the same document instead of composing a duplicate guide.
 
 Keep the confirmed baseline version and `DEC-BASELINE` link visible in the integrated guide. If detailed design exposes a material change, return only the affected story/scope slice for reconfirmation before updating dependent UI and specifications.
 

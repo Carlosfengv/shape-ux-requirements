@@ -1,6 +1,8 @@
 # Repository Context and Existing Behavior
 
-> Parent: [index.md](index.md)  
+> Primary requirement: [ux-requirements.md](ux-requirements.md)
+>
+> Add an `index.md` link only when this file belongs to a Modular delivery.
 > Purpose: Establish the repository-backed current-state baseline before requirement shaping.  
 > Status: Draft / Provisional / Confirmed
 

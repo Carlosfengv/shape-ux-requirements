@@ -2,8 +2,9 @@
 """Validate generated Markdown requirement documents.
 
 The default profile checks deterministic document structure. The full profile
-also checks stable-ID definitions, progressive ASCII confirmation coverage,
-interaction-to-ASCII coverage, and the requirement-to-ASCII trace chain.
+also checks delivery-profile/file-count consistency, stable-ID definitions,
+progressive ASCII confirmation coverage, interaction-to-ASCII coverage, and
+the requirement-to-ASCII trace chain.
 It cannot determine whether the underlying product decisions are correct.
 """
 
@@ -181,6 +182,8 @@ BASELINE_STATUS_LABELS = {
     "基线状态",
     "基线版本/状态",
 }
+DELIVERY_PROFILE_LABELS = {"DELIVERY PROFILE", "交付模式", "交付配置"}
+SPLIT_RATIONALE_LABELS = {"SPLIT RATIONALE", "拆分理由", "拆分原因"}
 STATUS_HEADERS = {"STATUS", "状态"}
 DELIVERY_ITEM_HEADERS = {"FILE", "DELIVERABLE", "文件", "交付物"}
 FINAL_DELIVERY_STATUSES = {
@@ -193,6 +196,15 @@ FINAL_DELIVERY_STATUSES = {
     "已完成",
     "不适用",
     "已省略",
+}
+DELIVERY_PROFILE_FILE_RANGES = {
+    "COMPACT": (1, 1),
+    "紧凑": (1, 1),
+    "单文件": (1, 1),
+    "BALANCED": (2, 3),
+    "平衡": (2, 3),
+    "MODULAR": (4, None),
+    "模块化": (4, None),
 }
 ASCII_QUEUE_SCOPE_HEADERS = {"CONFIRMATION SCOPE", "确认范围"}
 FINAL_ASCII_QUEUE_STATUSES = {
@@ -233,6 +245,8 @@ class Analysis:
     edges: dict[str, set[str]] = field(default_factory=lambda: defaultdict(set))
     ascii_flow_sites: set[Site] = field(default_factory=set)
     baseline_statuses: list[tuple[str, Site]] = field(default_factory=list)
+    delivery_profiles: list[tuple[str, Site]] = field(default_factory=list)
+    split_rationales: list[tuple[str, Site]] = field(default_factory=list)
     review_handoff_sites: set[Site] = field(default_factory=set)
     delivered_structure_sites: set[Site] = field(default_factory=set)
     ascii_confirmation_statuses: dict[str, list[tuple[str, Site]]] = field(
@@ -250,6 +264,8 @@ class Analysis:
             self.edges[stable_id].update(neighbors)
         self.ascii_flow_sites.update(other.ascii_flow_sites)
         self.baseline_statuses.extend(other.baseline_statuses)
+        self.delivery_profiles.extend(other.delivery_profiles)
+        self.split_rationales.extend(other.split_rationales)
         self.review_handoff_sites.update(other.review_handoff_sites)
         self.delivered_structure_sites.update(other.delivered_structure_sites)
         for stable_id, statuses in other.ascii_confirmation_statuses.items():
@@ -259,7 +275,7 @@ class Analysis:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Validate a single Markdown requirement file or a multi-file document set."
+        description="Validate a Compact, Balanced, or Modular Markdown requirement delivery."
     )
     parser.add_argument("target", type=Path, help="Markdown file or document directory")
     parser.add_argument(
@@ -271,7 +287,7 @@ def parse_args() -> argparse.Namespace:
         "--profile",
         choices=("structural", "full"),
         default="structural",
-        help="Use 'full' for confirmed-baseline and requirement-to-ASCII trace-chain coverage.",
+        help="Use 'full' for delivery-profile, confirmed-baseline, and requirement-to-ASCII trace-chain coverage.",
     )
     return parser.parse_args()
 
@@ -567,6 +583,12 @@ def inspect_file(path: Path, final: bool) -> Analysis:
                             )
                         )
 
+                if len(cells) >= 2 and normalize_header(cells[0]) in DELIVERY_PROFILE_LABELS:
+                    analysis.delivery_profiles.append((cells[1].strip(), site))
+
+                if len(cells) >= 2 and normalize_header(cells[0]) in SPLIT_RATIONALE_LABELS:
+                    analysis.split_rationales.append((cells[1].strip(), site))
+
                 if (
                     path.name == "index.md"
                     and delivery_table
@@ -621,7 +643,28 @@ def inspect_document_set(target: Path, files: list[Path], final: bool) -> list[F
 
     index = (target / "index.md").resolve()
     if not index.exists():
+        if len(files) >= 4:
+            findings.append(
+                Finding(
+                    severity(final),
+                    "MISSING_INDEX",
+                    target,
+                    1,
+                    "four-or-more-file Modular delivery requires index.md",
+                )
+            )
         return findings
+
+    if len(files) <= 3:
+        findings.append(
+            Finding(
+                severity(final),
+                "UNNECESSARY_INDEX",
+                index,
+                1,
+                "two-or-three-file delivery should use ux-requirements.md as the entry point instead of index.md",
+            )
+        )
 
     index_destinations = {
         destination
@@ -697,12 +740,104 @@ def reachable_prefix(
     return False
 
 
-def semantic_findings(analysis: Analysis, final: bool, profile: str) -> list[Finding]:
+def semantic_findings(
+    analysis: Analysis,
+    final: bool,
+    profile: str,
+    file_count: int = 1,
+) -> list[Finding]:
     if profile != "full":
         return []
 
     findings: list[Finding] = []
     strict_severity = severity(final)
+
+    if not analysis.delivery_profiles:
+        findings.append(
+            Finding(
+                strict_severity,
+                "MISSING_DELIVERY_PROFILE",
+                Path("."),
+                1,
+                "full profile requires Compact, Balanced, or Modular delivery profile",
+            )
+        )
+    else:
+        normalized_profiles = {
+            normalize_header(value): site
+            for value, site in analysis.delivery_profiles
+        }
+        if len(normalized_profiles) > 1:
+            first_site = next(iter(normalized_profiles.values()))
+            findings.append(
+                Finding(
+                    strict_severity,
+                    "CONFLICTING_DELIVERY_PROFILE",
+                    first_site.file,
+                    first_site.line,
+                    "delivery documents declare conflicting profiles: "
+                    + ", ".join(sorted(normalized_profiles)),
+                )
+            )
+        for normalized_profile, site in normalized_profiles.items():
+            expected_range = DELIVERY_PROFILE_FILE_RANGES.get(normalized_profile)
+            if expected_range is None:
+                findings.append(
+                    Finding(
+                        strict_severity,
+                        "INVALID_DELIVERY_PROFILE",
+                        site.file,
+                        site.line,
+                        f"unknown or unresolved delivery profile: {normalized_profile or '(empty)'}",
+                    )
+                )
+                continue
+            minimum, maximum = expected_range
+            if file_count < minimum or (maximum is not None and file_count > maximum):
+                expected = f"{minimum}+" if maximum is None else (
+                    str(minimum) if minimum == maximum else f"{minimum}-{maximum}"
+                )
+                findings.append(
+                    Finding(
+                        strict_severity,
+                        "DELIVERY_PROFILE_MISMATCH",
+                        site.file,
+                        site.line,
+                        f"{normalized_profile} expects {expected} Markdown file(s), found {file_count}",
+                    )
+                )
+
+        non_compact_profiles = {
+            profile_name
+            for profile_name in normalized_profiles
+            if profile_name in {"BALANCED", "平衡", "MODULAR", "模块化"}
+        }
+        meaningful_rationales = [
+            (value, rationale_site)
+            for value, rationale_site in analysis.split_rationales
+            if normalize_header(value)
+            not in {
+                "",
+                "NONE",
+                "N/A",
+                "NOT APPLICABLE",
+                "无",
+                "不适用",
+                "INDEPENDENT OWNER/REVIEW/RELEASE/READABILITY REASON",
+            }
+            and "OTHERWISE" not in normalize_header(value)
+        ]
+        if non_compact_profiles and not meaningful_rationales:
+            first_site = next(iter(normalized_profiles.values()))
+            findings.append(
+                Finding(
+                    strict_severity,
+                    "MISSING_SPLIT_RATIONALE",
+                    first_site.file,
+                    first_site.line,
+                    "Balanced or Modular delivery requires a specific reader, owner, review, release, or readability rationale",
+                )
+            )
 
     for stable_id, sites in analysis.definitions.items():
         if len(sites) > 1:
@@ -1030,7 +1165,7 @@ def main() -> int:
 
     analysis.findings.extend(inspect_document_set(target, files, args.final))
     analysis.findings.extend(
-        semantic_findings(analysis, args.final, args.profile)
+        semantic_findings(analysis, args.final, args.profile, len(files))
     )
 
     root = target if target.is_dir() else target.parent

@@ -104,15 +104,16 @@ Ask the user to confirm the whole baseline, confirm it with named corrections, o
 
 Place each story definition before its operating steps, ASCII UI, local specifications, and acceptance criteria. Keep it in:
 
-- the corresponding page/subfeature file when the story is primarily completed there;
-- the cross-page workflow file when it spans destinations;
-- the cross-cutting file only when it represents a genuinely shared operational outcome.
+- the corresponding page/subfeature chapter when the story is primarily completed there;
+- the cross-page workflow chapter when it spans destinations;
+- a cross-cutting chapter only when it represents a genuinely shared operational outcome;
+- an independently split module file only when that slice has its own owner, review boundary, or release lifecycle.
 
-Do not create a list containing only story IDs or titles. Do not duplicate the full story in the traceability file; reference its canonical location.
+Do not create a list containing only story IDs or titles. Do not duplicate the full story in a traceability appendix or file; reference its canonical location.
 
 Every `US` or `JS` ID used by a page, UI, specification, or acceptance criterion must resolve to one canonical story definition.
 
-For multi-file delivery, keep the requirement register, global story map, and release slicing in `04-story-map-and-release-scope.md`. Keep full story definitions in their page/subfeature or cross-page workflow files.
+Keep the requirement register, global story map, and release slicing in `ux-requirements.md`. In Modular delivery, keep full story definitions in independently owned page/subfeature or cross-page workflow files and link them from the main story map; do not create a dedicated story-map file solely because the table exists.
 
 ## Cover enterprise concerns
 

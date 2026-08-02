@@ -266,9 +266,11 @@ When repository evidence is available, include:
 
 If no relevant evidence is found, say what paths and terms were searched. `No evidence found` is not the same as `the feature does not exist`.
 
-## Large-document ownership
+## Repository evidence placement
 
-For a multi-file requirement deliverable, use `00-repository-context.md` as the canonical home for:
+In Compact delivery, keep the repository snapshot, key evidence, current behavior, drift, requested delta, and constraints in a concise `Repository evidence and current state` section of `ux-requirements.md`. Put detailed source inventories or ledgers in a collapsed appendix or concise table in that same file.
+
+Create `evidence-and-research.md` only when the evidence ledger is substantial enough to obstruct the human-readable requirement flow, must be reviewed independently, or has a different maintenance owner. Use it as the canonical home for:
 
 - snapshot and scope;
 - source inventory and evidence ledger;
@@ -278,9 +280,9 @@ For a multi-file requirement deliverable, use `00-repository-context.md` as the 
 - requested delta;
 - repository-derived constraints.
 
-Other files should reference these findings by `SRC`, requirement, or drift ID instead of duplicating them.
+Other sections or module files should reference these findings by `SRC`, requirement, or drift ID instead of duplicating them.
 
-Omit `00-repository-context.md` only when no repository or codebase is available. Record that limitation in `index.md`.
+When no repository or codebase is available, record that limitation in the primary document. Do not create an empty evidence file. In Modular delivery, `index.md` may mirror the evidence file's link and status but must not duplicate its findings.
 
 ## Safety and quality checks
 

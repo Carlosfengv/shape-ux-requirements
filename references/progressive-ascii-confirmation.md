@@ -63,7 +63,7 @@ Move a unit earlier when later units depend on its terminology, layout regions, 
 
 ## Maintain the confirmation queue
 
-Persist the queue in `index.md` for multi-file delivery or near the beginning of the detailed-design section for a single-file delivery.
+Persist the queue in `ux-requirements.md` for Compact and Balanced delivery. For Modular delivery, keep the canonical queue in the primary document and mirror only navigation/progress in `index.md`.
 
 Use:
 

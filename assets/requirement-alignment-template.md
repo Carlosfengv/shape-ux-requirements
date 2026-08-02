@@ -1,6 +1,6 @@
-# [Requirement name] · Requirement Alignment and Story Confirmation
+# [Requirement name] · Alignment and Story Confirmation Sections
 
-> First-pass review artifact. Confirm the requirement baseline and stories before detailed specifications or ASCII UI are produced.
+> Stage 1 content for the canonical `ux-requirements.md`. Keep it standalone only when an independently retained approval artifact is required. Confirm the baseline and stories before detailed specifications or ASCII UI are produced.
 
 ## Document status
 

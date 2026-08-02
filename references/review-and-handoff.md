@@ -134,7 +134,7 @@ List omitted and not-applicable artifacts separately. Never use `Complete` when 
 
 Every completed full-shaping Markdown artifact must contain a section headed `Review and delivery summary` or its localized equivalent, such as `Review 与交付摘要`.
 
-For a multi-file set, place it in `index.md`. For a single-file delivery, place it near the end of the main document.
+Place it near the end of the primary `ux-requirements.md` for every profile. In Modular delivery, keep `index.md` to navigation and mirror only the summary status/link.
 
 Use:
 
@@ -146,6 +146,8 @@ Use:
 | Item | Result |
 |---|---|
 | Delivery status | Complete / Complete with known limitations / Provisional / Blocked |
+| Delivery profile | Compact / Balanced / Modular |
+| Split rationale | None for Compact; otherwise the reader/owner/review/release/readability reason |
 | Baseline | Version and confirmation record |
 | Scope reviewed | Stories, functions, pages, workflows, and release boundary |
 | Reviewed on | Date |
@@ -158,10 +160,11 @@ Use:
 ### Delivered file/document structure
 
 ```text
-<output-folder>/
-├── index.md
-├── <actual-file>.md
-└── <actual-file>.md
+ux-requirements.md
+├── Alignment and confirmed baseline
+├── Confirmed ASCII UX and local specifications
+├── Necessary appendices
+└── Review and delivery summary
 ```
 
 ### Coverage
@@ -186,30 +189,30 @@ Use:
 
 ### Recommended reading order
 
-1. Human-readable UX requirement guide
-2. Relevant page or cross-page task chapter
-3. Cross-cutting specifications
-4. Traceability, evidence, and decisions
+1. `ux-requirements.md`
+2. Relevant page/function/task chapter
+3. Control appendix, when delivered
+4. Evidence and research, when delivered
 ```
 
-Keep the summary concise and link to canonical files instead of duplicating their contents.
+Keep the summary concise and link to canonical sections or justified supporting files instead of duplicating their contents.
 
 ## Show the delivered structure
 
 After generation is complete, show the actual structure rather than a planned or generic template.
 
-For a multi-file delivery:
+For Balanced or Modular delivery:
 
 - print a compact ASCII directory tree rooted at the output folder;
 - include only files that exist;
-- identify `index.md` or the primary reading entry;
+- identify `ux-requirements.md` as the primary reading entry and show `index.md` only for Modular delivery;
 - follow the tree with an artifact table containing each file's purpose and status;
-- distinguish supporting evidence, reader-first guidance, page/task specifications, cross-cutting rules, and traceability files.
+- state the delivery profile and why every supporting/module file was split.
 
-For a single-file delivery, show both the file and its internal document hierarchy:
+For Compact delivery, show both the file and its internal document hierarchy:
 
 ```text
-feature-requirements.md
+ux-requirements.md
 ├── Background, objectives, users, and scenarios
 ├── Confirmed stories and functional decomposition
 ├── Page/task chapters with ASCII UI and specifications
@@ -226,7 +229,7 @@ After the persisted review record is complete, give the user a self-contained ha
 
 Include:
 
-1. delivery status, location, format, baseline version, and scope;
+1. delivery status, profile, split rationale, location, format, baseline version, and scope;
 2. actual file/document tree and a file map with one-sentence descriptions;
 3. coverage of users, scenarios, stories, functions, pages, flows, sequential ASCII UX confirmations, UI states, specifications, and acceptance criteria;
 4. deterministic and manual review results;
@@ -235,7 +238,7 @@ Include:
 7. recommended reading order;
 8. the next decision or action, if one remains.
 
-For a small single-file result, combine these into a short paragraph and compact list. For a large set, use a small artifact table and link each file. Do not paste the entire index or a long traceability matrix into chat.
+For Compact delivery, combine these into a short paragraph and compact list. For Balanced or Modular delivery, use a small artifact table and link each file. Do not paste the entire index or a long traceability matrix into chat.
 
 Do not claim factual correctness, user approval, usability validation, accessibility compliance, or implementation readiness unless the applicable evidence and review support that claim.
 
@@ -245,6 +248,7 @@ Before yielding:
 
 - the persisted `Review and delivery summary` exists;
 - the displayed tree contains only delivered files and matches the artifact map;
+- the profile matches the actual file count and every split has a material rationale;
 - all links in the handoff resolve to real artifacts;
 - file descriptions match their current contents and statuses;
 - reported coverage matches the document and validator results;

@@ -55,7 +55,7 @@ At a glance
 
 Start with an “At a glance” block containing the problem, primary user, desired outcome, scope, status, and the most important open decision. Do not make repository metadata or an evidence ledger the first substantive reading experience.
 
-For multi-file delivery, make the human-readable guide the first content link in `index.md`. Treat `index.md` as navigation and progress, not the document readers are expected to interpret as the requirement itself.
+For Modular delivery, make `ux-requirements.md` the first content link in `index.md`. Treat `index.md` as navigation and progress, not the document readers are expected to interpret as the requirement itself. Balanced delivery does not need an index.
 
 ## Write sections for scanning
 

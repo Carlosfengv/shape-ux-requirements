@@ -11,7 +11,9 @@
 | Applicable roles | |
 | Repository snapshot | Branch/commit or N/A |
 | Scope | |
-| Delivery mode | Single-file Markdown |
+| Delivery profile | Compact / Balanced / Modular |
+| Primary document | ux-requirements.md |
+| Split rationale | None for Compact; otherwise state the reason |
 | Version/status | Draft / Provisional / Confirmed |
 | Readiness | |
 | Confirmed baseline | Version and DEC-BASELINE reference |
@@ -567,6 +569,8 @@ STATE-02 Processing
 | Item | Result |
 |---|---|
 | Delivery status | Complete / Complete with known limitations / Provisional / Blocked |
+| Delivery profile | Compact / Balanced / Modular |
+| Split rationale | |
 | Confirmed baseline | |
 | Scope reviewed | |
 | Reviewed on | |

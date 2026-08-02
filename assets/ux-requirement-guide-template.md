@@ -11,6 +11,9 @@
 | What outcome should improve? | |
 | What is in scope now? | |
 | Status | Draft / Provisional / Confirmed |
+| Delivery profile | Compact / Balanced / Modular |
+| Primary document | ux-requirements.md |
+| Split rationale | None for Compact; otherwise state the reader/owner/review/release/readability reason |
 | Confirmed baseline | [version and DEC-BASELINE link] |
 | Most important open decision | |
 
@@ -347,6 +350,8 @@ Use links rather than copying dense control material into the main guide.
 | Item | Result |
 |---|---|
 | Delivery status | Complete / Complete with known limitations / Provisional / Blocked |
+| Delivery profile | Compact / Balanced / Modular |
+| Split rationale | |
 | Confirmed baseline | |
 | Scope reviewed | |
 | Reviewed on | |
@@ -366,7 +371,7 @@ Use links rather than copying dense control material into the main guide.
 Replace this example with the headings that actually exist.
 
 ```text
-[file-name].md
+ux-requirements.md
 ├── Background, objectives, people, and scenarios
 ├── Confirmed stories and functional points
 ├── Page/task chapters with ASCII UI and local specifications

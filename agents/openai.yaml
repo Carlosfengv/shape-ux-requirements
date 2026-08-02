@@ -1,7 +1,7 @@
 interface:
   display_name: "UX 需求梳理"
   short_description: "面向 UX 与 PM 的需求梳理、ASCII UI 与规格"
-  default_prompt: "请使用 $shape-ux-requirements 先分析仓库、需求证据、背景、用户、场景、范围和 user stories，输出需求确认稿并等待我确认；确认后建立 ASCII UX 顺序，每次只提交一个页面、Section 或功能供我修改或确认，确认后写入文档并继续下一个，最后完成规格、追踪和 Review。"
+  default_prompt: "请使用 $shape-ux-requirements 先分析仓库、需求证据、背景、用户、场景、范围和 user stories，默认持续写入一份 ux-requirements.md 并等待我确认；确认后建立 ASCII UX 顺序，每次只提交一个页面、Section 或功能，确认后写回同一文档并继续下一个，只有独立所有权、评审、发布或明显阅读负担时才拆分文件。"
 
 policy:
   allow_implicit_invocation: false

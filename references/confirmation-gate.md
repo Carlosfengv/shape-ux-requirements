@@ -81,7 +81,7 @@ Do not make the user infer whether choosing continuation locks a baseline, creat
 
 Complete repository discovery, applicable public research, readiness assessment, problem framing, terminology shaping, and the outcome/task-led story backbone before asking for confirmation.
 
-Use `assets/requirement-alignment-template.md`. Keep the first pass readable and decision-oriented. Include:
+Use the alignment sections from `assets/requirement-alignment-template.md` inside the canonical `ux-requirements.md`. Create a separate alignment file only when the baseline needs independent governance or retention. Keep the first pass readable and decision-oriented. Include:
 
 1. evidence and current-versus-requested behavior;
 2. requirement background, problem, why now, and impact;

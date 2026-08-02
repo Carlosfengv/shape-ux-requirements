@@ -1,6 +1,6 @@
 ---
 name: shape-ux-requirements
-description: Assess and shape complex enterprise requirements into repository-grounded, user-mental-model-aligned, human-readable Markdown guides, specifications, and progressively user-confirmed ASCII UX. Use when PMs or UX designers need current-state analysis, clarification, public research on comparable products or industry approaches, problem framing, users and scenarios, terminology, ASCII-first IA/task/decision/state/cross-role flows, stories, page/subfeature decomposition, ordered ASCII confirmation, full-state ASCII UI, missing-ASCII supplementation, interaction/system contracts, accessibility, acceptance criteria, or traceability. Inspect repository instructions, code, tests, product copy, schemas, documents, and relevant authoritative public sources before proposing behavior. Default to a reader-first UX/requirements guide with dense control detail in appendices or supporting files. Do not use for visual styling, procurement ranking, or technical architecture alone.
+description: Assess and shape complex enterprise requirements into repository-grounded, user-mental-model-aligned, human-readable Markdown guides, specifications, and progressively user-confirmed ASCII UX. Use when PMs or UX designers need current-state analysis, clarification, public research, problem framing, users and scenarios, terminology, stories, ordered ASCII confirmation, page/subfeature interaction, specifications, accessibility, acceptance criteria, or traceability. Inspect repository instructions, code, tests, product copy, schemas, documents, and relevant authoritative public sources before proposing behavior. Default to one evolving reader-first ux-requirements.md; promote to a small Balanced or Modular set only for independent ownership, review, release, or material readability needs. Do not use for visual styling, procurement ranking, or technical architecture alone.
 ---
 
 # Shape UX Requirements
@@ -25,7 +25,7 @@ Respond in the user's language unless asked otherwise. Use `ASCII`, not `ASII`, 
 10. Do not expose implementation concepts in the UI unless users need them to make decisions or complete tasks.
 11. Keep stable IDs throughout the analysis. Do not silently rename concepts or change rules between sections.
 12. Write for UX/PM readers: lead with plain-language meaning and compact ASCII, keep tables narrow, place descriptive/name/outcome columns first and all stable or related ID columns last, and move dense matrices, contracts, and trace detail to appendices.
-13. Deliver a completed document request as `.md`. Use chat for clarification and confirmation, but persist the alignment brief, accepted baseline, confirmation record, and final artifacts in Markdown files.
+13. Deliver as `.md`, defaulting to one evolving `ux-requirements.md`; use more files only when an explicit reader, ownership, review, release, or material readability need justifies the split.
 14. Establish the outcome/task/story backbone before committing to pages. Then validate information architecture and task/decision flows before detailed screens.
 15. Treat ASCII as a behavioral and structural contract, not visual proof. Anchor every user-visible interaction behavior to at least one ASCII `UI`/`STATE` frame; prose, a flow, or a table alone is insufficient. Record viewport, input, accessibility, density, and responsive constraints that ASCII cannot show.
 16. Treat external product and industry research as comparative context. Never let it override repository evidence, project-specific user needs, or explicit owner decisions.
@@ -44,7 +44,7 @@ Respond in the user's language unless asked otherwise. Use `ASCII`, not `ASII`, 
 - Read [references/human-readable-requirements.md](references/human-readable-requirements.md) before composing any UX/PM-facing requirement document.
 - Read [references/spec-and-traceability.md](references/spec-and-traceability.md) before producing specifications, matrices, or the final quality audit.
 - Read [references/integrated-guide.md](references/integrated-guide.md) before producing a full document, user manual, feature guide, or combined user-guide/specification deliverable.
-- Read [references/markdown-delivery.md](references/markdown-delivery.md) before structuring artifacts, then [references/review-and-handoff.md](references/review-and-handoff.md) before final review, repair, completion status, or user handoff.
+- Read [references/adaptive-delivery-profiles.md](references/adaptive-delivery-profiles.md) and [references/markdown-delivery.md](references/markdown-delivery.md) before creating files, then [references/review-and-handoff.md](references/review-and-handoff.md) before final review or handoff.
 
 Use templates from `assets/` only when the user wants a reusable artifact or when a full end-to-end deliverable is requested:
 
@@ -70,7 +70,7 @@ Infer the smallest mode that satisfies the request:
 | Interaction shaping | Producing ASCII UI and flows | Establish IA, task flows, stories, objects, permissions, lifecycle, and state behavior first |
 | ASCII UI supplement | Completing or improving missing UI from an existing document | Report delivery coverage, extract the interaction baseline, generate traceable flows/frames when sufficient, or ask focused blocking questions |
 | Integrated guide | Human-readable UX/PM guide plus supporting requirements | Lead with context, users, journeys, and ASCII; keep compact local behavior nearby and move dense control detail to appendices |
-| Markdown delivery | Creating the final artifact | Use one `.md` for small scope or a planned, linked Markdown document set for large scope |
+| Markdown delivery | Creating the final artifact | Start with one evolving `ux-requirements.md`; split only when ownership, review, release, or readability requires it |
 | Full shaping | End-to-end requirement analysis | First confirm the analysis/story baseline, then run the detailed design phases and integrated guide output contract |
 | Existing-spec audit | Reviewing an existing PRD/spec | Preserve source IDs where possible, report gaps and conflicts, and propose revisions separately |
 | Repository-grounded shaping | Analyzing requirements inside a project repository | Inspect instructions, code, tests, UI copy, schemas, and docs before clarification; document current behavior and requested delta |
@@ -376,18 +376,14 @@ Use task-led chapters for workflows that cross several pages. Link each task ste
 
 Before the final audit, apply `references/markdown-delivery.md` and deliver the artifact:
 
-1. Choose single-file or multi-file mode from scope and complexity.
-2. Use a task plan for multi-file delivery when a planning tool is available; otherwise record the same steps and statuses in `index.md`.
-3. Create `index.md` first for multi-file delivery.
-4. Ensure the alignment brief and `DEC-BASELINE` confirmation record exist before detailed files; when repository evidence is available, create `00-repository-context.md` from `assets/repository-context-template.md`.
-5. When external research was performed, create the landscape artifact before requirement foundation files.
-6. Generate foundation files, then confirm and write one dependent ASCII unit at a time before cross-cutting and traceability completion.
-7. Update the plan, confirmation queue, and `index.md` after every confirmed unit.
-8. Keep each page's canonical stories, ASCII UI, subfeature explanations, local interaction/system requirements, accessibility/adaptation constraints, and acceptance criteria together in the same file.
-9. Run `scripts/validate_requirement_docs.py <output-path> --final --profile full` for a completed full-shaping document when Python is available; omit the full profile for narrower modes.
-10. Validate relative links, filenames, IDs, document status, and canonical rule ownership manually for anything the script cannot establish.
+1. Start with the Compact profile and one `ux-requirements.md`; use the same file for Stage 1 alignment and Stage 2 confirmed design.
+2. Promote to Balanced only for substantial control/evidence material, or Modular for independent ownership/review/release; state the split rationale.
+3. Create `index.md` only for Modular delivery with four or more Markdown files.
+4. Keep each page/task's stories, confirmed ASCII, local specifications, accessibility constraints, and acceptance criteria together.
+5. Update the main document and local trace after every confirmed ASCII unit; compose dense global control/trace appendices near final review.
+6. Run `scripts/validate_requirement_docs.py <output-path> --final --profile full` for completed full shaping and manually verify semantics the script cannot prove.
 
-Use a dedicated output folder for a multi-file deliverable. Follow the current environment's artifact/output convention or a user-specified location.
+Use a dedicated output folder only after the delivery becomes Balanced or Modular. Follow the current environment's artifact/output convention or a user-specified location.
 
 ### Phase 12: Review, repair, revalidate, and hand off
 
@@ -396,14 +392,14 @@ Apply `references/review-and-handoff.md`.
 1. Run the deterministic validator, evidence/baseline audit, requirement/trace audit, UX/interaction review, and human-readable document review.
 2. Repair findings at their canonical source, update affected dependents, and rerun every affected check.
 3. Use `Complete` only when all required artifacts and reviews pass with no blocking issue; otherwise use `Complete with known limitations`, `Provisional`, or `Blocked`.
-4. Persist a `Review and delivery summary` in `index.md` for multi-file output or near the end of a single-file document.
+4. Persist a `Review and delivery summary` in the primary document, and mirror only navigation/status in `index.md` for Modular delivery.
 5. Give the user a self-contained handoff with the actual file/document tree, artifact links and purposes, content coverage, review results, repairs, remaining risks, omissions, reading order, and next action.
 
 Do not claim completion from validator success alone. Report gaps instead of manufacturing missing coverage.
 
 ## Output contract
 
-For a first pass, output the alignment brief through candidate stories and pause for explicit confirmation. After confirmation, preserve that baseline and use this full-shaping order:
+For a first pass, write the alignment sections through candidate stories into `ux-requirements.md` and pause for confirmation. After confirmation, preserve that baseline and extend the same document in this order:
 
 1. Document purpose, document audience, repository snapshot, scope, status, and readiness
 2. Repository evidence, current implementation, documented intent, code/documentation drift, and requested delta
@@ -429,9 +425,7 @@ For a first pass, output the alignment brief through candidate stories and pause
 
 If clarification is still required, output only sections 1–7 and the next question batch. Do not bury the questions after a speculative full solution.
 
-For a small, ready scope, write the reader-first contract using `assets/ux-requirement-guide-template.md`. Add only the detailed appendix sections that are needed for implementation or review.
-
-For a large scope, write a linked Markdown set using `assets/multi-file-index-template.md` as the entry point. Split by page/core feature and cross-page concern, not by artifact type. Do not put all ASCII UI in one file and all specifications in another.
+Use `assets/ux-requirement-guide-template.md` for Compact and as the primary document for Balanced/Modular. Use `assets/multi-file-index-template.md` only when four or more real files justify Modular navigation. Never split by artifact type alone.
 
 ## Quality bar
 
@@ -466,8 +460,9 @@ Reject or revise an output when:
 - an ASCII frame is treated as proof of responsive, accessible, or visual-design quality without explicit constraints;
 - a large page is shown as one dense frame without subfeature decomposition;
 - a subfeature or interaction lacks its own explanation, focused ASCII, or local specifications when the overview is insufficient;
-- a large scope is forced into one unwieldy Markdown file;
-- a multi-file deliverable lacks `index.md`, progress status, relative navigation, or a canonical home for each requirement;
+- a document remains unwieldy after deduplication and appendices, or was split without a reader/owner/review/release/readability reason;
+- a four-or-more-file Modular delivery lacks `index.md`, navigation, or canonical ownership;
+- Stage 1 and Stage 2 duplicate the baseline, or two files repeat the same detailed ASCII/specification;
 - cross-file links are broken or stable IDs conflict;
 - a story describes a component instead of a user outcome;
 - a specification cannot be observed or tested;
