@@ -44,3 +44,15 @@
 | Modify current content | Name the section, Story, quoted wording, or optional ID and describe the desired change |
 | Continue to | Name the next question batch or phase |
 | Expected next state | Files/content to be created or updated, status transition, and next possible pause |
+
+## Current ASCII UX confirmation
+
+| Item | Value |
+|---|---|
+| Queue position | |
+| Section/function in review | |
+| Confirmed dependencies | |
+| Candidate target location | |
+| Modification guidance | Name a region, control, step, state, message, or behavior; IDs are optional |
+| Confirmation action | Write this slice with specifications, acceptance criteria, trace links, and DEC-ASCII record |
+| Next unit | |

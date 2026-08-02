@@ -321,6 +321,13 @@ ROLE-01 User          Product/System          ROLE-02 Reviewer
 | User outcome | Entry | Result | SUB/TASK reference | Parent PAGE/FUNC | US/JS references |
 | --- | --- | --- | --- | --- | --- |
 
+### 8.1 ASCII UX confirmation queue
+
+Confirm one dependency-ordered interaction slice at a time. Do not place candidate ASCII into the canonical chapters below until its confirmation record is complete.
+
+| Order | Section or function | Confirmation scope | Status | Target chapter | Depends on | Included UI/STATE IDs | DEC ID |
+|---:|---|---|---|---|---|---|---|
+
 ## 9. Page and core-feature chapters
 
 ### PAGE-01 · [Page or core feature name]
@@ -400,6 +407,8 @@ ROLE-01 User          Product/System          ROLE-02 Reviewer
 3.
 
 ##### UI-01-01 · [Focused interaction] · Default
+
+> Canonical only after its confirmation queue row is `Confirmed` and linked to `DEC-ASCII-###`.
 
 ```text
 ┌──────────────────────────────────────────────┐

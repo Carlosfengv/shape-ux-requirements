@@ -6,6 +6,7 @@ Use this reference to create text-based flows and interaction drafts that explai
 
 - Decide what to draw
 - Map every interaction behavior to UI
+- Confirm ASCII UX progressively
 - Complete missing ASCII UI from an existing document
 - Flow conventions
 - Frame and dialog conventions
@@ -42,6 +43,16 @@ Maintain a behavior-to-UI coverage table:
 
 Do not mark an interaction complete until its referenced frame exists and visibly contains the relevant control, message, status, or outcome.
 
+## Confirm ASCII UX progressively
+
+Apply `progressive-ascii-confirmation.md` after deciding what frames a page, section, function, or task needs.
+
+Treat a coherent interaction slice as the default confirmation unit: its overview or local flow plus every materially different visible state needed to understand the behavior. Order units by dependency, present one unit at a time, and label it as a candidate rather than canonical content.
+
+Do not write the candidate into the formal page/task section until the user confirms it. On confirmation, write the frames together with their local interaction rules, accessibility/adaptation constraints, acceptance criteria, trace links, and `DEC-ASCII` confirmation record. Use those confirmed decisions as context for the next dependent candidate.
+
+If a later candidate requires changing a confirmed frame, stop the affected branch, record the change and impact, reconfirm the smallest affected upstream slice, and then revisit invalidated downstream units in order.
+
 ## Complete missing ASCII UI from an existing document
 
 When a narrow-scope request or existing requirement document omits ASCII UI, do not silently treat the delivery as complete.
@@ -67,7 +78,7 @@ If the document is sufficient:
 3. Generate the corresponding page overview and focused ASCII UI states.
 4. Place local interface, interaction, state, permission, accessibility, and acceptance requirements beside the frames.
 5. Trace every introduced UI element back to existing requirement evidence. Do not invent unsupported business rules.
-6. Review the generated UI against the source document and revise unclear hierarchy, terminology, action labels, state coverage, and recovery.
+6. Put the supplement slices into the progressive ASCII confirmation queue, review them one at a time, and write each confirmed slice with its adjacent requirements.
 
 If gaps are non-blocking, generate a clearly marked provisional ASCII UI and list each assumption beside the affected frame. If gaps could materially change the interaction, stop before final frames and ask 1–3 focused questions using a structured choice component when applicable.
 

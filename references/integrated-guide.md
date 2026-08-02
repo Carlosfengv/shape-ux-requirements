@@ -44,6 +44,8 @@ For a new or materially revised requirement, first deliver the reader-friendly a
 
 Keep the confirmed baseline version and `DEC-BASELINE` link visible in the integrated guide. If detailed design exposes a material change, return only the affected story/scope slice for reconfirmation before updating dependent UI and specifications.
 
+Baseline confirmation authorizes detailed design but does not pre-approve its ASCII UX. Apply `progressive-ascii-confirmation.md`: confirm the experience topology, page overview, and dependent section/function slices one at a time; write each confirmed slice with its adjacent rules; and use confirmed upstream ASCII decisions as context for later chapters.
+
 ## Information layers
 
 Keep content layers visible but place them according to reader need:
@@ -105,6 +107,8 @@ Derive each page or broad feature from the story-to-experience map, then use thi
 5. Shared navigation, filters, selection, refresh, permission, and state rules
 6. Functional decomposition table
 7. One section per subfeature
+
+Create and follow the ASCII UX confirmation queue before canonicalizing these chapter elements. Confirm the page overview before dependent subfeatures, and confirm each subfeature or task slice before composing later dependent slices.
 
 Use this compact main-guide table:
 

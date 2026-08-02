@@ -174,6 +174,13 @@ Use inline interaction for small local changes, a dialog for one bounded decisio
 | Destination | User purpose | How users arrive | What they leave with |
 |---|---|---|---|
 
+### ASCII UX confirmation progress
+
+The detailed experience is confirmed one dependency-ordered section or function at a time. Candidate ASCII remains outside this canonical guide until confirmation.
+
+| Order | Section or function | What was confirmed | Status | Canonical location | Depends on | Included UI/STATE IDs | DEC ID |
+|---:|---|---|---|---|---|---|---|
+
 ## 6. Task and interface chapters
 
 > Repeat this section for each primary user-recognizable outcome.
@@ -207,6 +214,7 @@ Trace: [TASK / US or JS / REQ references]
 #### Interface overview
 
 > What to notice: [Explain the hierarchy, primary decision, or state shown below.]
+> Include this frame as canonical content only after its confirmation unit is confirmed.
 
 ```text
 PAGE · [Page or feature] · Overview

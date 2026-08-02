@@ -114,8 +114,8 @@ Do not invent thresholds. Mark them as open decisions when absent.
 
 ## Traceability matrix
 
-| User outcome | Coverage status | BG/OBJ/SCN/REQ/STMT | ROLE/CON/UXH | IA/NAV/TASK/FLOW | PAGE/FUNC/SUB/INT | US/JS | UI/STATE | SYS/SPEC/NFR | AC |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| User outcome | Coverage status | BG/OBJ/SCN/REQ/STMT | ROLE/CON/UXH | IA/NAV/TASK/FLOW | PAGE/FUNC/SUB/INT | US/JS | UI/STATE | SYS/SPEC/NFR | AC | Baseline/ASCII DEC |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 
 Use these coverage statuses:
 
@@ -154,6 +154,8 @@ Find and report:
 - stories without acceptance criteria;
 - primary scenarios without an IA entry or complete task/decision flow;
 - user-visible interaction behaviors without an ASCII UI/state frame;
+- canonical ASCII UI/state definitions without a confirmed `DEC-ASCII` record;
+- unresolved ASCII confirmation queue items or downstream candidates generated before their dependencies were confirmed;
 - UI actions without specifications;
 - user-visible service/data boundaries without an applicable system contract;
 - states without entry or exit behavior;

@@ -65,6 +65,15 @@
 
 Delete unused planned rows instead of creating empty files.
 
+## ASCII UX confirmation queue
+
+Confirm one dependency-ordered interaction slice at a time. Keep candidate ASCII out of canonical page/task sections until the corresponding row is confirmed.
+
+| Order | Section or function | Confirmation scope | Status | Target location | Depends on | Included UI/STATE IDs | DEC ID |
+|---:|---|---|---|---|---|---|---|
+
+Allowed statuses: Planned / In review / Changes requested / Confirmed / Blocked / Superseded.
+
 ## Coverage summary
 
 | Area | Planned | Complete | Blocked | Notes |
@@ -87,6 +96,7 @@ Delete unused planned rows instead of creating empty files.
 | Pages/core features | | | | |
 | Subfeatures | | | | |
 | ASCII UI states | | | | |
+| Confirmed ASCII UX units | | | | |
 | Requirement specifications | | | | |
 | Interaction-to-system contracts | | | | |
 | Accessibility and adaptation constraints | | | | |

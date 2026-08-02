@@ -57,6 +57,8 @@ Verify:
 - each task has a clear trigger, context, next action, completion, exit, and recovery;
 - main, alternate, permission, failure, asynchronous, partial-success, stale, and recovery paths are covered when applicable;
 - every user-visible interaction appears in an ASCII UI/state frame;
+- every canonical ASCII UI/state was confirmed in dependency order, traces to a confirmed `DEC-ASCII` record, and was used as context for dependent units;
+- no candidate or changes-requested ASCII was silently written as canonical content;
 - every visible action, message, status, and consequence has a local behavior specification;
 - dialog versus dedicated-page choices follow the interaction-logic rules and no drawer-like surface appears;
 - destructive or irreversible actions show scope, consequence, reversibility, and safeguard;
@@ -226,7 +228,7 @@ Include:
 
 1. delivery status, location, format, baseline version, and scope;
 2. actual file/document tree and a file map with one-sentence descriptions;
-3. coverage of users, scenarios, stories, functions, pages, flows, ASCII UI states, specifications, and acceptance criteria;
+3. coverage of users, scenarios, stories, functions, pages, flows, sequential ASCII UX confirmations, UI states, specifications, and acceptance criteria;
 4. deterministic and manual review results;
 5. important repairs made during review;
 6. remaining limitations, assumptions, risks, blocked items, and omitted or not-applicable artifacts;
@@ -246,6 +248,7 @@ Before yielding:
 - all links in the handoff resolve to real artifacts;
 - file descriptions match their current contents and statuses;
 - reported coverage matches the document and validator results;
+- ASCII confirmation coverage reports confirmed, superseded, omitted, and blocked units accurately;
 - repaired findings are no longer present;
 - remaining limitations and blocking issues are explicit;
 - omitted, provisional, blocked, and not-applicable artifacts are distinguished;

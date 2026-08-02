@@ -122,7 +122,9 @@ Confirmation validates shared understanding, not factual truth. Keep evidence la
 
 ## Produce the detailed specification
 
-Only after confirmation, derive functional points from stories, choose the appropriate overview/list/queue/detail/task starting surfaces, map detail and jump destinations, organize and justify the interaction logic, and then proceed with information architecture, task and decision flows, page/subfeature decomposition, complete ASCII UI/state coverage, interaction behavior, system contracts, accessibility/adaptation constraints, atomic specifications, acceptance criteria, and traceability.
+Only after confirmation, derive functional points from stories, choose the appropriate overview/list/queue/detail/task starting surfaces, map detail and jump destinations, and organize the interaction logic. Then apply `progressive-ascii-confirmation.md`: order material ASCII UX by dependency, present one candidate unit at a time, write only confirmed units into canonical documents, and derive later candidates from the confirmed baseline plus confirmed upstream ASCII decisions.
+
+Do not interpret baseline confirmation as advance approval of every detailed flow or interface. Each material ASCII interaction slice still requires its own explicit confirmation before canonical write.
 
 If detailed design reveals a material contradiction or missing decision, pause the affected branch, explain why the baseline is insufficient, and return only that slice to confirmation. Continue unaffected confirmed work when separation is safe.
 

@@ -1,6 +1,6 @@
 ---
 name: shape-ux-requirements
-description: Assess and shape complex enterprise requirements into repository-grounded, user-mental-model-aligned, human-readable Markdown guides, specifications, and ASCII UX. Use when PMs or UX designers need current-state analysis, clarification, public research on comparable products or industry approaches, problem framing, users and scenarios, terminology, ASCII-first IA/task/decision/state/cross-role flows, stories, page/subfeature decomposition, full-state ASCII UI, missing-ASCII supplementation, interaction/system contracts, accessibility, acceptance criteria, or traceability. Inspect repository instructions, code, tests, product copy, schemas, documents, and relevant authoritative public sources before proposing behavior. Default to a reader-first UX/requirements guide with dense control detail in appendices or supporting files. Do not use for visual styling, procurement ranking, or technical architecture alone.
+description: Assess and shape complex enterprise requirements into repository-grounded, user-mental-model-aligned, human-readable Markdown guides, specifications, and progressively user-confirmed ASCII UX. Use when PMs or UX designers need current-state analysis, clarification, public research on comparable products or industry approaches, problem framing, users and scenarios, terminology, ASCII-first IA/task/decision/state/cross-role flows, stories, page/subfeature decomposition, ordered ASCII confirmation, full-state ASCII UI, missing-ASCII supplementation, interaction/system contracts, accessibility, acceptance criteria, or traceability. Inspect repository instructions, code, tests, product copy, schemas, documents, and relevant authoritative public sources before proposing behavior. Default to a reader-first UX/requirements guide with dense control detail in appendices or supporting files. Do not use for visual styling, procurement ranking, or technical architecture alone.
 ---
 
 # Shape UX Requirements
@@ -40,7 +40,7 @@ Respond in the user's language unless asked otherwise. Use `ASCII`, not `ASII`, 
 - Read [references/concept-language.md](references/concept-language.md) when the input contains engineering terminology, translated terms, unfamiliar domain objects, or naming work.
 - Read [references/stories-and-acceptance.md](references/stories-and-acceptance.md) before producing stories or acceptance criteria, then [references/confirmation-gate.md](references/confirmation-gate.md) before any user confirmation pause or baseline approval.
 - Read [references/information-architecture-and-task-flows.md](references/information-architecture-and-task-flows.md) after the story backbone and before defining navigation, cross-page journeys, role handoffs, or detailed screen structure.
-- Read [references/interaction-logic-principles.md](references/interaction-logic-principles.md) and [references/ascii-interactions.md](references/ascii-interactions.md) before organizing interaction logic or producing an ASCII UI/flow.
+- Read [references/interaction-logic-principles.md](references/interaction-logic-principles.md), [references/ascii-interactions.md](references/ascii-interactions.md), and [references/progressive-ascii-confirmation.md](references/progressive-ascii-confirmation.md) before organizing, presenting, confirming, or writing detailed ASCII UX.
 - Read [references/human-readable-requirements.md](references/human-readable-requirements.md) before composing any UX/PM-facing requirement document.
 - Read [references/spec-and-traceability.md](references/spec-and-traceability.md) before producing specifications, matrices, or the final quality audit.
 - Read [references/integrated-guide.md](references/integrated-guide.md) before producing a full document, user manual, feature guide, or combined user-guide/specification deliverable.
@@ -286,7 +286,7 @@ After validating the IA, create the page/feature/subfeature map. Keep each subfe
 
 ### Phase 8: Model interactions
 
-Apply `references/interaction-logic-principles.md` to derive and justify the interaction, then apply `references/ascii-interactions.md` to express it.
+Apply `references/interaction-logic-principles.md` to derive the interaction, `references/ascii-interactions.md` to express it, and `references/progressive-ascii-confirmation.md` to confirm and persist it in dependency order.
 
 Use ASCII as the default explanatory view for flows, state changes, and interfaces. Create the smallest non-duplicative set needed to explain:
 
@@ -308,10 +308,11 @@ For each relevant frame, record the assumed viewport/context, keyboard and focus
 
 For a large page or broad feature:
 
-1. Draw one page-level ASCII overview that labels major regions and subfeatures.
-2. Explain the page's purpose, entry conditions, shared controls, navigation, and cross-region dependencies.
-3. Draw a focused ASCII state for each subfeature or interaction that cannot be understood from the overview.
-4. Keep page-level rules beside the overview and subfeature-level rules beside the focused frame.
+1. Create an ASCII confirmation queue ordered from topology and page overview through dependent function/section slices and recovery paths.
+2. Present exactly one candidate unit, with its dependencies, assumptions, modification guidance, target location, and named next unit.
+3. Keep candidate ASCII out of canonical requirement sections until the user explicitly confirms it.
+4. On confirmation, write its ASCII, adjacent specifications, accessibility/adaptation constraints, acceptance criteria, trace links, and `DEC-ASCII` record as one coherent update.
+5. Generate the next unit from the confirmed baseline and relevant confirmed ASCII decisions; reconfirm affected units when an upstream decision changes.
 
 ### Phase 9: Specify behavior in tables
 
@@ -380,8 +381,8 @@ Before the final audit, apply `references/markdown-delivery.md` and deliver the 
 3. Create `index.md` first for multi-file delivery.
 4. Ensure the alignment brief and `DEC-BASELINE` confirmation record exist before detailed files; when repository evidence is available, create `00-repository-context.md` from `assets/repository-context-template.md`.
 5. When external research was performed, create the landscape artifact before requirement foundation files.
-6. Generate foundation, page/feature, cross-page workflow, cross-cutting specification, and traceability files in dependency order.
-7. Update the plan and `index.md` status after each completed step.
+6. Generate foundation files, then confirm and write one dependent ASCII unit at a time before cross-cutting and traceability completion.
+7. Update the plan, confirmation queue, and `index.md` after every confirmed unit.
 8. Keep each page's canonical stories, ASCII UI, subfeature explanations, local interaction/system requirements, accessibility/adaptation constraints, and acceptance criteria together in the same file.
 9. Run `scripts/validate_requirement_docs.py <output-path> --final --profile full` for a completed full-shaping document when Python is available; omit the full profile for narrower modes.
 10. Validate relative links, filenames, IDs, document status, and canonical rule ownership manually for anything the script cannot establish.
@@ -413,7 +414,7 @@ For a first pass, output the alignment brief through candidate stories and pause
 7. Target scenarios and current workarounds
 8. Concept model and user-facing terminology
 9. Requirement register, global story map, priority, and release slicing
-10. Story-derived functional points, starting-surface/page topology, interaction logic and rationale, UX hypotheses, and ASCII navigation, task/decision, cross-role, asynchronous, and state flows with supporting rule tables
+10. Story-derived functional points, starting-surface/page topology, interaction logic and rationale, UX hypotheses, and sequentially confirmed ASCII navigation, task/decision, cross-role, asynchronous, and state flows with supporting rule tables
 11. Page, feature, subfeature, and task map
 12. Repeated page or core-feature chapters containing:
    - page/feature purpose, scope, and applicable roles;
@@ -474,4 +475,5 @@ Reject or revise an output when:
 - permissions, inheritance, precedence, lifecycle, or failure behavior remain ambiguous;
 - the traceability matrix exposes orphaned stories, screens, specs, or criteria.
 - a confirmation pause does not explain how to modify the current material or what the named next phase will produce;
+- dependent ASCII units were generated or written ahead of confirmation, or a canonical UI lacks a confirmed `DEC-ASCII` record;
 - review findings were not repaired and revalidated, or the user handoff omits the actual file/document structure, contents, coverage, review results, limitations, and reading order.

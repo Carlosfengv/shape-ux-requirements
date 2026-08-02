@@ -50,7 +50,14 @@
 | Assumption | Validation needed | Affected FLOW/UI/SPEC | STMT ID |
 | --- | --- | --- | --- |
 
-## 5. ASCII task and state flow
+## 5. ASCII UX confirmation queue
+
+Confirm one dependency-ordered supplement slice at a time. Keep candidate ASCII out of the canonical supplement sections below until confirmation.
+
+| Order | Section or function | Confirmation scope | Status | Target section | Depends on | Included UI/STATE IDs | DEC ID |
+|---:|---|---|---|---|---|---|---|
+
+## 6. ASCII task and state flow
 
 ```text
 [TASK/FLOW entry]
@@ -61,7 +68,7 @@
        +-- correct/retry <-+-- validation or system failure
 ```
 
-## 6. Page overview
+## 7. Page overview
 
 ```text
 PAGE-01 · [Page or feature] · Overview
@@ -79,12 +86,14 @@ PAGE-01 · [Page or feature] · Overview
 | Region | User purpose | Main interactions | Related source | SUB ID |
 | --- | --- | --- | --- | --- |
 
-## 7. Focused ASCII UI states
+## 8. Focused ASCII UI states
 
 | Interaction behavior | Visible change or feedback | ASCII UI/STATE | Source/SPEC/AC | INT ID |
 | --- | --- | --- | --- | --- |
 
 ### UI-01 · [Interaction] · Default
+
+> Canonical only after its confirmation queue row is `Confirmed` and linked to `DEC-ASCII-###`.
 
 ```text
 ┌──────────────────────────────────────────────┐
@@ -113,7 +122,7 @@ PAGE-01 · [Page or feature] · Overview
 
 Repeat focused frames only for materially different states.
 
-## 8. Accessibility and adaptation
+## 9. Accessibility and adaptation
 
 | Constraint | Requirement | Related UI/SPEC |
 |---|---|---|
@@ -124,7 +133,7 @@ Repeat focused frames only for materially different states.
 | Text expansion and overflow | | |
 | Narrow viewport or dense data | | |
 
-## 9. Coverage and optimization review
+## 10. Coverage and optimization review
 
 | Check | Result | Adjustment made or remaining gap |
 |---|---|---|
@@ -137,8 +146,9 @@ Repeat focused frames only for materially different states.
 | Every introduced element traces to source evidence | | |
 | Unsupported behavior is labeled as an assumption | | |
 | ASCII and adjacent specification agree | | |
+| Every canonical UI/STATE is covered by a confirmed DEC-ASCII record | | |
 
-## 10. Revision summary
+## 11. Revision summary
 
 | Version/date | Source change or review finding | ASCII/spec adjustment | Remaining decision |
 |---|---|---|---|

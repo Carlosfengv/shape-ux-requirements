@@ -79,9 +79,9 @@ When a planning tool is available, create and maintain a plan with exactly one a
 8. Produce the alignment brief, request explicit confirmation, and pause dependent work.
 9. Record the confirmed baseline version and `DEC-BASELINE`.
 10. Derive user-recognizable `FUNC` capabilities from confirmed stories, choose the appropriate starting-surface model, and map detail/action destinations and return behavior.
-11. Establish interaction logic and material pattern rationale, then the canonical UX hypotheses and ASCII information architecture, navigation, task/decision, role-handoff, asynchronous, and lifecycle flows with supporting rule tables.
+11. Establish interaction logic and material pattern rationale, create the dependency-ordered ASCII confirmation queue, then present and confirm one topology, flow, page, section/function, or state slice at a time.
 12. Produce the page/core-feature map.
-13. Produce one page/core-feature file at a time, including canonical story details, subfeatures, ASCII UI, local interaction/system specifications, accessibility/adaptation constraints, and acceptance criteria.
+13. Write each confirmed ASCII slice into its page/core-feature file with canonical story details, local interaction/system specifications, accessibility/adaptation constraints, acceptance criteria, trace links, and `DEC-ASCII` record before presenting the next slice.
 14. Produce cross-page workflows and cross-cutting requirements.
 15. Produce traceability, decisions, assumptions, and open questions.
 16. Compose or update the human-readable UX requirement guide from the canonical material.
@@ -90,7 +90,7 @@ When a planning tool is available, create and maintain a plan with exactly one a
 
 If no planning tool is available, put the same steps and statuses into `index.md`.
 
-Do not mark a step complete until its file exists, contains no unintended placeholders, and passes its local coverage check.
+Do not mark a step complete until its file exists, contains no unintended placeholders, passes its local coverage check, and every canonical ASCII UI in scope has a confirmed `DEC-ASCII` record.
 
 ## Multi-file structure
 
@@ -166,7 +166,9 @@ Before baseline confirmation:
 - mark dependent files as Blocked or Planned;
 - do not fill detailed IA, ASCII UI, specifications, or acceptance files with speculative content.
 
-For long-running delivery, update both the execution plan and the index after each file.
+After baseline confirmation, persist the ASCII UX confirmation queue. Keep candidate ASCII in the confirmation conversation, not in canonical requirement sections. Update the execution plan, index, queue, canonical page/task slice, adjacent specifications, acceptance criteria, and trace links after each confirmed unit.
+
+For long-running delivery, reconstruct the next unit from the persisted baseline, queue, confirmed `DEC-ASCII` records, and canonical files rather than conversation memory alone.
 
 ## Final validation
 
@@ -187,6 +189,7 @@ Check:
 - each page/subfeature has a canonical file;
 - ASCII UI remains adjacent to local specifications;
 - every user-visible interaction behavior references an ASCII UI/state frame that actually shows its control, feedback, or result;
+- every canonical ASCII UI/state is covered by a confirmed `DEC-ASCII` record, and no required queue item remains in review or awaiting changes;
 - every primary and cross-page flow has a readable ASCII overview before its detailed rule table;
 - every narrow delivery reports expected, omitted, provisional, blocked, and not-applicable artifacts;
 - the main guide passes the five-minute, skim, jargon, table-width, ID-hierarchy, and action-findability checks;
@@ -203,4 +206,4 @@ For completed artifacts, run:
 python3 <skill-directory>/scripts/validate_requirement_docs.py <output-path> --final --profile full
 ```
 
-The structural profile checks file/link integrity, table structure, localized ID headers, placeholders, baseline-status fields, final delivery statuses, index backlinks, and unknown ID prefixes. The full profile also requires a canonical `DEC-BASELINE` record linked to confirmed requirement/story coverage, a persisted review/handoff section, and the actual delivered file/document structure; it detects duplicate canonical IDs, dangling references, untraced `CHG` records, missing required artifact classes, missing ASCII flow coverage when `FLOW` IDs exist, interaction behaviors without linked ASCII UI/state, stories without functional points or upstream/downstream trace, functional points without stories or user-facing surfaces, UI states without stories or behavioral rules, and orphaned acceptance criteria. It still cannot prove that a person actually approved the baseline, that review findings were genuinely repaired, that the displayed tree matches the filesystem, that a referenced frame visibly depicts the claimed behavior, that every diagram is comprehensible, or that the product logic, priority, terminology, usability, accessibility, or UX hypothesis is correct; complete those judgments manually and report them honestly in the handoff.
+The structural profile checks file/link integrity, table structure, localized ID headers, placeholders, baseline-status fields, final delivery statuses, index backlinks, and unknown ID prefixes. The full profile also requires a canonical `DEC-BASELINE` record linked to confirmed requirement/story coverage, a populated final ASCII UX confirmation queue, confirmed `DEC-ASCII` coverage for every canonical UI, a persisted review/handoff section, and the actual delivered file/document structure; it detects unresolved ASCII confirmation units, duplicate canonical IDs, dangling references, untraced `CHG` records, missing required artifact classes, missing ASCII flow coverage when `FLOW` IDs exist, interaction behaviors without linked ASCII UI/state, stories without functional points or upstream/downstream trace, functional points without stories or user-facing surfaces, UI states without stories or behavioral rules, and orphaned acceptance criteria. It still cannot prove that a person actually approved a candidate, that units were presented sequentially, that review findings were genuinely repaired, that the displayed tree matches the filesystem, that a referenced frame visibly depicts the claimed behavior, that every diagram is comprehensible, or that the product logic, priority, terminology, usability, accessibility, or UX hypothesis is correct; complete those judgments manually and report them honestly in the handoff.

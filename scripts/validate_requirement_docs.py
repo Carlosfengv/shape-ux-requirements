@@ -2,8 +2,8 @@
 """Validate generated Markdown requirement documents.
 
 The default profile checks deterministic document structure. The full profile
-also checks stable-ID definitions, interaction-to-ASCII coverage, and the
-requirement-to-ASCII trace chain.
+also checks stable-ID definitions, progressive ASCII confirmation coverage,
+interaction-to-ASCII coverage, and the requirement-to-ASCII trace chain.
 It cannot determine whether the underlying product decisions are correct.
 """
 
@@ -194,6 +194,20 @@ FINAL_DELIVERY_STATUSES = {
     "不适用",
     "已省略",
 }
+ASCII_QUEUE_SCOPE_HEADERS = {"CONFIRMATION SCOPE", "确认范围"}
+FINAL_ASCII_QUEUE_STATUSES = {
+    "CONFIRMED",
+    "CONFIRMED AND WRITTEN",
+    "SUPERSEDED",
+    "N/A",
+    "NOT APPLICABLE",
+    "OMITTED",
+    "已确认",
+    "已确认并写入",
+    "已取代",
+    "不适用",
+    "已省略",
+}
 
 
 @dataclass(frozen=True)
@@ -221,6 +235,10 @@ class Analysis:
     baseline_statuses: list[tuple[str, Site]] = field(default_factory=list)
     review_handoff_sites: set[Site] = field(default_factory=set)
     delivered_structure_sites: set[Site] = field(default_factory=set)
+    ascii_confirmation_statuses: dict[str, list[tuple[str, Site]]] = field(
+        default_factory=lambda: defaultdict(list)
+    )
+    ascii_queue_statuses: list[tuple[str, Site]] = field(default_factory=list)
 
     def merge(self, other: "Analysis") -> None:
         self.findings.extend(other.findings)
@@ -234,6 +252,9 @@ class Analysis:
         self.baseline_statuses.extend(other.baseline_statuses)
         self.review_handoff_sites.update(other.review_handoff_sites)
         self.delivered_structure_sites.update(other.delivered_structure_sites)
+        for stable_id, statuses in other.ascii_confirmation_statuses.items():
+            self.ascii_confirmation_statuses[stable_id].extend(statuses)
+        self.ascii_queue_statuses.extend(other.ascii_queue_statuses)
 
 
 def parse_args() -> argparse.Namespace:
@@ -303,6 +324,15 @@ def is_confirmed_baseline_status(value: str) -> bool:
     )
 
 
+def is_confirmed_ascii_status(value: str) -> bool:
+    return normalize_header(value) in {
+        "CONFIRMED",
+        "CONFIRMED AND WRITTEN",
+        "已确认",
+        "已确认并写入",
+    }
+
+
 def split_table_cells(line: str) -> list[str]:
     stripped = line.strip()
     content = stripped[1:-1] if stripped.startswith("|") and stripped.endswith("|") else stripped
@@ -369,6 +399,7 @@ def inspect_file(path: Path, final: bool) -> Analysis:
     definition_columns: dict[int, set[str] | None] = {}
     status_column: int | None = None
     delivery_table = False
+    ascii_queue_table = False
 
     for line_number, line in enumerate(lines, start=1):
         stripped = line.strip()
@@ -394,6 +425,9 @@ def inspect_file(path: Path, final: bool) -> Analysis:
             table_headers = None
             table_cell_count = None
             definition_columns = {}
+            status_column = None
+            delivery_table = False
+            ascii_queue_table = False
             continue
 
         if in_fence:
@@ -490,6 +524,10 @@ def inspect_file(path: Path, final: bool) -> Analysis:
                     DELIVERY_ITEM_HEADERS & normalized_headers
                     and STATUS_HEADERS & normalized_headers
                 )
+                ascii_queue_table = bool(
+                    ASCII_QUEUE_SCOPE_HEADERS & normalized_headers
+                    and STATUS_HEADERS & normalized_headers
+                )
             elif not is_separator_row(cells):
                 add_row_edges(analysis, line_ids)
                 for column, allowed_prefixes in definition_columns.items():
@@ -498,6 +536,21 @@ def inspect_file(path: Path, final: bool) -> Analysis:
                     for stable_id in extract_ids(cells[column]):
                         if allowed_prefixes is None or prefix_of(stable_id) in allowed_prefixes:
                             analysis.definitions[stable_id].add(site)
+
+                if ascii_queue_table and status_column is not None:
+                    queue_status = cells[status_column].strip() if status_column < len(cells) else ""
+                    analysis.ascii_queue_statuses.append((queue_status, site))
+
+                for stable_id in line_ids:
+                    if stable_id.startswith("DEC-ASCII-"):
+                        confirmation_status = (
+                            cells[status_column].strip()
+                            if status_column is not None and status_column < len(cells)
+                            else ""
+                        )
+                        analysis.ascii_confirmation_statuses[stable_id].append(
+                            (confirmation_status, site)
+                        )
 
                 if len(cells) >= 2 and normalize_header(cells[0]) in BASELINE_STATUS_LABELS:
                     baseline_value = cells[1].strip()
@@ -538,6 +591,7 @@ def inspect_file(path: Path, final: bool) -> Analysis:
             definition_columns = {}
             status_column = None
             delivery_table = False
+            ascii_queue_table = False
 
         for match in LINK_RE.finditer(line):
             destination = local_link_destination(path, match.group(1))
@@ -726,6 +780,35 @@ def semantic_findings(analysis: Analysis, final: bool, profile: str) -> list[Fin
                 "full profile requires the actual delivered file or document structure",
             )
         )
+    if not analysis.ascii_queue_statuses:
+        findings.append(
+            Finding(
+                strict_severity,
+                "MISSING_ASCII_CONFIRMATION_QUEUE",
+                fallback_file,
+                1,
+                "full profile requires a populated ASCII UX confirmation queue",
+            )
+        )
+    else:
+        for queue_status, site in analysis.ascii_queue_statuses:
+            if normalize_header(queue_status) not in FINAL_ASCII_QUEUE_STATUSES:
+                findings.append(
+                    Finding(
+                        strict_severity,
+                        "UNRESOLVED_ASCII_CONFIRMATION",
+                        site.file,
+                        site.line,
+                        f"ASCII confirmation unit has non-final status: "
+                        f"{queue_status or '(empty)'}",
+                    )
+                )
+
+    confirmed_ascii_decisions = {
+        stable_id
+        for stable_id, statuses in analysis.ascii_confirmation_statuses.items()
+        if any(is_confirmed_ascii_status(status) for status, _site in statuses)
+    }
 
     baseline_ids = sorted(
         stable_id
@@ -889,6 +972,16 @@ def semantic_findings(analysis: Analysis, final: bool, profile: str) -> list[Fin
                         first.file,
                         first.line,
                         f"{stable_id} does not trace to SPEC/SYS/AC",
+                    )
+                )
+            if not (analysis.edges.get(stable_id, set()) & confirmed_ascii_decisions):
+                findings.append(
+                    Finding(
+                        strict_severity,
+                        "MISSING_ASCII_CONFIRMATION",
+                        first.file,
+                        first.line,
+                        f"{stable_id} is not directly covered by a confirmed DEC-ASCII record",
                     )
                 )
         elif stable_prefix == "AC" and not reachable_prefix(
