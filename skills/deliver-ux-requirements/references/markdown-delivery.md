@@ -30,7 +30,7 @@ Apply `adaptive-delivery-profiles.md`. Start with one human-readable `ux-require
 
 ## Use two-stage delivery
 
-For a new or materially revised requirement, Stage 1 creates or updates `ux-requirements.md` using the alignment sections from `assets/requirement-alignment-template.md`. Stop after presenting the evidence-backed analysis, scope, terminology, and complete candidate stories. Keep downstream IA, ASCII UI, detailed specifications, and acceptance sections Planned or omitted until confirmation.
+For a new or materially revised requirement, Stage 1 creates or updates `ux-requirements.md` using the alignment artifact produced by `$shape-requirement-baseline`. Stop after presenting the evidence-backed analysis, scope, terminology, and complete candidate stories. Keep downstream IA, ASCII UI, detailed specifications, and acceptance sections Planned or omitted until confirmation.
 
 After explicit confirmation, change the baseline status to `Confirmed`, record `DEC-BASELINE-###`, and extend the same main file through Stage 2. Record later changes in its baseline/change section and reconfirm affected stories before updating dependent content. Create a separate alignment file only when governance requires an independently retained approval artifact.
 
@@ -53,7 +53,7 @@ A narrow request limits output size, not transparency. Before handoff, show:
 
 Do this for the requested artifact and the adjacent outputs required to use it safely. For interaction-related work, explicitly cover task flow, ASCII UI, critical states, local specifications, accessibility/adaptation, and acceptance criteria.
 
-When an existing document contains enough interaction evidence but lacks ASCII UI, create a targeted supplement with `assets/ascii-ui-supplement-template.md`. Keep it bounded to the relevant page, subfeature, or task. When evidence is partial, label provisional frames and assumptions. When a missing role, task, permission, state, data, or recovery decision would materially change the interface, mark ASCII UI `Blocked`, explain the impact, and ask focused questions before finalizing it.
+When an existing document contains enough interaction evidence but lacks ASCII UI, invoke `$shape-ascii-interactions` to create a targeted supplement from its `assets/ascii-ui-supplement-template.md`. Keep it bounded to the relevant page, subfeature, or task. When evidence is partial, label provisional frames and assumptions. When a missing role, task, permission, state, data, or recovery decision would materially change the interface, mark ASCII UI `Blocked`, explain the impact, and ask focused questions before finalizing it.
 
 If the user explicitly requests only a non-UI artifact, do not expand scope without permission. State that ASCII UI was omitted and whether a later supplement is needed for design, implementation, testing, or acceptance.
 

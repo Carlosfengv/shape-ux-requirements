@@ -8,7 +8,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-VALIDATOR_PATH = ROOT / "scripts" / "validate_requirement_docs.py"
+DELIVERY_SKILL = ROOT / "skills" / "deliver-ux-requirements"
+VALIDATOR_PATH = DELIVERY_SKILL / "scripts" / "validate_requirement_docs.py"
 SPEC = importlib.util.spec_from_file_location("requirement_validator_tested", VALIDATOR_PATH)
 assert SPEC is not None and SPEC.loader is not None
 validator = importlib.util.module_from_spec(SPEC)
@@ -206,7 +207,7 @@ class HappyPathValidationTests(unittest.TestCase):
 
     def test_enterprise_template_confirms_path_before_deriving_functions(self) -> None:
         content = (
-            ROOT / "assets" / "enterprise-requirement-output-template.md"
+            DELIVERY_SKILL / "assets" / "enterprise-requirement-output-template.md"
         ).read_text(encoding="utf-8")
 
         happy_path_position = content.index("### 6.3 Confirmed Happy Paths")
@@ -219,6 +220,81 @@ class HappyPathValidationTests(unittest.TestCase):
 
         self.assertLess(happy_path_position, function_position)
         self.assertLess(function_position, surface_position)
+
+
+class StageProfileValidationTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.site = validator.Site(Path("synthetic.md"), 1)
+
+    def confirmed_baseline(self):
+        analysis = validator.Analysis()
+        for stable_id in (
+            "BG-001",
+            "OBJ-001",
+            "ROLE-001",
+            "SCN-001",
+            "CON-001",
+            "REQ-001",
+            "TASK-001",
+            "US-001",
+            "DEC-BASELINE-001",
+        ):
+            analysis.definitions[stable_id].add(self.site)
+        analysis.edges["US-001"].update({"REQ-001", "SCN-001", "TASK-001"})
+        analysis.edges["REQ-001"].add("US-001")
+        analysis.edges["SCN-001"].add("US-001")
+        analysis.edges["TASK-001"].add("US-001")
+        analysis.edges["DEC-BASELINE-001"].update(
+            {"REQ-001", "TASK-001", "US-001"}
+        )
+        analysis.edges["REQ-001"].add("DEC-BASELINE-001")
+        analysis.baseline_statuses.append(("Confirmed", self.site))
+        return analysis
+
+    def findings(self, analysis, profile):
+        return validator.semantic_findings(
+            analysis,
+            final=True,
+            profile=profile,
+            file_count=1,
+        )
+
+    def test_baseline_profile_does_not_require_downstream_artifacts(self) -> None:
+        codes = {
+            finding.code
+            for finding in self.findings(self.confirmed_baseline(), "baseline")
+        }
+
+        self.assertNotIn("MISSING_HAPPY_PATH", codes)
+        self.assertNotIn("MISSING_FUNCTION_DECOMPOSITION", codes)
+        self.assertNotIn("MISSING_REVIEW_HANDOFF", codes)
+        self.assertNotIn("MISSING_STAGE_ARTIFACT", codes)
+
+    def test_happy_path_profile_includes_baseline_and_path_contracts(self) -> None:
+        findings = self.findings(self.confirmed_baseline(), "happy-path")
+        codes = {finding.code for finding in findings}
+
+        self.assertIn("MISSING_HAPPY_PATH", codes)
+        self.assertTrue(
+            any(
+                finding.code == "MISSING_STAGE_ARTIFACT"
+                and "happy path" in finding.message
+                for finding in findings
+            )
+        )
+        self.assertNotIn("MISSING_REVIEW_HANDOFF", codes)
+
+    def test_delivery_profile_does_not_reopen_baseline_gate(self) -> None:
+        codes = {
+            finding.code
+            for finding in self.findings(self.confirmed_baseline(), "delivery")
+        }
+
+        self.assertIn("MISSING_DELIVERY_PROFILE", codes)
+        self.assertIn("MISSING_REVIEW_HANDOFF", codes)
+        self.assertIn("MISSING_STAGE_ARTIFACT", codes)
+        self.assertNotIn("MISSING_BASELINE_CONFIRMATION", codes)
+        self.assertNotIn("MISSING_HAPPY_PATH", codes)
 
 
 if __name__ == "__main__":

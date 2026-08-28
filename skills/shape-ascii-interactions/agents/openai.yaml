@@ -1,0 +1,4 @@
+interface:
+  display_name: "ASCII 交互设计"
+  short_description: "从确认路径推导 IA、流程和 ASCII UI"
+  default_prompt: "请使用 $shape-ascii-interactions 把已确认需求和 Happy Path 转成可逐项确认的 ASCII 交互。"

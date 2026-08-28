@@ -74,7 +74,7 @@ Add these details below the table for important or risky concepts:
 
 Treat claims about user recognition, findability, expected sequence, comprehension, risk perception, and completion signals as hypotheses until supported.
 
-Record concept-specific evidence and confidence in the concept dictionary. Send every material cross-concept or task-level claim to the single canonical `UXH` register defined in `references/information-architecture-and-task-flows.md`; do not duplicate the hypothesis text here.
+Record concept-specific evidence and confidence in the concept dictionary. Send every material cross-concept or task-level claim to the single canonical `UXH` register owned by `$shape-ascii-interactions`; do not duplicate the hypothesis text here.
 
 Prefer task-based validation over asking whether a label “sounds good.” Define what a representative user must find, explain, predict, or complete.
 

@@ -1,0 +1,7 @@
+interface:
+  display_name: "UX 需求编排"
+  short_description: "编排基线、Happy Path、ASCII 与规格交付"
+  default_prompt: "请使用 $shape-ux-requirements 完成端到端需求梳理，并在每个确认门暂停。"
+
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,28 @@
+{
+  "name": "shape-ux-requirements",
+  "version": "0.2.0",
+  "description": "A staged enterprise UX requirements toolkit for evidence-grounded baselines, happy paths, ASCII interactions, and specification delivery.",
+  "author": {
+    "name": "Carlosfengv",
+    "url": "https://github.com/Carlosfengv"
+  },
+  "homepage": "https://github.com/Carlosfengv/shape-ux-requirements",
+  "repository": "https://github.com/Carlosfengv/shape-ux-requirements",
+  "license": "MIT",
+  "keywords": ["ux", "requirements", "product-management", "ascii-ui", "specification"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "UX Requirements Toolkit",
+    "shortDescription": "Shape and validate enterprise UX requirements.",
+    "longDescription": "Turn repository evidence and complex product input into a confirmed requirement baseline, reviewed happy paths, traceable ASCII interactions, and reader-first specifications.",
+    "developerName": "Carlosfengv",
+    "category": "Productivity",
+    "capabilities": ["Research", "Write", "Validate"],
+    "websiteURL": "https://github.com/Carlosfengv/shape-ux-requirements",
+    "defaultPrompt": [
+      "Shape this requirement from evidence to a confirmed baseline.",
+      "Review the primary happy path before interface design.",
+      "Turn the confirmed flow into traceable ASCII interactions."
+    ]
+  }
+}

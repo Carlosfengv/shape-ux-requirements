@@ -1,141 +1,160 @@
-# UX 需求梳理
+# UX 需求梳理工具集
 
-面向复杂企业级产品的需求分析 Skill，帮助 PM、UX 设计师和研发团队把零散、工程化、难理解的输入，整理为符合用户心智模型的需求文档、User Stories、交互逻辑和 ASCII UX。
+面向复杂企业产品的多 Skill 工具集。它把原来单一、较重的需求梳理流程拆成四个可独立调用的专业阶段，并保留一个端到端编排入口。
 
-## 它能帮你做什么
+## Skill 组成
 
-- 优先分析当前代码仓库、已有文档、产品文案、状态、权限和测试，理解产品现状。
-- 评估输入是否完整、准确和自洽，识别事实、决定、推断、假设、冲突与待确认问题。
-- 补全需求背景、业务目标、目标用户、使用场景、范围和成功结果。
-- 把工程术语和复杂概念转换为用户容易理解的产品语言。
-- 将需求整理为 User Stories，并在进入详细设计前与用户确认需求基线。
-- 为每个主要场景从第一性原理推导候选 Happy Path，主动审查角色、前置条件、隐藏依赖、必要步骤和完成信号，确认后再用于页面与交互设计。
-- 每次确认都会明确提供“修改当前内容”和“进入具体下一阶段”两条路径，说明修改方法、下一步产出及预期状态。
-- 从已确认的 User Stories 推导功能点、页面、详情去向和交互逻辑。
-- 使用 ASCII 表达页面结构、任务流、决策分支、状态变化、跨角色协作和异步过程。
-- 按依赖顺序逐个提交页面、Section 或功能的 ASCII UX；用户确认一个就写入一个，并用已确认结果继续生成后续交互。
-- 为每个用户可见交互补充默认、加载、空状态、成功、错误、权限和恢复界面。
-- 把交互连接到需求规格、系统行为、验收标准和追踪关系。
-- 默认把需求确认、ASCII UX、规格和 Review 持续写入同一份 `ux-requirements.md`，只在独立评审、所有权或阅读需要时拆分文件。
-- 完整生成后执行需求、UX、交互和可读性 Review，修复并复查问题，再说明文档清单、覆盖内容、遗留风险和阅读顺序。
-- 在需要时搜索相关产品、行业方案和公开资料，作为需求分析参考。
+| Skill | 负责什么 | 主要产物 |
+| --- | --- | --- |
+| `$shape-ux-requirements` | 跨阶段编排与确认门控制 | 一份持续演进的端到端需求文档 |
+| `$shape-requirement-baseline` | 仓库证据、输入评估、问题框定、用户/场景、术语、需求与 Stories | `DEC-BASELINE` 确认的需求基线 |
+| `$shape-happy-paths` | 第一性原理推导、对抗性审查、成功路径分支与确认 | `FLOW-HP`、`DEC-HAPPY` |
+| `$shape-ascii-interactions` | 功能点、IA、任务流、交互逻辑、ASCII UI/状态及逐项确认 | `FUNC/IA/FLOW/INT/UI/STATE`、`DEC-ASCII` |
+| `$deliver-ux-requirements` | 规格、验收、追踪、Markdown 组装、校验、Review 与交付 | `SPEC/SYS/AC/NFR`、最终文件与交付摘要 |
 
-## 输出是什么样的
+每个专业 Skill 都可以单独触发。只有请求跨越多个阶段时，才需要加载编排入口。
 
-UX 需求梳理采用三个依次确认的阶段，避免在需求基线或主要成功路径尚未确认时过早进入页面设计。
-
-### 阶段一：需求基线确认稿
+## 端到端流程
 
 ```text
-需求背景与当前问题
-        ↓
-业务目标和用户目标
-        ↓
-目标用户与使用场景
-        ↓
-用户心智模型与术语解释
-        ↓
-需求范围与 User Stories
-        ↓
-概念级候选 Happy Path 与初步质疑
-        ↓
-等待用户确认需求基线
+仓库与来源证据
+      ↓
+需求/Story 基线 ── DEC-BASELINE
+      ↓
+Happy Path 推导与审查 ── DEC-HAPPY
+      ↓
+IA、流程和 ASCII 交互 ── DEC-ASCII
+      ↓
+规格、验收、追踪、校验与交付
 ```
 
-第一次输出主要帮助 PM 和 UX 确认：解决什么问题、服务谁、在哪些场景使用、User Stories 是否准确，以及概念级候选 Happy Path 是否指向正确的用户成功结果。此时只标出关键依据、假设和可能改变路径的问题，不绑定页面或控件，也不把候选路径当作已确认的设计输入。
+每个确认门都必须同时提供修改路径和明确的下一阶段。上游确认不能自动替代下游确认；确认后的 ID 和决定会通过共享 artifact contract 继续传递。
 
-### 阶段二：Happy Path 细化与确认
+## 主要能力
 
-```text
-已确认的需求基线与 User Stories
-        ↓
-细化每个主要场景的 FLOW-HP
-        ↓
-第一性原理分析与对抗性审查
-        ↓
-分离替代、失败、退出与恢复路径
-        ↓
-修改路径 / 阻塞并补充依据 / 记录 DEC-HAPPY 确认
-```
+- 优先检查可用仓库中的代码、测试、文档、文案、模型、权限和状态，而不是只复述用户输入。
+- 区分当前实现、文档意图、请求行为和最终差异，并标注事实、决定、推断、假设、未知与冲突。
+- 将工程术语转换为不改变技术含义的用户语言。
+- 在页面设计前确认问题、目标用户、场景、范围、需求和完整 Stories。
+- 从用户结果和不可删除的约束推导 Happy Path，不默认沿用当前页面顺序。
+- 对角色、权限、数据、生命周期、等待、跨角色协作和完成信号进行对抗性审查。
+- 用 ASCII 表达信息层级、任务流、决策、异步协作、页面结构和用户可见状态。
+- 把行为连接到规格、系统契约、验收标准和端到端追踪关系。
+- 默认生成一份 `ux-requirements.md`；只有独立所有权、评审、发布或明显阅读负担时才拆文件。
 
-这一阶段从用户触发开始，以用户能够观察和验证的成功结果结束。它会区分不可省略的业务约束与当前界面造成的偶然步骤，并检查角色、权限、数据、状态、跨角色协作、等待和完成信号等隐藏依赖。只有经 `DEC-HAPPY-###` 确认的路径，才能继续用于功能、页面和交互推导。
+## 安装
 
-如果缺少关键决定或证据，应将 Happy Path 覆盖状态标记为 `Blocked`，并写明缺少什么、由谁决定；只有需求确实不存在有意义的主要用户成功路径时，才可标记为 `Not applicable` 并说明理由。状态本身不能替代理由。
+### 作为 Plugin 分发
 
-### 阶段三：完整需求与 ASCII UX
+仓库根目录已经包含标准 `.codex-plugin/plugin.json`，`skills/` 下包含全部五个 Skill。将该目录放入个人或团队 marketplace 的 `plugins/shape-ux-requirements` 后即可作为一个 Plugin 安装。
 
-```text
-已确认 FLOW-HP
-        ↓
-用户可识别的功能点
-        ↓
-建立 ASCII UX 确认顺序
-        ↓
-候选页面、Section 或功能 ASCII
-        ↓
-修改并重新确认 / 确认后写入文档
-        ↓
-用已确认结果生成下一个 ASCII UX
-        ↓
-完整规格、异常恢复、验收标准与最终 Review
-```
+Plugin 和 marketplace 的结构以 [OpenAI 官方 Plugin 文档](https://developers.openai.com/plugins/build/plugins) 为准。
 
-完整文档通常包含：
+### 本地直接使用 Skills
 
-- 需求背景、目标、目标用户和目标场景；
-- 用户心智模型和产品术语；
-- User Stories 与功能点；
-- 经第一性原理推导、对抗性审查和确认的 Happy Path，以及关联的替代、失败、退出与恢复路径；
-- 页面、子功能和跳转关系；
-- 交互逻辑、操作步骤和设计理由；
-- ASCII 任务流、决策流、状态流和跨角色流程；
-- 页面、详情和 Dialog 的 ASCII UI；
-- 权限、校验、加载、失败、部分成功和恢复状态；
-- 需求规格、系统行为和验收标准；
-- 从需求到 Story、功能、页面、交互和验收的追踪关系。
-- Review 结果、修复记录、文档清单、内容覆盖、遗留限制和推荐阅读顺序。
-- 完成后的真实文件树、单文件章节结构以及每个文件的用途。
-
-表格会把名称、目标和描述放在前面，把稳定 ID 和关联 ID 放在最后，方便 PM 和 UX 阅读。
-
-最终默认输出一份持续演进的 `ux-requirements.md`。证据或控制表较多时才增加 1–2 份附录；只有多个模块需要独立负责、评审或发布时才使用四个以上文件和 `index.md`。
-
-## 安装与调用
+克隆仓库：
 
 ```bash
-mkdir -p ~/.codex/skills
-git clone https://github.com/Carlosfengv/shape-ux-requirements.git \
-  ~/.codex/skills/shape-ux-requirements
+git clone https://github.com/Carlosfengv/shape-ux-requirements.git
 ```
 
-安装后通过 Skill ID 显式调用：
+将 `skills/` 下的每个 Skill 目录链接到个人 Skill 目录：
+
+```bash
+mkdir -p ~/.agents/skills
+ln -s /absolute/path/shape-ux-requirements/skills/shape-ux-requirements ~/.agents/skills/shape-ux-requirements
+ln -s /absolute/path/shape-ux-requirements/skills/shape-requirement-baseline ~/.agents/skills/shape-requirement-baseline
+ln -s /absolute/path/shape-ux-requirements/skills/shape-happy-paths ~/.agents/skills/shape-happy-paths
+ln -s /absolute/path/shape-ux-requirements/skills/shape-ascii-interactions ~/.agents/skills/shape-ascii-interactions
+ln -s /absolute/path/shape-ux-requirements/skills/deliver-ux-requirements ~/.agents/skills/deliver-ux-requirements
+```
+
+Codex 支持符号链接并会自动检测 Skill 变更；如未显示，重启 Codex。目录发现规则见 [OpenAI 官方 Skills 文档](https://developers.openai.com/codex/skills)。
+
+### 旧安装兼容
+
+根目录的 `SKILL.md` 仍是 `$shape-ux-requirements` 兼容入口。旧方式把整个仓库克隆到个人 Skill 目录时，端到端调用仍可工作，但四个专业 Skill 不一定会作为独立名称显示；建议迁移到 Plugin 或上述五个链接。
+
+## 调用示例
+
+只建立需求基线：
 
 ```text
-请使用 $shape-ux-requirements 分析这个需求。
+请使用 $shape-requirement-baseline 分析这个需求和当前仓库，
+形成可确认的需求与 Story 基线，先不要设计页面。
 ```
 
-只分析 Happy Path 时，可显式指定工作模式：
+只审查 Happy Path：
 
 ```text
-请使用 $shape-ux-requirements 的 Happy-path shaping 模式，
-基于当前需求推导并审查主要成功路径，先不要进入页面与 ASCII UI。
+请使用 $shape-happy-paths 基于已确认基线推导主要成功路径，
+进行第一性原理和对抗性审查，先不要进入页面与 ASCII UI。
 ```
 
-`Happy-path shaping` 是 Skill 的工作模式，不是需要额外安装或维护的独立 CLI 命令。也可以直接用自然语言说明只需要 Happy Path 分析。
+只做交互：
 
-## 校验生成的文档
+```text
+请使用 $shape-ascii-interactions 把已确认的需求和 FLOW-HP
+转换为 IA、任务流和逐项确认的 ASCII 交互。
+```
 
-草稿阶段可以运行结构校验：
+只做最终交付：
+
+```text
+请使用 $deliver-ux-requirements 整理现有确认结果，
+补齐规格、验收、追踪、校验和最终交付摘要。
+```
+
+端到端编排：
+
+```text
+请使用 $shape-ux-requirements 从仓库证据开始梳理该需求，
+并在 Baseline、Happy Path 和 ASCII 三个确认门分别等待我确认。
+```
+
+## 文档校验
+
+根目录保留兼容命令，实际实现属于 `$deliver-ux-requirements`：
 
 ```bash
 python3 scripts/validate_requirement_docs.py path/to/requirements.md
 ```
 
-完整交付前运行严格校验：
+可以按阶段使用更精确的 profile：
 
 ```bash
-python3 scripts/validate_requirement_docs.py path/to/requirements.md \
-  --final --profile full
+python3 scripts/validate_requirement_docs.py path/to/requirements.md --final --profile baseline
+python3 scripts/validate_requirement_docs.py path/to/requirements.md --final --profile happy-path
+python3 scripts/validate_requirement_docs.py path/to/requirements.md --final --profile interaction
+python3 scripts/validate_requirement_docs.py path/to/requirements.md --final --profile delivery
+python3 scripts/validate_requirement_docs.py path/to/requirements.md --final --profile full
 ```
 
-严格校验会检查未替换占位符、稳定 ID、Happy Path 的逐路径依据与对抗审查、`DEC-HAPPY` 确认状态、追踪关系以及完整交付物覆盖。脚本只能验证可确定的文档结构，不能替代对产品决定、证据质量和实际用户结果的人工评审。
+| Profile | 检查范围 |
+| --- | --- |
+| `structural` | Markdown、链接、占位符和基础结构 |
+| `baseline` | 基线所需实体、Story 上游追踪和 `DEC-BASELINE` |
+| `happy-path` | Baseline 加 `FLOW-HP` 依据、对抗审查、确认或豁免理由 |
+| `interaction` | Happy Path 加功能分解、IA、ASCII、交互与 `DEC-ASCII` |
+| `delivery` | Delivery profile、规格、验收、Review 和真实文件结构 |
+| `full` | 全阶段契约和端到端追踪 |
+
+校验器只能验证确定性的文档结构，不能替代对证据质量、产品决定、用户结果、可用性和无障碍约束的人工 Review。
+
+## 仓库结构
+
+```text
+shape-ux-requirements/
+├── .codex-plugin/plugin.json
+├── skills/
+│   ├── shape-ux-requirements/
+│   ├── shape-requirement-baseline/
+│   ├── shape-happy-paths/
+│   ├── shape-ascii-interactions/
+│   └── deliver-ux-requirements/
+├── scripts/validate_requirement_docs.py
+├── tests/
+└── SKILL.md
+```
+
+根 `SKILL.md` 和根校验脚本都是兼容层；新功能应进入对应专业 Skill。

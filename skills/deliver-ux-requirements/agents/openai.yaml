@@ -1,0 +1,4 @@
+interface:
+  display_name: "UX 需求交付"
+  short_description: "生成规格、验收、追踪和最终 Markdown 交付"
+  default_prompt: "请使用 $deliver-ux-requirements 把已确认的需求与交互整理成可校验、可评审的最终文档。"

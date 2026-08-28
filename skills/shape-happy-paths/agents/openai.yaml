@@ -1,0 +1,4 @@
+interface:
+  display_name: "Happy Path 梳理"
+  short_description: "推导、质疑并确认主要用户成功路径"
+  default_prompt: "请使用 $shape-happy-paths 从已确认基线推导并审查主要 Happy Path，先不要设计页面。"

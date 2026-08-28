@@ -1,0 +1,4 @@
+interface:
+  display_name: "需求基线梳理"
+  short_description: "从证据形成可确认的需求与 Story 基线"
+  default_prompt: "请使用 $shape-requirement-baseline 分析输入和仓库证据，形成需求基线后等待我确认。"

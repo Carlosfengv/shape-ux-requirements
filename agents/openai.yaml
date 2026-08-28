@@ -1,7 +1,7 @@
 interface:
-  display_name: "UX 需求梳理"
-  short_description: "面向 UX 与 PM 的需求梳理、ASCII UI 与规格"
-  default_prompt: "请使用 $shape-ux-requirements 先分析仓库、需求证据、背景、用户、场景、范围、user stories 和候选 Happy Path，默认持续写入一份 ux-requirements.md 并等待我确认；确认需求基线后先细化、对抗性审查并确认 FLOW-HP，再按依赖顺序逐个确认 ASCII UX，只有独立所有权、评审、发布或明显阅读负担时才拆分文件。"
+  display_name: "UX 需求梳理（兼容入口）"
+  short_description: "端到端需求梳理与专业 Skill 路由"
+  default_prompt: "请使用 $shape-ux-requirements 编排需求基线、Happy Path、ASCII 交互和最终规格交付。"
 
 policy:
   allow_implicit_invocation: false

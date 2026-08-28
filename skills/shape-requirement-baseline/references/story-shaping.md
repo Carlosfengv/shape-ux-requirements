@@ -1,4 +1,4 @@
-# Stories and acceptance
+# Story shaping
 
 Use this reference to convert a validated baseline and concept vocabulary into outcome-oriented stories.
 
@@ -11,7 +11,6 @@ Use this reference to convert a validated baseline and concept vocabulary into o
 - Confirm stories before design
 - Place stories in the final document
 - Cover enterprise concerns
-- Write acceptance criteria
 - Check story quality
 
 ## Choose the right story form
@@ -135,29 +134,6 @@ Inspect each applicable concern:
 - scale, performance, availability, and accessibility.
 
 Do not add generic enterprise requirements without evidence. Add a question or risk when applicability is unclear.
-
-## Write acceptance criteria
-
-Write observable criteria that validate user and system outcomes. Use IDs and link every criterion to a story and specification.
-
-Good criteria define:
-
-- precondition;
-- action or event;
-- observable result;
-- resulting state;
-- permission and data boundary when relevant;
-- failure or recovery behavior when relevant.
-
-Avoid:
-
-- “works correctly”;
-- “is user-friendly”;
-- “loads quickly” without a threshold;
-- implementation-only assertions invisible to the requested acceptance surface;
-- criteria that merely repeat the story.
-
-Use examples to clarify rules, but do not let examples replace the general rule.
 
 ## Check story quality
 
