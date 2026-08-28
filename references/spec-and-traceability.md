@@ -114,7 +114,7 @@ Do not invent thresholds. Mark them as open decisions when absent.
 
 ## Traceability matrix
 
-| User outcome | Coverage status | BG/OBJ/SCN/REQ/STMT | ROLE/CON/UXH | IA/NAV/TASK/FLOW | PAGE/FUNC/SUB/INT | US/JS | UI/STATE | SYS/SPEC/NFR | AC | Baseline/ASCII DEC |
+| User outcome | Coverage status | BG/OBJ/SCN/REQ/STMT | ROLE/CON/UXH | TASK/FLOW-HP and branch FLOW | IA/NAV/PAGE/FUNC/SUB/INT | US/JS | UI/STATE | SYS/SPEC/NFR | AC | Baseline/Happy-path/ASCII DEC |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 
 Use these coverage statuses:
@@ -153,6 +153,9 @@ Find and report:
 - concepts used but not defined;
 - stories without acceptance criteria;
 - primary scenarios without an IA entry or complete task/decision flow;
+- primary scenarios without an evidence-labeled `FLOW-HP-###`, observable completion evidence, first-principles basis, adversarial review, and confirmed `DEC-HAPPY-###`, unless a Blocked/Not applicable coverage record provides a concrete rationale;
+- happy paths that end at submission/system acceptance rather than a verifiable user outcome;
+- alternate, failure, exit, or recovery conditions silently mixed into normal success instead of linked as branches;
 - user-visible interaction behaviors without an ASCII UI/state frame;
 - canonical ASCII UI/state definitions without a confirmed `DEC-ASCII` record;
 - unresolved ASCII confirmation queue items or downstream candidates generated before their dependencies were confirmed;

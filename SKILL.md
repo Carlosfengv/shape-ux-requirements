@@ -1,6 +1,6 @@
 ---
 name: shape-ux-requirements
-description: Assess and shape complex enterprise requirements into repository-grounded, user-mental-model-aligned, human-readable Markdown guides, specifications, and progressively user-confirmed ASCII UX. Use when PMs or UX designers need current-state analysis, clarification, public research, problem framing, users and scenarios, terminology, stories, ordered ASCII confirmation, page/subfeature interaction, specifications, accessibility, acceptance criteria, or traceability. Inspect repository instructions, code, tests, product copy, schemas, documents, and relevant authoritative public sources before proposing behavior. Default to one evolving reader-first ux-requirements.md; promote to a small Balanced or Modular set only for independent ownership, review, release, or material readability needs. Do not use for visual styling, procurement ranking, or technical architecture alone.
+description: Assess and shape complex enterprise requirements into repository-grounded, user-mental-model-aligned, human-readable Markdown guides, first-principles and adversarially reviewed happy paths, specifications, and progressively user-confirmed ASCII UX. Use when PMs or UX designers need current-state analysis, clarification, public research, problem framing, users and scenarios, terminology, stories, happy-path analysis, ordered ASCII confirmation, page/subfeature interaction, specifications, accessibility, acceptance criteria, or traceability. Inspect repository instructions, code, tests, product copy, schemas, documents, and relevant authoritative public sources before proposing behavior. Default to one evolving reader-first ux-requirements.md; promote to a small Balanced or Modular set only for independent ownership, review, release, or material readability needs. Do not use for visual styling, procurement ranking, or technical architecture alone.
 ---
 
 # Shape UX Requirements
@@ -26,7 +26,7 @@ Respond in the user's language unless asked otherwise. Use `ASCII`, not `ASII`, 
 11. Keep stable IDs throughout the analysis. Do not silently rename concepts or change rules between sections.
 12. Write for UX/PM readers: lead with plain-language meaning and compact ASCII, keep tables narrow, place descriptive/name/outcome columns first and all stable or related ID columns last, and move dense matrices, contracts, and trace detail to appendices.
 13. Deliver as `.md`, defaulting to one evolving `ux-requirements.md`; use more files only when an explicit reader, ownership, review, release, or material readability need justifies the split.
-14. Establish the outcome/task/story backbone before committing to pages. Then validate information architecture and task/decision flows before detailed screens.
+14. Establish the outcome/task/story backbone and a candidate happy path before committing to pages. Confirm and adversarially review the detailed happy path before using it to derive information architecture or detailed screens.
 15. Treat ASCII as a behavioral and structural contract, not visual proof. Anchor every user-visible interaction behavior to at least one ASCII `UI`/`STATE` frame; prose, a flow, or a table alone is insufficient. Record viewport, input, accessibility, density, and responsive constraints that ASCII cannot show.
 16. Treat external product and industry research as comparative context. Never let it override repository evidence, project-specific user needs, or explicit owner decisions.
 17. Never silently omit an expected artifact in narrow delivery. Show coverage status, impact, and the next step, especially when ASCII UI is omitted, provisional, or blocked.
@@ -39,7 +39,7 @@ Respond in the user's language unless asked otherwise. Use `ASCII`, not `ASII`, 
 - Read [references/problem-framing.md](references/problem-framing.md) before defining background, objectives, target users, document audiences, target scenarios, scope, or success measures.
 - Read [references/concept-language.md](references/concept-language.md) when the input contains engineering terminology, translated terms, unfamiliar domain objects, or naming work.
 - Read [references/stories-and-acceptance.md](references/stories-and-acceptance.md) before producing stories or acceptance criteria, then [references/confirmation-gate.md](references/confirmation-gate.md) before any user confirmation pause or baseline approval.
-- Read [references/information-architecture-and-task-flows.md](references/information-architecture-and-task-flows.md) after the story backbone and before defining navigation, cross-page journeys, role handoffs, or detailed screen structure.
+- Read [references/information-architecture-and-task-flows.md](references/information-architecture-and-task-flows.md) when producing or auditing a happy path, and after the story backbone before defining navigation, cross-page journeys, role handoffs, or detailed screen structure.
 - Read [references/interaction-logic-principles.md](references/interaction-logic-principles.md), [references/ascii-interactions.md](references/ascii-interactions.md), and [references/progressive-ascii-confirmation.md](references/progressive-ascii-confirmation.md) before organizing, presenting, confirming, or writing detailed ASCII UX.
 - Read [references/human-readable-requirements.md](references/human-readable-requirements.md) before composing any UX/PM-facing requirement document.
 - Read [references/spec-and-traceability.md](references/spec-and-traceability.md) before producing specifications, matrices, or the final quality audit.
@@ -67,6 +67,7 @@ Infer the smallest mode that satisfies the request:
 | Intake assessment | Reviewing raw input or determining readiness | Assess, identify evidence gaps, and clarify; do not generate a final solution |
 | Terminology shaping | Translating engineering or domain concepts | Perform a lightweight assessment, then build the concept language |
 | Story shaping | Producing user/job stories and acceptance criteria | Establish a usable baseline and concept vocabulary first |
+| Happy-path shaping | Finding, challenging, or documenting the primary successful user path | Establish the minimum user/scenario/story baseline, derive the path from first principles, adversarially review its assumptions, and stop before detailed page or ASCII UI design unless requested |
 | Interaction shaping | Producing ASCII UI and flows | Establish IA, task flows, stories, objects, permissions, lifecycle, and state behavior first |
 | ASCII UI supplement | Completing or improving missing UI from an existing document | Report delivery coverage, extract the interaction baseline, generate traceable flows/frames when sufficient, or ask focused blocking questions |
 | Integrated guide | Human-readable UX/PM guide plus supporting requirements | Lead with context, users, journeys, and ASCII; keep compact local behavior nearby and move dense control detail to appendices |
@@ -262,6 +263,10 @@ When the story backbone contains several activities, tasks, or release slices, p
 
 Include unhappy paths, permission differences, bulk operations, long-running work, partial success, auditability, and recovery behavior where relevant. Avoid stories that restate screens or implementation tasks.
 
+For each primary scenario, derive a candidate happy path at the user-outcome level before proposing pages. Start from the user's trigger and end at an observable user result; identify irreducible business constraints, distinguish necessary steps from current-interface accidents, and label the evidence or assumption behind the actor, preconditions, sequence, and completion signal. Keep the candidate conceptual and non-binding in the alignment brief.
+
+Adversarially challenge whether the candidate uses the correct primary actor and scenario, assumes a normally achievable starting state, hides permission/state/data dependencies, skips a required role or wait, mistakes system submission for user success, or contains avoidable steps. Revise or block the candidate when a finding changes its actor, outcome, normal preconditions, essential rules, or completion signal. Record unusual conditions as alternate, failure, exit, or recovery intent instead of polluting the happy path.
+
 Place each story's full definition in its canonical page/subfeature or cross-page task chapter before the related operating steps and ASCII UI. Do not emit story IDs without story text, preconditions, outcome, and trace links.
 
 For a new or materially revised requirement, apply `references/confirmation-gate.md`, deliver the first-pass alignment brief, and stop until the user explicitly chooses either guided modification or the named next phase. Skip or narrow the gate only under the reference's stated exceptions.
@@ -273,14 +278,17 @@ Apply `references/information-architecture-and-task-flows.md`.
 For multi-page, multi-role, or multi-state work:
 
 1. Consolidate one canonical `UXH` register and validation plan.
-2. Derive user-recognizable `FUNC` capabilities from each confirmed `US/JS`; allow many-to-many mappings and do not equate a function with a page or component.
-3. Choose each function's starting surface from overview, resource list/collection, work queue, detail-first, direct task, or configuration patterns according to the user's dominant job.
-4. Draw an ASCII experience topology showing entry, starting surface, detail/action destinations, cross-page jumps, carried context, return, denied, and not-found paths.
-5. Draw an ASCII task/decision flow for every primary scenario and use swimlanes or sequences for material handoffs, waits, notifications, re-entry, and recovery.
-6. Validate that functions, pages, and interactions support the confirmed stories without mirroring internal services or turning stories into screen requirements.
-7. Map each `SCN/REQ` through `TASK/FLOW`, `US/JS`, `FUNC`, `IA/NAV/PAGE/SUB`, `INT/UI/STATE`, and `SYS/SPEC/AC`.
+2. Promote each confirmed-baseline candidate happy path to a detailed `FLOW-HP-###` that makes user actions, required system responses, visible feedback, cross-role/async steps, and observable completion explicit without yet committing to pages.
+3. Run the first-principles and adversarial checks from `references/information-architecture-and-task-flows.md`; revise the path, expose a blocker, or move exceptional conditions to linked alternate/failure/recovery flows.
+4. Confirm each material happy path with a `DEC-HAPPY-###` record before treating it as the canonical downstream path. In happy-path-only mode, stop after this confirmation handoff unless the user requests another artifact.
+5. Derive user-recognizable `FUNC` capabilities from each confirmed `US/JS` and happy path; allow many-to-many mappings and do not equate a function with a page or component.
+6. Choose each function's starting surface from overview, resource list/collection, work queue, detail-first, direct task, or configuration patterns according to the user's dominant job.
+7. Draw an ASCII experience topology showing entry, starting surface, detail/action destinations, cross-page jumps, carried context, return, denied, and not-found paths.
+8. Draw an ASCII task/decision flow for every primary scenario and use swimlanes or sequences for material handoffs, waits, notifications, re-entry, and recovery.
+9. Validate that functions, pages, and interactions support the confirmed stories and happy paths without mirroring internal services or turning stories into screen requirements.
+10. Map each `SCN/REQ` through `TASK/FLOW-HP`, `US/JS`, `FUNC`, `IA/NAV/PAGE/SUB`, `INT/UI/STATE`, and `SYS/SPEC/AC`.
 
-For a narrow single-screen request, record the entry, return, and one complete task flow without inventing a larger navigation system.
+For a narrow single-screen request, record the entry, return, and one complete task flow without inventing a larger navigation system. For a narrow happy-path request, report adjacent artifacts as Included, Provisional, Omitted, Blocked, or Not applicable and do not force IA or UI output.
 
 After validating the IA, create the page/feature/subfeature map. Keep each subfeature tied to a distinct user purpose, page region, action set, or state responsibility.
 
@@ -345,7 +353,7 @@ Organize the main document by user task rather than by artifact type. For every 
 
 1. Explain the user goal, applicable role, prerequisites, and expected result.
 2. Define the canonical user story or job story.
-3. Show the task, decision, handoff, or state sequence as a compact ASCII flow.
+3. Show the confirmed `FLOW-HP` first, then link material alternate, failure, exit, and recovery flows without mixing them into the main sequence.
 4. Describe the shortest complete operating procedure.
 5. Show the relevant ASCII UI state.
 6. Place the interface requirement table directly after that frame.
@@ -409,19 +417,20 @@ For a first pass, write the alignment sections through candidate stories into `u
 6. Primary target users, secondary users, affected parties, and role characteristics
 7. Target scenarios and current workarounds
 8. Concept model and user-facing terminology
-9. Requirement register, global story map, priority, and release slicing
-10. Story-derived functional points, starting-surface/page topology, interaction logic and rationale, UX hypotheses, and sequentially confirmed ASCII navigation, task/decision, cross-role, asynchronous, and state flows with supporting rule tables
-11. Page, feature, subfeature, and task map
-12. Repeated page or core-feature chapters containing:
+9. Requirement register, global story map, priority, release slicing, and conceptual candidate happy paths
+10. Detailed `FLOW-HP` definitions with first-principles basis, adversarial review, linked branch inventory, and `DEC-HAPPY` confirmation records
+11. Story-and-happy-path-derived functional points, starting-surface/page topology, interaction logic and rationale, UX hypotheses, and sequentially confirmed ASCII navigation, task/decision, cross-role, asynchronous, and state flows with supporting rule tables
+12. Page, feature, subfeature, and task map
+13. Repeated page or core-feature chapters containing:
    - page/feature purpose, scope, and applicable roles;
    - page-level ASCII overview and region legend;
    - page-level navigation, shared state, and requirement specifications;
    - repeated subfeature sections containing purpose, canonical user/job stories, operating steps, focused ASCII UI, colocated interaction and system specifications, accessibility/adaptation constraints, exceptions, and acceptance criteria.
-13. Cross-page task chapters with end-to-end ASCII flows when a workflow spans several pages
-14. Cross-cutting specifications
-15. Glossary
-16. Traceability, evidence, assumptions, conflicts, and research needs
-17. Review and delivery summary with the actual file/document structure, artifact map, coverage, review results, remaining risks, reading order, and next action
+14. Cross-page task chapters with end-to-end ASCII flows when a workflow spans several pages
+15. Cross-cutting specifications
+16. Glossary
+17. Traceability, evidence, assumptions, conflicts, and research needs
+18. Review and delivery summary with the actual file/document structure, artifact map, coverage, review results, remaining risks, reading order, and next action
 
 If clarification is still required, output only sections 1–7 and the next question batch. Do not bury the questions after a speculative full solution.
 
@@ -451,12 +460,15 @@ Reject or revise an output when:
 - the story map or functional decomposition starts with pages/components instead of confirmed outcomes, activities, user tasks, and stories;
 - a requirement or story has no explicit priority/release status and no owner for that decision;
 - detailed IA, specifications, or ASCII UI were produced from a new or materially changed requirement before its analysis/story baseline was explicitly confirmed;
+- a primary scenario lacks an evidence-labeled candidate happy path or an explicit Blocked/Not applicable rationale, or its detailed `FLOW-HP` was used for downstream page/UI design before adversarial review and `DEC-HAPPY` confirmation;
+- a happy path follows current pages by default, hides normally required permissions/roles/waits, contains avoidable steps as necessities, or ends at system submission instead of an observable user outcome;
+- alternate, failure, exit, or recovery conditions are mixed into normal success instead of linked as explicit branches;
 - a primary scenario has no information-architecture entry, task/decision flow, completion, or recovery;
 - a primary flow is expressed only as prose or a table when a readable ASCII overview could show its sequence, branching, handoff, or lifecycle;
 - a user-visible interaction behavior appears only in prose, a table, or a flow without a corresponding ASCII UI/state frame;
 - a narrow interaction delivery omits ASCII UI without a coverage notice, impact statement, and supplement or blocking explanation;
 - a story ID appears without a canonical story definition;
-- a happy-path-only ASCII screen hides important states;
+- a happy-path-only delivery omits adjacent-artifact coverage or implies that exception and recovery analysis is complete;
 - an ASCII frame is treated as proof of responsive, accessible, or visual-design quality without explicit constraints;
 - a large page is shown as one dense frame without subfeature decomposition;
 - a subfeature or interaction lacks its own explanation, focused ASCII, or local specifications when the overview is insufficient;

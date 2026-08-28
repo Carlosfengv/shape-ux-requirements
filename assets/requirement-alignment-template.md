@@ -103,6 +103,55 @@ Conceptual scope flow only · not an ASCII UI commitment
 
 Repeat only for stories in the proposed baseline.
 
+### Candidate Happy Paths
+
+> One per primary scenario or materially different primary-role path. Keep these paths conceptual, evidence-labeled, and independent of pages or controls. They confirm outcome-level intent, not detailed flow or UI design.
+
+#### FLOW-HP-001 · [Happy path name] · Candidate
+
+- Primary actor:
+- Trigger and normal context:
+- Preconditions:
+- Fundamental user outcome:
+- Observable completion evidence:
+- Evidence/uncertainty status:
+- Related scenario/requirement/story:
+
+```text
+[Trigger and normal context]
+          |
+          v
+[Required understanding or input]
+          |
+          v
+[Consequential user action]
+          |
+          v
+[Required system work]
+          |
+          v
+[User verifies the intended result]
+
+Conceptual candidate happy path · not a page or ASCII UI commitment
+```
+
+| Fundamental user outcome | Observable completion evidence | Irreducible constraints | Potentially avoidable steps | Evidence/uncertainty | Related IDs |
+| --- | --- | --- | --- | --- | --- |
+| | | | | | FLOW-HP-001 |
+
+#### Adversarial review
+
+| Challenge | Finding and evidence | Path impact | Resolution/owner | Status | Related IDs |
+| --- | --- | --- | --- | --- | --- |
+| | | | | | FLOW-HP-001 |
+
+#### Linked path intent
+
+| Happy-path point | Condition | Path type | User outcome | Planned FLOW/STATE | Status |
+| --- | --- | --- | --- | --- | --- |
+
+Use path types: Alternate success, Failure, Exit, Recovery, or Out of scope. Revise or block the candidate when a finding changes the actor, outcome, normal preconditions, irreducible rule, essential sequence, or completion evidence.
+
 ## 6. Assumptions, conflicts, and risks
 
 | Type | Item | Why it matters | Resolution/owner | ID |
@@ -112,6 +161,7 @@ Repeat only for stories in the proposed baseline.
 
 After confirmation, detailed work may begin on:
 
+- promoting candidate paths to detailed `FLOW-HP-###`, completing first-principles and adversarial review, and confirming them with `DEC-HAPPY-###` before page/UI derivation;
 - deriving user-recognizable functional points from the confirmed stories;
 - selecting an overview, resource list, work queue, detail-first, direct-task, or configuration starting surface according to the user task;
 - mapping detail/action destinations, jumps, and context-preserving return paths;
@@ -133,8 +183,8 @@ Confirmation does not convert assumptions into facts. Unresolved items remain vi
 | Item | Description |
 |---|---|
 | Current state | Alignment brief complete; detailed UX design paused |
-| Review now | Background, users, scenarios, scope, terminology, requirements, and Stories |
-| Not generated yet | Functional decomposition, page/task topology, detailed ASCII UI, specifications, and acceptance criteria |
+| Review now | Background, users, scenarios, scope, terminology, requirements, Stories, and outcome-level candidate Happy Paths |
+| Not generated yet | Detailed/confirmed Happy Paths, functional decomposition, page/task topology, detailed ASCII UI, specifications, and acceptance criteria |
 
 ### If changes are needed
 
@@ -149,10 +199,12 @@ The affected content will be updated, its downstream impact summarized, and the 
 
 ### If the baseline is confirmed
 
-`确认并进入「详细 UX 设计」` will:
+`确认并进入「Happy Path 细化与确认」` will:
 
 ```text
 baseline becomes Confirmed
+  → detail, challenge, and confirm each FLOW-HP
+  → pause for Happy Path correction/confirmation
   → derive user-recognizable functions
   → establish page/task topology and interaction logic
   → generate ASCII flows and visible UI states
@@ -165,8 +217,8 @@ baseline becomes Confirmed
 
 Use the structured confirmation control when available:
 
-- 修改需求与 Stories
-- 确认并进入「详细 UX 设计」
+- 修改需求、Stories 与候选 Happy Path
+- 确认并进入「Happy Path 细化与确认」
 - 补充分析后再确认
 
 ## 9. Change record

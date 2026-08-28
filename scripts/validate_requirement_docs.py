@@ -4,7 +4,7 @@
 The default profile checks deterministic document structure. The full profile
 also checks delivery-profile/file-count consistency, stable-ID definitions,
 progressive ASCII confirmation coverage, interaction-to-ASCII coverage, and
-the requirement-to-ASCII trace chain.
+the requirement-to-happy-path-to-ASCII trace chain.
 It cannot determine whether the underlying product decisions are correct.
 """
 
@@ -80,6 +80,10 @@ DEFINITION_HEADERS: dict[str, set[str] | None] = {
     "元素 ID": {"UI"},
     "FLOW/STEP ID": {"FLOW"},
     "流程/步骤 ID": {"FLOW"},
+    "FLOW ID": {"FLOW"},
+    "流程 ID": {"FLOW"},
+    "HAPPY PATH ID": {"FLOW"},
+    "成功路径 ID": {"FLOW"},
     "FUNC ID": {"FUNC"},
     "功能 ID": {"FUNC"},
     "IA ID": {"IA"},
@@ -164,6 +168,10 @@ LOCALIZED_PLACEHOLDER_RE = re.compile(
     r"Feature Name|Page or core feature name|Subfeature name|Focused interaction|"
     r"Primary area|Page/object|Task step|Decision [A-Z]|Next step|Recovery or exit|Page title|"
     r"Requirement name|Story name|User outcome|Activity(?: [A-Z])?|role|meaningful task|"
+    r"Happy path name|DEC-HAPPY reference|related baseline IDs|FLOW references|FLOW-HP reference|"
+    r"SCN/REQ/TASK/US/JS references|Trigger and normal context|Required understanding or input|"
+    r"Required understanding/input|Consequential user action|Consequential action|Required system work|"
+    r"User verifies the intended result|User verifies outcome|Trigger|"
     r"situation|motivation/action|expected outcome|Summarize [^]]+|Describe [^]]+|"
     r"功能名称|页面名称|子功能名称|交互名称|主要区域|页面或对象|任务步骤|决策[^]]*|下一步|恢复或退出|页面标题|"
     r"需求名称|故事名称|用户结果|活动|角色|有意义的任务|场景|动机/行动|预期结果|概述[^]]*|描述[^]]*"
@@ -174,6 +182,7 @@ FIXED_PLACEHOLDERS = {
     "Replace with real page": "unresolved example-page instruction",
     "Draft / Provisional / Confirmed": "unresolved status choice",
     "Planned / N/A": "unresolved delivery-plan status choice",
+    "Confirmed / Blocked / Not applicable": "unresolved happy-path coverage status",
 }
 
 BASELINE_STATUS_LABELS = {
@@ -207,6 +216,32 @@ DELIVERY_PROFILE_FILE_RANGES = {
     "模块化": (4, None),
 }
 ASCII_QUEUE_SCOPE_HEADERS = {"CONFIRMATION SCOPE", "确认范围"}
+HAPPY_PATH_COVERAGE_HEADERS = {"HAPPY PATH COVERAGE", "成功路径覆盖"}
+RATIONALE_HEADERS = {"RATIONALE", "理由"}
+HAPPY_PATH_BASIS_HEADERS = {
+    "FUNDAMENTAL USER OUTCOME",
+    "根本用户结果",
+}
+HAPPY_PATH_COMPLETION_HEADERS = {
+    "OBSERVABLE COMPLETION EVIDENCE",
+    "可观察完成证据",
+    "可验证完成证据",
+}
+ADVERSARIAL_CHALLENGE_HEADERS = {"CHALLENGE", "审查问题", "挑战"}
+ADVERSARIAL_IMPACT_HEADERS = {"PATH IMPACT", "路径影响"}
+CONFIRMED_HAPPY_PATH_STATUSES = {
+    "CONFIRMED",
+    "CONFIRMED WITH CONDITIONS",
+    "已确认",
+    "有条件确认",
+}
+HAPPY_PATH_WAIVER_STATUSES = {
+    "BLOCKED",
+    "NOT APPLICABLE",
+    "N/A",
+    "阻塞",
+    "不适用",
+}
 FINAL_ASCII_QUEUE_STATUSES = {
     "CONFIRMED",
     "CONFIRMED AND WRITTEN",
@@ -244,6 +279,16 @@ class Analysis:
     occurrences: dict[str, set[Site]] = field(default_factory=lambda: defaultdict(set))
     edges: dict[str, set[str]] = field(default_factory=lambda: defaultdict(set))
     ascii_flow_sites: set[Site] = field(default_factory=set)
+    happy_path_basis_ids: dict[str, set[Site]] = field(
+        default_factory=lambda: defaultdict(set)
+    )
+    happy_path_adversarial_ids: dict[str, set[Site]] = field(
+        default_factory=lambda: defaultdict(set)
+    )
+    happy_path_confirmation_statuses: dict[str, list[tuple[str, Site]]] = field(
+        default_factory=lambda: defaultdict(list)
+    )
+    happy_path_coverage: list[tuple[str, str, Site]] = field(default_factory=list)
     baseline_statuses: list[tuple[str, Site]] = field(default_factory=list)
     delivery_profiles: list[tuple[str, Site]] = field(default_factory=list)
     split_rationales: list[tuple[str, Site]] = field(default_factory=list)
@@ -263,6 +308,13 @@ class Analysis:
         for stable_id, neighbors in other.edges.items():
             self.edges[stable_id].update(neighbors)
         self.ascii_flow_sites.update(other.ascii_flow_sites)
+        for stable_id, sites in other.happy_path_basis_ids.items():
+            self.happy_path_basis_ids[stable_id].update(sites)
+        for stable_id, sites in other.happy_path_adversarial_ids.items():
+            self.happy_path_adversarial_ids[stable_id].update(sites)
+        for stable_id, statuses in other.happy_path_confirmation_statuses.items():
+            self.happy_path_confirmation_statuses[stable_id].extend(statuses)
+        self.happy_path_coverage.extend(other.happy_path_coverage)
         self.baseline_statuses.extend(other.baseline_statuses)
         self.delivery_profiles.extend(other.delivery_profiles)
         self.split_rationales.extend(other.split_rationales)
@@ -314,6 +366,10 @@ def prefix_of(stable_id: str) -> str:
     return stable_id.split("-", 1)[0]
 
 
+def is_happy_path_id(stable_id: str) -> bool:
+    return bool(re.fullmatch(r"FLOW-HP-[A-Z0-9]+", stable_id))
+
+
 def extract_ids(text: str) -> list[str]:
     return [match.group(0) for match in ID_RE.finditer(text)]
 
@@ -346,6 +402,28 @@ def is_confirmed_ascii_status(value: str) -> bool:
         "CONFIRMED AND WRITTEN",
         "已确认",
         "已确认并写入",
+    }
+
+
+def is_confirmed_happy_path_status(value: str) -> bool:
+    return normalize_header(value) in CONFIRMED_HAPPY_PATH_STATUSES
+
+
+def is_meaningful_rationale(value: str) -> bool:
+    normalized = normalize_header(value)
+    return normalized not in {
+        "",
+        "-",
+        "—",
+        "TBD",
+        "TODO",
+        "N/A",
+        "NOT APPLICABLE",
+        "待确认",
+        "待补充",
+        "不适用",
+        "理由",
+        "RATIONALE",
     }
 
 
@@ -414,8 +492,14 @@ def inspect_file(path: Path, final: bool) -> Analysis:
     table_cell_count: int | None = None
     definition_columns: dict[int, set[str] | None] = {}
     status_column: int | None = None
+    rationale_column: int | None = None
     delivery_table = False
     ascii_queue_table = False
+    happy_path_basis_table = False
+    happy_path_adversarial_table = False
+    happy_path_coverage_table = False
+    happy_path_basis_required_columns: tuple[int, int] | None = None
+    happy_path_adversarial_required_columns: tuple[int, int] | None = None
 
     for line_number, line in enumerate(lines, start=1):
         stripped = line.strip()
@@ -442,8 +526,14 @@ def inspect_file(path: Path, final: bool) -> Analysis:
             table_cell_count = None
             definition_columns = {}
             status_column = None
+            rationale_column = None
             delivery_table = False
             ascii_queue_table = False
+            happy_path_basis_table = False
+            happy_path_adversarial_table = False
+            happy_path_coverage_table = False
+            happy_path_basis_required_columns = None
+            happy_path_adversarial_required_columns = None
             continue
 
         if in_fence:
@@ -528,11 +618,71 @@ def inspect_file(path: Path, final: bool) -> Analysis:
                     if normalized in DEFINITION_HEADERS:
                         definition_columns[index] = DEFINITION_HEADERS[normalized]
                 normalized_headers = {normalize_header(header) for header in table_headers}
+                happy_path_basis_columns = (
+                    next(
+                        (
+                            index
+                            for index, header in enumerate(table_headers)
+                            if normalize_header(header) in HAPPY_PATH_BASIS_HEADERS
+                        ),
+                        None,
+                    ),
+                    next(
+                        (
+                            index
+                            for index, header in enumerate(table_headers)
+                            if normalize_header(header) in HAPPY_PATH_COMPLETION_HEADERS
+                        ),
+                        None,
+                    ),
+                )
+                happy_path_basis_table = all(
+                    column is not None for column in happy_path_basis_columns
+                )
+                happy_path_basis_required_columns = (
+                    happy_path_basis_columns
+                    if happy_path_basis_table
+                    else None
+                )
+                happy_path_adversarial_columns = (
+                    next(
+                        (
+                            index
+                            for index, header in enumerate(table_headers)
+                            if normalize_header(header) in ADVERSARIAL_CHALLENGE_HEADERS
+                        ),
+                        None,
+                    ),
+                    next(
+                        (
+                            index
+                            for index, header in enumerate(table_headers)
+                            if normalize_header(header) in ADVERSARIAL_IMPACT_HEADERS
+                        ),
+                        None,
+                    ),
+                )
+                happy_path_adversarial_table = all(
+                    column is not None for column in happy_path_adversarial_columns
+                )
+                happy_path_adversarial_required_columns = (
+                    happy_path_adversarial_columns
+                    if happy_path_adversarial_table
+                    else None
+                )
                 status_column = next(
                     (
                         index
                         for index, header in enumerate(table_headers)
                         if normalize_header(header) in STATUS_HEADERS
+                    ),
+                    None,
+                )
+                rationale_column = next(
+                    (
+                        index
+                        for index, header in enumerate(table_headers)
+                        if normalize_header(header) in RATIONALE_HEADERS
                     ),
                     None,
                 )
@@ -544,18 +694,67 @@ def inspect_file(path: Path, final: bool) -> Analysis:
                     ASCII_QUEUE_SCOPE_HEADERS & normalized_headers
                     and STATUS_HEADERS & normalized_headers
                 )
+                happy_path_coverage_table = bool(
+                    HAPPY_PATH_COVERAGE_HEADERS & normalized_headers
+                    and STATUS_HEADERS & normalized_headers
+                    and RATIONALE_HEADERS & normalized_headers
+                )
             elif not is_separator_row(cells):
                 add_row_edges(analysis, line_ids)
+                happy_path_row_ids = {
+                    stable_id for stable_id in line_ids if is_happy_path_id(stable_id)
+                }
+                basis_row_complete = bool(
+                    happy_path_basis_table
+                    and happy_path_basis_required_columns is not None
+                    and all(
+                        column < len(cells)
+                        and is_meaningful_rationale(cells[column])
+                        for column in happy_path_basis_required_columns
+                    )
+                )
+                adversarial_row_complete = bool(
+                    happy_path_adversarial_table
+                    and happy_path_adversarial_required_columns is not None
+                    and all(
+                        column < len(cells)
+                        and is_meaningful_rationale(cells[column])
+                        for column in happy_path_adversarial_required_columns
+                    )
+                )
+                if basis_row_complete:
+                    for stable_id in happy_path_row_ids:
+                        analysis.happy_path_basis_ids[stable_id].add(site)
+                if adversarial_row_complete:
+                    for stable_id in happy_path_row_ids:
+                        analysis.happy_path_adversarial_ids[stable_id].add(site)
+                defined_ids_in_row: set[str] = set()
                 for column, allowed_prefixes in definition_columns.items():
                     if column >= len(cells):
                         continue
                     for stable_id in extract_ids(cells[column]):
                         if allowed_prefixes is None or prefix_of(stable_id) in allowed_prefixes:
                             analysis.definitions[stable_id].add(site)
+                            defined_ids_in_row.add(stable_id)
 
                 if ascii_queue_table and status_column is not None:
                     queue_status = cells[status_column].strip() if status_column < len(cells) else ""
                     analysis.ascii_queue_statuses.append((queue_status, site))
+
+                if happy_path_coverage_table and status_column is not None:
+                    coverage_status = (
+                        cells[status_column].strip()
+                        if status_column < len(cells)
+                        else ""
+                    )
+                    coverage_rationale = (
+                        cells[rationale_column].strip()
+                        if rationale_column is not None and rationale_column < len(cells)
+                        else ""
+                    )
+                    analysis.happy_path_coverage.append(
+                        (coverage_status, coverage_rationale, site)
+                    )
 
                 for stable_id in line_ids:
                     if stable_id.startswith("DEC-ASCII-"):
@@ -565,6 +764,18 @@ def inspect_file(path: Path, final: bool) -> Analysis:
                             else ""
                         )
                         analysis.ascii_confirmation_statuses[stable_id].append(
+                            (confirmation_status, site)
+                        )
+                    elif (
+                        stable_id.startswith("DEC-HAPPY-")
+                        and stable_id in defined_ids_in_row
+                    ):
+                        confirmation_status = (
+                            cells[status_column].strip()
+                            if status_column is not None and status_column < len(cells)
+                            else ""
+                        )
+                        analysis.happy_path_confirmation_statuses[stable_id].append(
                             (confirmation_status, site)
                         )
 
@@ -612,8 +823,14 @@ def inspect_file(path: Path, final: bool) -> Analysis:
             table_cell_count = None
             definition_columns = {}
             status_column = None
+            rationale_column = None
             delivery_table = False
             ascii_queue_table = False
+            happy_path_basis_table = False
+            happy_path_adversarial_table = False
+            happy_path_coverage_table = False
+            happy_path_basis_required_columns = None
+            happy_path_adversarial_required_columns = None
 
         for match in LINK_RE.finditer(line):
             destination = local_link_destination(path, match.group(1))
@@ -883,6 +1100,133 @@ def semantic_findings(
                     fallback_file,
                     1,
                     f"full profile has no canonical {label} definition",
+                )
+            )
+
+    happy_path_ids = sorted(
+        stable_id
+        for stable_id in analysis.definitions
+        if is_happy_path_id(stable_id)
+    )
+
+    waiver_entries = [
+        (status, rationale, site)
+        for status, rationale, site in analysis.happy_path_coverage
+        if normalize_header(status) in HAPPY_PATH_WAIVER_STATUSES
+    ]
+    valid_waivers = [
+        entry for entry in waiver_entries if is_meaningful_rationale(entry[1])
+    ]
+    for waiver_status, waiver_rationale, waiver_site in waiver_entries:
+        if not is_meaningful_rationale(waiver_rationale):
+            findings.append(
+                Finding(
+                    strict_severity,
+                    "MISSING_HAPPY_PATH_WAIVER_RATIONALE",
+                    waiver_site.file,
+                    waiver_site.line,
+                    f"happy-path coverage status {waiver_status or '(empty)'} requires a concrete rationale",
+                )
+            )
+
+    if not happy_path_ids:
+        if not valid_waivers and not waiver_entries:
+            findings.append(
+                Finding(
+                    strict_severity,
+                    "MISSING_HAPPY_PATH",
+                    fallback_file,
+                    1,
+                    "full profile requires a canonical FLOW-HP happy path or a Blocked/Not applicable coverage record with rationale",
+                )
+            )
+
+    confirmed_happy_path_decisions = {
+        stable_id
+        for stable_id, statuses in analysis.happy_path_confirmation_statuses.items()
+        if any(is_confirmed_happy_path_status(status) for status, _site in statuses)
+    }
+
+    for stable_id in happy_path_ids:
+        first = sorted(
+            analysis.definitions[stable_id],
+            key=lambda site: (str(site.file), site.line),
+        )[0]
+        if stable_id not in analysis.happy_path_basis_ids:
+            findings.append(
+                Finding(
+                    strict_severity,
+                    "MISSING_HAPPY_PATH_BASIS",
+                    first.file,
+                    first.line,
+                    f"{stable_id} has no first-principles basis row linked by ID",
+                )
+            )
+        if stable_id not in analysis.happy_path_adversarial_ids:
+            findings.append(
+                Finding(
+                    strict_severity,
+                    "MISSING_HAPPY_PATH_ADVERSARIAL_REVIEW",
+                    first.file,
+                    first.line,
+                    f"{stable_id} has no adversarial-review row linked by ID",
+                )
+            )
+        if not reachable_prefix(
+            stable_id, {"SCN", "REQ", "TASK"}, analysis.edges
+        ):
+            findings.append(
+                Finding(
+                    strict_severity,
+                    "ORPHAN_HAPPY_PATH_UPSTREAM",
+                    first.file,
+                    first.line,
+                    f"{stable_id} does not trace to SCN/REQ/TASK",
+                )
+            )
+        if not reachable_prefix(stable_id, {"US", "JS"}, analysis.edges):
+            findings.append(
+                Finding(
+                    strict_severity,
+                    "ORPHAN_HAPPY_PATH_STORY",
+                    first.file,
+                    first.line,
+                    f"{stable_id} does not trace to a user/job story",
+                )
+            )
+        direct_happy_path_decisions = {
+            neighbor
+            for neighbor in analysis.edges.get(stable_id, set())
+            if neighbor.startswith("DEC-HAPPY-")
+        }
+        if not direct_happy_path_decisions:
+            findings.append(
+                Finding(
+                    strict_severity,
+                    "MISSING_HAPPY_PATH_CONFIRMATION",
+                    first.file,
+                    first.line,
+                    f"{stable_id} is not directly covered by a DEC-HAPPY confirmation record",
+                )
+            )
+        elif not (direct_happy_path_decisions & confirmed_happy_path_decisions):
+            observed_statuses = sorted(
+                {
+                    status or "(empty)"
+                    for decision_id in direct_happy_path_decisions
+                    for status, _site in analysis.happy_path_confirmation_statuses.get(
+                        decision_id, []
+                    )
+                }
+            )
+            findings.append(
+                Finding(
+                    strict_severity,
+                    "UNCONFIRMED_HAPPY_PATH",
+                    first.file,
+                    first.line,
+                    f"{stable_id} is linked only to non-confirmed DEC-HAPPY records: "
+                    + (", ".join(observed_statuses) if observed_statuses else "(no status)"),
                 )
             )
     if "FUNC" not in present_prefixes:

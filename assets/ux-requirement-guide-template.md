@@ -101,6 +101,57 @@ Trace: [SCN / OBJ / REQ references]
 
 [Summarize the proposed experience and the design principles a reviewer should notice.]
 
+### Confirmed Happy Paths
+
+Show the user-level success sequence before explaining functions or pages. Keep alternate, failure, exit, and recovery behavior linked rather than merged into normal success. If Happy Path analysis is blocked or not applicable, select that coverage status and provide a concrete rationale instead of retaining the example path below.
+
+| Happy Path coverage | Status | Rationale | Related IDs |
+| --- | --- | --- | --- |
+| Primary scenario paths | Confirmed / Blocked / Not applicable | | |
+
+#### FLOW-HP-001 · [Happy path name]
+
+| Happy path | Primary actor | Trigger/context | User outcome | Completion evidence | Related IDs | FLOW ID |
+| --- | --- | --- | --- | --- | --- | --- |
+| [Happy path name] | | | | | [SCN/REQ/TASK/US/JS references] | FLOW-HP-001 |
+
+- Primary actor:
+- Trigger and normal context:
+- Preconditions:
+- Observable user outcome:
+- Completion evidence:
+- Confirmation: [DEC-HAPPY reference]
+
+```text
+[Trigger]
+   |
+   v
+[Required understanding/input] -> [Consequential action]
+                                         |
+                                         v
+                              [Required system work]
+                                         |
+                                         v
+                              [User verifies outcome]
+```
+
+| Step | What the user needs or does | Required system response | Visible completion evidence | FLOW/step ID |
+| --- | --- | --- | --- | --- |
+
+| Fundamental user outcome | Observable completion evidence | Irreducible constraints | Potentially avoidable steps | Evidence/uncertainty | Related IDs |
+| --- | --- | --- | --- | --- | --- |
+| | | | | | FLOW-HP-001 |
+
+| Challenge | Finding and evidence | Path impact | Resolution/owner | Status | Related IDs |
+| --- | --- | --- | --- | --- | --- |
+| | | | | | FLOW-HP-001 |
+
+Linked alternate/failure/exit/recovery flows: [FLOW references]
+
+| Decision | Covered FLOW-HP/SCN/REQ/TASK/US/JS | Owner/date | Conditions or corrections | Status | DEC ID |
+| --- | --- | --- | --- | --- | --- |
+| Happy Path confirmed | FLOW-HP-001 · [related baseline IDs] | | | Confirmed | DEC-HAPPY-001 |
+
 ### From stories to the experience
 
 ```text
@@ -194,19 +245,22 @@ The detailed experience is confirmed one dependency-ordered section or function 
 **When and where:**  
 **Preconditions:**  
 **Expected result:**  
+**Confirmed Happy Path:** [FLOW-HP reference]
 
 Trace: [TASK / US or JS / REQ references]
 
-#### How the task works
+#### Confirmed Happy Path and linked branches
 
 ```text
 [Start]
    |
    v
-[Review context] -> [Configure or choose] -> [Confirm] -> [Result]
+[Review context] -> [Configure or choose] -> [Confirm] -> [Observable result]
                            |
-                           +-- issue --> [Explain] -> [Correct/retry or exit]
+                           +-- issue --> [Linked recovery flow]
 ```
+
+Keep the happy path linear. Explain alternate, failure, exit, and recovery behavior under “Important states and recovery” or by linking its own `FLOW/STATE` definition.
 
 #### Steps
 

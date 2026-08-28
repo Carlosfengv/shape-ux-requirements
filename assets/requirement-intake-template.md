@@ -51,6 +51,10 @@
 ### Known navigation and task flow
 
 - Current entry points:
+- Fundamental user outcome:
+- Observable evidence that the user has succeeded:
+- Steps or constraints believed to be unavoidable:
+- Steps suspected to exist only because of the current interface/implementation:
 - Expected entry and return paths:
 - Cross-page steps:
 - Decision branches:

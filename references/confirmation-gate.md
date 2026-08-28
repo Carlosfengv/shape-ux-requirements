@@ -90,11 +90,12 @@ Use the alignment sections from `assets/requirement-alignment-template.md` insid
 5. important concepts and user-facing language;
 6. in-scope, later, and out-of-scope boundaries;
 7. candidate `REQ`, `TASK`, and complete `US/JS` definitions;
-8. main, alternate, failure, and recovery intent for each story;
-9. assumptions, conflicts, missing decisions, priority/release uncertainty, and risks;
-10. a concise statement of what detailed work will follow after confirmation.
+8. one evidence-labeled, outcome-level candidate happy path for each primary scenario, plus main, alternate, failure, and recovery intent for each story;
+9. first-principles basis and material adversarial findings that affect the candidate happy paths;
+10. assumptions, conflicts, missing decisions, priority/release uncertainty, and risks;
+11. a concise statement of what detailed work will follow after confirmation.
 
-Do not produce functional-point decomposition, starting-surface/page topology, detailed interaction logic, the full interface specification, final information architecture, detailed ASCII UI frames, system contracts, or exhaustive acceptance criteria in this pass. A small conceptual ASCII outcome/story flow is allowed only when it helps the user verify sequence or scope; label it as non-binding and do not imply screen structure.
+Do not produce functional-point decomposition, starting-surface/page topology, detailed interaction logic, the full interface specification, final information architecture, detailed ASCII UI frames, system contracts, or exhaustive acceptance criteria in this pass. A compact candidate happy path is allowed to help the user verify actor, sequence, scope, and outcome; label it conceptual and non-binding, avoid page/control commitments, and defer its detailed `FLOW-HP` confirmation until after the requirement/story baseline is confirmed.
 
 If blocking gaps remain, ask focused questions instead of presenting the brief as confirmable.
 
@@ -102,8 +103,8 @@ If blocking gaps remain, ask focused questions instead of presenting the brief a
 
 End the alignment brief with one explicit confirmation decision that follows the confirmation handoff contract. When the host provides a structured choice component, offer:
 
-- `修改需求与 Stories` — keep detailed design paused, collect corrections by section/story name or optional ID, update affected content, and present the changed slice again;
-- `确认并进入「详细 UX 设计」` — lock the presented scope and stories, then derive functions, flows, pages, ASCII UI, specifications, and acceptance criteria;
+- `修改需求、Stories 与候选 Happy Path` — keep downstream work paused, collect corrections by section/story/path name or optional ID, update affected content, and present the changed slice again;
+- `确认并进入「Happy Path 细化与确认」` — lock the presented scope, stories, and outcome-level path intent, then detail and adversarially review each `FLOW-HP` before any page/UI derivation;
 - `补充分析后再确认` — keep detailed design paused and investigate the named uncertainty.
 
 Do not treat silence, “looks interesting,” or feedback on only one story as confirmation of the full baseline. Record who confirmed it, when, which version, and any conditions.
@@ -114,7 +115,7 @@ After explicit confirmation:
 
 1. change the baseline status from pending to `Confirmed`;
 2. assign a baseline version and record `DEC-BASELINE-###`;
-3. freeze the confirmed `BG`, `OBJ`, `ROLE`, `SCN`, `CON`, `REQ`, `TASK`, `US/JS`, scope, assumptions, and open decisions;
+3. freeze the confirmed `BG`, `OBJ`, `ROLE`, `SCN`, `CON`, `REQ`, `TASK`, `US/JS`, scope, assumptions, open decisions, and the outcome-level intent of each candidate happy path;
 4. preserve IDs and wording unless a later approved change requires revision;
 5. link every downstream IA, flow, page, interaction, UI, specification, and acceptance criterion to the confirmed baseline.
 
@@ -122,9 +123,9 @@ Confirmation validates shared understanding, not factual truth. Keep evidence la
 
 ## Produce the detailed specification
 
-Only after confirmation, derive functional points from stories, choose the appropriate overview/list/queue/detail/task starting surfaces, map detail and jump destinations, and organize the interaction logic. Then apply `progressive-ascii-confirmation.md`: order material ASCII UX by dependency, present one candidate unit at a time, write only confirmed units into canonical documents, and derive later candidates from the confirmed baseline plus confirmed upstream ASCII decisions.
+Only after confirmation, promote each candidate happy path to a detailed `FLOW-HP-###`, run its first-principles and adversarial checks, and confirm it with `DEC-HAPPY-###`. Then derive functional points from stories and confirmed paths, choose the appropriate overview/list/queue/detail/task starting surfaces, map detail and jump destinations, and organize the interaction logic. Apply `progressive-ascii-confirmation.md`: order material ASCII UX by dependency, present one candidate unit at a time, write only confirmed units into canonical documents, and derive later candidates from the confirmed baseline plus confirmed happy-path and upstream ASCII decisions.
 
-Do not interpret baseline confirmation as advance approval of every detailed flow or interface. Each material ASCII interaction slice still requires its own explicit confirmation before canonical write.
+Do not interpret baseline confirmation as approval of each detailed happy path, and do not interpret happy-path confirmation as advance approval of every interface. Each material ASCII interaction slice still requires its own explicit confirmation before canonical write.
 
 If detailed design reveals a material contradiction or missing decision, pause the affected branch, explain why the baseline is insufficient, and return only that slice to confirmation. Continue unaffected confirmed work when separation is safe.
 

@@ -217,6 +217,7 @@ Use appendices for:
 
 - repository and public-source evidence ledgers;
 - requirement register and full story map;
+- confirmed happy paths, first-principles basis, adversarial review, branch inventory, and `DEC-HAPPY` records;
 - shared role and permission matrix;
 - global lifecycle and state definitions;
 - extended terminology dictionary;

@@ -183,7 +183,73 @@ without [important risk or constraint].
 | Outcome | Activity | User task | Priority | Release slice | Evidence | Status | TASK ID | US/JS reference |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 
-### 6.3 Story-to-functional-point decomposition
+### 6.3 Confirmed Happy Paths
+
+> Define one `FLOW-HP-###` per primary scenario or materially different primary-role path. Derive it from the user outcome and irreducible constraints, challenge it adversarially, and confirm it before using it to derive functions, pages, or detailed UI. If Happy Path analysis is blocked or not applicable, select that coverage status and provide a concrete rationale instead of retaining the example path below.
+
+| Happy Path coverage | Status | Rationale | Related IDs |
+| --- | --- | --- | --- |
+| Primary scenario paths | Confirmed / Blocked / Not applicable | | |
+
+#### FLOW-HP-001 · [Happy path name]
+
+| Happy path | Primary actor | Trigger/context | User outcome | Completion evidence | Related IDs | FLOW ID |
+| --- | --- | --- | --- | --- | --- | --- |
+| [Happy path name] | | | | | [SCN/REQ/TASK/US/JS references] | FLOW-HP-001 |
+
+| Item | Definition |
+|---|---|
+| Primary actor | |
+| Trigger and normal context | |
+| Preconditions | |
+| Fundamental user outcome | |
+| Observable completion evidence | |
+| Evidence/uncertainty status | |
+| Related SCN/REQ/TASK/US/JS | |
+
+```text
+[Trigger and normal context]
+          |
+          v
+[Required understanding/input]
+          |
+          v
+[Consequential action]
+          |
+          v
+[Required system work]
+          |
+          v
+[User verifies the intended result]
+```
+
+| Step | Actor intent/action | Required system response | User-visible feedback | Next state or completion | Evidence | Related IDs | FLOW/step ID |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+
+##### First-principles basis
+
+| Fundamental user outcome | Observable completion evidence | Irreducible constraints | Potentially avoidable steps | Evidence/uncertainty | Related IDs |
+| --- | --- | --- | --- | --- | --- |
+| | | | | | FLOW-HP-001 |
+
+##### Adversarial review
+
+| Challenge | Finding and evidence | Path impact | Resolution/owner | Status | Related IDs |
+| --- | --- | --- | --- | --- | --- |
+| | | | | | FLOW-HP-001 |
+
+##### Linked paths
+
+| Happy-path point | Condition | Path type | User outcome | Linked FLOW/STATE | Status |
+| --- | --- | --- | --- | --- | --- |
+
+##### Confirmation record
+
+| Decision | Covered FLOW-HP/SCN/REQ/TASK/US/JS | Owner/date | Conditions or corrections | Status | DEC ID |
+| --- | --- | --- | --- | --- | --- |
+| Happy Path confirmed | FLOW-HP-001 · [related baseline IDs] | | | Confirmed | DEC-HAPPY-001 |
+
+### 6.4 Story-to-functional-point decomposition
 
 Derive functional points only from the confirmed story baseline. A functional point is a user-recognizable capability, not a component, API, service, or implementation layer.
 
@@ -199,7 +265,7 @@ Derive functional points only from the confirmed story baseline. A functional po
 | User outcome | Functional point/capability | User-visible result | Shared with | Evidence | FUNC ID | US/JS ID |
 | --- | --- | --- | --- | --- | --- | --- |
 
-### 6.4 Starting surface and experience topology
+### 6.5 Starting surface and experience topology
 
 Choose the starting surface according to the user’s task. Use an overview for cross-object status, a resource list for collection management, a work queue for prioritized work, a detail-first entry for a known object, a direct task surface for a focused operation, or a configuration surface for policy and defaults.
 
@@ -223,7 +289,7 @@ Choose the starting surface according to the user’s task. Use an overview for 
 | Starting-surface model | Primary content | Entry | Detail/action destination | Return/context behavior | PAGE/IA ID | Related US/JS | FUNC ID |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 
-### 6.5 Interaction logic model
+### 6.6 Interaction logic model
 
 Derive interaction logic before detailed ASCII UI:
 

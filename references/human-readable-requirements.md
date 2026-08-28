@@ -47,6 +47,7 @@ At a glance
   -> Why this matters
   -> People and scenarios
   -> Mental model and terminology
+  -> Confirmed happy paths
   -> Experience overview
   -> Task-by-task flows and ASCII UI
   -> Key states, decisions, risks, and open questions
@@ -154,13 +155,14 @@ For each primary task, use:
 1. User goal
 2. When and where this happens
 3. Preconditions
-4. Short ASCII task/decision flow
-5. Numbered operating steps
-6. ASCII UI covering every user-visible interaction, with separate frames for materially different states
-7. What the user sees and can do
-8. Exceptions and recovery
-9. Key decisions or assumptions
-10. Links to detailed requirements and acceptance criteria
+4. Confirmed `FLOW-HP` with observable completion evidence
+5. Linked alternate, failure, exit, and recovery flows
+6. Numbered operating steps
+7. ASCII UI covering every user-visible interaction, with separate frames for materially different states
+8. What the user sees and can do
+9. Exceptions and recovery
+10. Key decisions or assumptions
+11. Links to detailed requirements and acceptance criteria
 
 Keep one chapter focused on one user-recognizable outcome. If a page supports several unrelated goals, split it into subfeature/task sections.
 
