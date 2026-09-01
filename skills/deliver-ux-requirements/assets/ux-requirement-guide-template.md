@@ -97,6 +97,11 @@ Trace: [SCN / OBJ / REQ references]
 | Internal/source term | Product term | Plain-language meaning | Avoid/confuse with |
 |---|---|---|---|
 
+### Target-user model used for interaction review
+
+| Target role/scenario | Goal and trigger | Familiar objects | Expected sequence | Decision information | Risk perception | Completion signal | Vocabulary | Evidence status |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+
 ## 5. Experience overview
 
 [Summarize the proposed experience and the design principles a reviewer should notice.]
@@ -213,6 +218,18 @@ Use inline interaction for small local changes, a dialog for one bounded decisio
       +-- cannot proceed --+--> [Explain and recover]
 ```
 
+### Target-user model-fit review
+
+Review the candidate `FLOW/INT` before detailed UI, then review `UI/STATE` before ASCII confirmation. Record coverage even when no material gap is found; create `UXGAP` only for a material mismatch or unresolved high-risk uncertainty.
+
+| Model-fit review coverage | Target user/scenario | Reviewed FLOW/INT/UI/STATE | Evidence status | Result | Rationale/limitation |
+| --- | --- | --- | --- | --- | --- |
+| Flow-model fit | | | | | |
+| Representation-model fit | | | | | |
+
+| Target user/scenario | Flow or interface point | User goal/expectation | Interface expression | Actual system behavior/consequence | Gap type | Severity | Evidence | Resolution/status | Related IDs | UXGAP ID |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+
 ### Experience principles
 
 - Make the current scope and object clear.
@@ -232,8 +249,8 @@ Use inline interaction for small local changes, a dialog for one bounded decisio
 
 The detailed experience is confirmed one dependency-ordered section or function at a time. Candidate ASCII remains outside this canonical guide until confirmation.
 
-| Order | Section or function | What was confirmed | Status | Canonical location | Depends on | Included UI/STATE IDs | DEC ID |
-|---:|---|---|---|---|---|---|---|
+| Order | Section or function | What was confirmed | Model-fit status | Status | Canonical location | Depends on | Included UI/STATE IDs | DEC ID |
+|---:|---|---|---|---|---|---|---|---|
 
 ## 6. Task and interface chapters
 
@@ -379,6 +396,7 @@ Later
 |---|---|---|---|
 | User and scenario framing | | | |
 | Mental model and terminology | | | |
+| Target-user model-fit review | | | |
 | Task flows | | | |
 | ASCII UI and critical states | | | |
 | Detailed requirements | | | |
@@ -418,6 +436,7 @@ Use links rather than copying dense control material into the main guide.
 | Evidence and baseline | | | |
 | Requirement and trace | | | |
 | UX and interaction | | | |
+| Target-user model fit | | | |
 | Human-readable document | | | |
 
 ### Delivered document structure

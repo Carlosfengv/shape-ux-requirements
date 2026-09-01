@@ -58,6 +58,13 @@ Confirm whether the background, objectives, users, scenarios, scope, terminology
 | Source/internal term | Proposed product term | Plain-language meaning | Evidence or uncertainty | CON ID |
 | --- | --- | --- | --- | --- |
 
+### Role-specific mental-model handoff
+
+> Required when downstream work will evaluate a flow or interface against target-user expectations. Keep inferred or assumed expectations explicitly provisional.
+
+| Target role/scenario | Goal and trigger | Familiar objects | Expected sequence | Decision information | Risk perception | Completion signal | Vocabulary | Evidence status |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+
 ## 5. Requirement and story backbone
 
 ```text

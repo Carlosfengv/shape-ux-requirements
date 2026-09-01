@@ -322,12 +322,13 @@ For a full shaping request, produce:
 2. candidate and confirmed `FLOW-HP-###` paths with first-principles basis, adversarial review, linked branch inventory, and `DEC-HAPPY-###` records;
 3. confirmed story-to-functional-point map;
 4. starting-surface decision table and ASCII page/detail/jump topology;
-5. interaction-logic chain and material pattern-rationale table;
+5. interaction-logic chain, material pattern-rationale table, and flow-model fit coverage for every material target `ROLE/SCN`;
 6. information architecture tree and IA node table;
 7. ASCII navigation flow plus the applicable navigation behavior table when navigation spans steps or branches;
 8. one ASCII task/decision flow plus its detailed table for every primary scenario;
 9. ASCII swimlane or async sequence for every material cross-role handoff, wait, notification, or re-entry;
 10. ASCII state flow for every material lifecycle;
-11. mapping from stories through happy paths, functions, pages, interactions, UI states, specifications, and acceptance criteria.
+11. representation-model fit coverage plus material `UXGAP` findings linked to the affected role, scenario, flow, interaction, or UI/state;
+12. mapping from stories through happy paths, functions, pages, interactions, UI states, specifications, and acceptance criteria.
 
 For a narrow, single-screen request, a compact ASCII entry/task/return flow plus a short supporting table may be sufficient.

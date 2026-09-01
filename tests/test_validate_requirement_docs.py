@@ -297,5 +297,214 @@ class StageProfileValidationTests(unittest.TestCase):
         self.assertNotIn("MISSING_HAPPY_PATH", codes)
 
 
+class ModelFitValidationTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.site = validator.Site(Path("synthetic.md"), 1)
+
+    def model_fit_analysis(self, *, include_ui: bool = True):
+        analysis = validator.Analysis()
+        stable_ids = ["ROLE-001", "SCN-001", "FLOW-001", "INT-001"]
+        if include_ui:
+            stable_ids.extend(["UI-001", "STATE-001"])
+        for stable_id in stable_ids:
+            analysis.definitions[stable_id].add(self.site)
+        flow_ids = {"ROLE-001", "SCN-001", "FLOW-001", "INT-001"}
+        analysis.model_fit_coverage.append(
+            (
+                "Flow-model fit",
+                "Reviewed",
+                "Domain-owner-confirmed",
+                "No material gap found",
+                flow_ids,
+                self.site,
+            )
+        )
+        if include_ui:
+            representation_ids = {
+                "ROLE-001",
+                "SCN-001",
+                "UI-001",
+                "STATE-001",
+            }
+            analysis.model_fit_coverage.append(
+                (
+                    "Representation-model fit",
+                    "Reviewed",
+                    "Inferred",
+                    "Representative-user validation remains planned",
+                    representation_ids,
+                    self.site,
+                )
+            )
+        return analysis
+
+    @staticmethod
+    def model_fit_findings(analysis):
+        return [
+            finding
+            for finding in validator.semantic_findings(
+                analysis, final=True, profile="model-fit"
+            )
+            if finding.code in validator.STAGE_PROFILE_CODES["model-fit"]
+            or finding.code == "MISSING_STAGE_ARTIFACT"
+        ]
+
+    def test_review_coverage_does_not_require_a_gap_finding(self) -> None:
+        codes = {
+            finding.code
+            for finding in self.model_fit_findings(self.model_fit_analysis())
+        }
+
+        self.assertNotIn("MISSING_MODEL_FIT_COVERAGE", codes)
+        self.assertNotIn("MISSING_FLOW_MODEL_FIT_REVIEW", codes)
+        self.assertNotIn("MISSING_REPRESENTATION_MODEL_FIT_REVIEW", codes)
+        self.assertNotIn("MISSING_STAGE_ARTIFACT", codes)
+
+    def test_ui_scope_requires_representation_review(self) -> None:
+        analysis = self.model_fit_analysis()
+        analysis.model_fit_coverage = [analysis.model_fit_coverage[0]]
+
+        codes = {
+            finding.code for finding in self.model_fit_findings(analysis)
+        }
+
+        self.assertIn("MISSING_REPRESENTATION_MODEL_FIT_REVIEW", codes)
+
+    def test_coverage_requires_role_scenario_scope_and_evidence(self) -> None:
+        analysis = self.model_fit_analysis(include_ui=False)
+        analysis.model_fit_coverage = [
+            (
+                "Flow-model fit",
+                "Reviewed",
+                "",
+                "",
+                {"FLOW-001", "INT-001"},
+                self.site,
+            )
+        ]
+
+        codes = {
+            finding.code for finding in self.model_fit_findings(analysis)
+        }
+
+        self.assertIn("INCOMPLETE_MODEL_FIT_COVERAGE", codes)
+        self.assertIn("ORPHAN_MODEL_FIT_COVERAGE", codes)
+
+    def test_open_critical_gap_is_blocking_but_resolved_gap_is_not(self) -> None:
+        analysis = self.model_fit_analysis()
+        gap_id = "UXGAP-001"
+        analysis.definitions[gap_id].add(self.site)
+        for related_id in ("ROLE-001", "SCN-001", "UI-001", "STATE-001"):
+            analysis.edges[gap_id].add(related_id)
+            analysis.edges[related_id].add(gap_id)
+        analysis.uxgap_records[gap_id].append(("Critical", "Open", self.site))
+
+        codes = {
+            finding.code for finding in self.model_fit_findings(analysis)
+        }
+        self.assertIn("OPEN_CRITICAL_UXGAP", codes)
+
+        analysis.uxgap_records[gap_id] = [("Critical", "Resolved", self.site)]
+        codes = {
+            finding.code for finding in self.model_fit_findings(analysis)
+        }
+        self.assertNotIn("OPEN_CRITICAL_UXGAP", codes)
+
+    def test_confirmed_ascii_cannot_hide_an_open_critical_gap(self) -> None:
+        analysis = self.model_fit_analysis()
+        gap_id = "UXGAP-001"
+        decision_id = "DEC-ASCII-001"
+        analysis.definitions[gap_id].add(self.site)
+        analysis.definitions[decision_id].add(self.site)
+        for related_id in ("ROLE-001", "SCN-001", "UI-001"):
+            analysis.edges[gap_id].add(related_id)
+            analysis.edges[related_id].add(gap_id)
+        analysis.edges["UI-001"].add(decision_id)
+        analysis.edges[decision_id].add("UI-001")
+        analysis.ascii_confirmation_statuses[decision_id].append(
+            ("Confirmed", self.site)
+        )
+        analysis.uxgap_records[gap_id].append(("Critical", "Open", self.site))
+
+        codes = {
+            finding.code for finding in self.model_fit_findings(analysis)
+        }
+
+        self.assertIn("CONFIRMED_ASCII_WITH_OPEN_CRITICAL_UXGAP", codes)
+
+    def test_parser_collects_model_fit_coverage_and_gap_details(self) -> None:
+        markdown = """\
+| Model-fit review coverage | Target user/scenario | Reviewed FLOW/INT/UI/STATE | Evidence status | Result | Rationale/limitation |
+| --- | --- | --- | --- | --- | --- |
+| Flow-model fit | ROLE-001 · SCN-001 | FLOW-001 · INT-001 | Inferred | Reviewed with findings | User testing planned |
+
+| Target user/scenario | Flow or interface point | Severity | Evidence | Resolution/status | Related IDs | UXGAP ID |
+| --- | --- | --- | --- | --- | --- | --- |
+| ROLE-001 · SCN-001 | FLOW-001 · INT-001 | Critical | Owner-confirmed | Open | UI-001 | UXGAP-001 |
+"""
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "requirements.md"
+            path.write_text(markdown, encoding="utf-8")
+            analysis = validator.inspect_file(path, final=True)
+
+        self.assertEqual(len(analysis.model_fit_coverage), 1)
+        self.assertEqual(analysis.model_fit_coverage[0][0:3], (
+            "Flow-model fit",
+            "Reviewed with findings",
+            "Inferred",
+        ))
+        self.assertEqual(
+            analysis.uxgap_records["UXGAP-001"][0][0:2],
+            ("Critical", "Open"),
+        )
+        self.assertIn("ROLE-001", analysis.edges["UXGAP-001"])
+        self.assertIn("UI-001", analysis.edges["UXGAP-001"])
+
+    def test_audit_only_document_passes_model_fit_profile_without_baseline(self) -> None:
+        markdown = """\
+| Target role | ROLE ID |
+| --- | --- |
+| Occasional requester | ROLE-001 |
+
+| Target scenario | SCN ID |
+| --- | --- |
+| Submit and verify a request | SCN-001 |
+
+| Task flow | Related IDs | FLOW ID |
+| --- | --- | --- |
+| Submit request | ROLE-001 · SCN-001 · INT-001 | FLOW-001 |
+
+| Interaction | Related IDs | INT ID |
+| --- | --- | --- |
+| Review consequence and submit | ROLE-001 · SCN-001 · FLOW-001 | INT-001 |
+
+| Model-fit review coverage | Target user/scenario | Reviewed FLOW/INT/UI/STATE | Evidence status | Result | Rationale/limitation |
+| --- | --- | --- | --- | --- | --- |
+| Flow-model fit | ROLE-001 · SCN-001 | FLOW-001 · INT-001 | Domain-owner-confirmed | Reviewed | Representation review is outside the supplied scope |
+"""
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "audit.md"
+            path.write_text(markdown, encoding="utf-8")
+            analysis = validator.inspect_file(path, final=True)
+            findings = validator.semantic_findings(
+                analysis,
+                final=True,
+                profile="model-fit",
+                file_count=1,
+            )
+
+        self.assertEqual(findings, [])
+
+    def test_enterprise_template_reviews_flow_before_ascii_confirmation(self) -> None:
+        content = (
+            DELIVERY_SKILL / "assets" / "enterprise-requirement-output-template.md"
+        ).read_text(encoding="utf-8")
+
+        model_fit_position = content.index("### 7.2 Target-user model-fit review")
+        queue_position = content.index("### 8.1 ASCII UX confirmation queue")
+
+        self.assertLess(model_fit_position, queue_position)
+
+
 if __name__ == "__main__":
     unittest.main()

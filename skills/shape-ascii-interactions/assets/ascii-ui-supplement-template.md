@@ -38,6 +38,21 @@
 | Success outcome |  |  |  |  |
 | Failure and recovery |  |  |  |  |
 
+### Target-user model used for review
+
+| Target role/scenario | Goal and trigger | Familiar objects | Expected sequence | Decision information | Risk perception | Completion signal | Vocabulary | Evidence status |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+
+### Model-fit review
+
+| Model-fit review coverage | Target user/scenario | Reviewed FLOW/INT/UI/STATE | Evidence status | Result | Rationale/limitation |
+| --- | --- | --- | --- | --- | --- |
+| Flow-model fit | | | | | |
+| Representation-model fit | | | | | |
+
+| Target user/scenario | Flow or interface point | User goal/expectation | Interface expression | Actual system behavior/consequence | Gap type | Severity | Evidence | Resolution/status | Related IDs | UXGAP ID |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+
 ## 4. Questions and assumptions
 
 ### Blocking questions
@@ -52,10 +67,10 @@
 
 ## 5. ASCII UX confirmation queue
 
-Confirm one dependency-ordered supplement slice at a time. Keep candidate ASCII out of the canonical supplement sections below until confirmation.
+Confirm one dependency-ordered supplement slice at a time. Keep candidate ASCII out of the canonical supplement sections below until confirmation. Do not confirm a slice while an affected Critical `UXGAP` remains open.
 
-| Order | Section or function | Confirmation scope | Status | Target section | Depends on | Included UI/STATE IDs | DEC ID |
-|---:|---|---|---|---|---|---|---|
+| Order | Section or function | Confirmation scope | Model-fit status | Status | Target section | Depends on | Included UI/STATE IDs | DEC ID |
+|---:|---|---|---|---|---|---|---|---|
 
 ## 6. ASCII task and state flow
 
@@ -145,6 +160,8 @@ Repeat focused frames only for materially different states.
 | Critical states are represented or explicitly omitted | | |
 | Every introduced element traces to source evidence | | |
 | Unsupported behavior is labeled as an assumption | | |
+| Flow-model and representation-model fit coverage is recorded | | |
+| No confirmed slice has an open Critical UXGAP | | |
 | ASCII and adjacent specification agree | | |
 | Every canonical UI/STATE is covered by a confirmed DEC-ASCII record | | |
 

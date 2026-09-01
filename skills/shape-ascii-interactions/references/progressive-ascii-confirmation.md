@@ -96,7 +96,8 @@ Before presenting a candidate, load:
 1. the confirmed baseline and relevant `US/JS`, `FUNC`, `TASK/FLOW`, role, permission, scope, terminology, and state rules;
 2. confirmed upstream ASCII units and their `DEC-ASCII` decisions;
 3. shared interaction, accessibility, adaptation, and system constraints;
-4. unresolved assumptions that affect this unit.
+4. the applicable target-user mental-model evidence, model-fit coverage, and unresolved `UXGAP/UXH` records;
+5. unresolved assumptions that affect this unit.
 
 Present:
 
@@ -105,6 +106,7 @@ Present:
 - the candidate flow and ASCII UI/state frames;
 - a concise behavior summary adjacent to the ASCII;
 - assumptions, omissions, conflicts, and downstream impact;
+- flow-model and representation-model fit status, resolved findings, open non-blocking limitations, and the exact validation claim;
 - confirmation choices following `confirmation-gate.md`.
 
 Use action-specific choices:
@@ -130,13 +132,14 @@ When the user requests changes:
 
 When the user confirms:
 
-1. confirm the exact candidate version and covered `UI/STATE` IDs;
-2. create or update `DEC-ASCII-###` with confirmer, date, baseline version, dependencies, conditions, and covered IDs;
-3. write the ASCII and adjacent local specifications, accessibility/adaptation constraints, acceptance criteria, and trace links to the canonical location;
-4. set the queue row to `Confirmed` only after the write succeeds;
-5. validate the affected Markdown, links, IDs, trace edges, and local ASCII-to-spec agreement;
-6. build the next context packet from all relevant confirmed units;
-7. present only the next queue unit.
+1. verify that the applicable model-fit reviews exist and no affected Critical `UXGAP` remains open;
+2. confirm the exact candidate version and covered `UI/STATE` IDs;
+3. create or update `DEC-ASCII-###` with confirmer, date, baseline version, dependencies, model-fit status, conditions, and covered IDs;
+4. write the ASCII and adjacent local specifications, accessibility/adaptation constraints, acceptance criteria, and trace links to the canonical location;
+5. set the queue row to `Confirmed` only after the write succeeds;
+6. validate the affected Markdown, links, IDs, trace edges, gap closure, and local ASCII-to-spec agreement;
+7. build the next context packet from all relevant confirmed units;
+8. present only the next queue unit.
 
 Do not treat silence, comments on one element, or approval of only the happy path as confirmation of the whole unit.
 
@@ -217,8 +220,9 @@ After the final unit is confirmed and written:
 
 1. verify that no required unit remains `Planned`, `In review`, `Changes requested`, or `Blocked` unless the delivery is explicitly provisional or blocked;
 2. verify every canonical `UI` definition traces to a confirmed `DEC-ASCII` record;
-3. run the full document review and repair loop;
-4. include ASCII confirmation coverage and any superseded decisions in the final handoff.
+3. verify flow-model and representation-model fit coverage, and that no confirmed slice retains an open Critical `UXGAP`;
+4. run the full document review and repair loop;
+5. include ASCII confirmation coverage, model-fit evidence status, remaining limitations, and any superseded decisions in the final handoff.
 
 ## Review the confirmation coverage
 
@@ -228,6 +232,7 @@ Reject or revise the delivery when:
 - unconfirmed candidate ASCII appears as canonical specification;
 - the queue order ignores a material dependency;
 - a confirmed unit lacks its covered `UI/STATE` IDs or `DEC-ASCII` record;
+- a confirmed unit lacks applicable model-fit coverage or retains an open Critical `UXGAP`;
 - the next candidate contradicts confirmed terminology, hierarchy, navigation, state, or behavior;
 - a revision changes confirmed upstream behavior without impact analysis and reconfirmation;
 - confirmation updates the diagram but leaves adjacent specifications or acceptance criteria stale;

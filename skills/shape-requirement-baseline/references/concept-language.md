@@ -50,6 +50,8 @@ For each role, identify:
 
 Label each claim as research-backed, domain-owner-confirmed, observed in product data, inferred, or assumed.
 
+When a downstream flow-model or interface-model review is planned, treat this role-specific hypothesis as required handoff context. If the primary role or scenario is missing, the review is Blocked. If material dimensions are inferred, assumed, unknown, or conflicted, the downstream review may continue only as Provisional and must not claim user validation.
+
 ## Create a concept dictionary
 
 Use one row per stable user-relevant concept:
@@ -77,6 +79,8 @@ Treat claims about user recognition, findability, expected sequence, comprehensi
 Record concept-specific evidence and confidence in the concept dictionary. Send every material cross-concept or task-level claim to the single canonical `UXH` register owned by `$shape-ascii-interactions`; do not duplicate the hypothesis text here.
 
 Prefer task-based validation over asking whether a label “sounds good.” Define what a representative user must find, explain, predict, or complete.
+
+Do not convert a stakeholder's preferred workflow, the current screen sequence, an API shape, or an implementation model into user-model evidence. Preserve the source and confidence of each expectation so downstream `UXGAP` findings can distinguish a demonstrated mismatch from a hypothesis that still needs testing.
 
 ## Explain at four levels
 

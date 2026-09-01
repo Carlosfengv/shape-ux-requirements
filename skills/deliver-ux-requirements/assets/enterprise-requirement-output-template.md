@@ -163,6 +163,11 @@ without [important risk or constraint].
 | Source term | Product term | User explanation | Technical boundary | Evidence | CON ID |
 | --- | --- | --- | --- | --- | --- |
 
+### 5.3 Role-specific mental-model handoff
+
+| Target role/scenario | Goal and trigger | Familiar objects | Expected sequence | Decision information | Risk perception | Completion signal | Vocabulary | Evidence status |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+
 ## 6. Requirement register, story map, and release scope
 
 ### 6.1 Requirement register
@@ -318,14 +323,26 @@ Derive interaction logic before detailed ASCII UI:
 
 Use inline interaction for a small local change, a dialog for one bounded decision or short form, and a dedicated page or wizard for complex, multi-step, resumable, shareable, or reference-heavy work. Do not use drawers, side sheets, slide-over panels, or off-canvas task surfaces.
 
-## 7. UX hypotheses, information architecture, navigation, and task flows
+## 7. UX hypotheses, target-user model fit, information architecture, navigation, and task flows
 
 ### 7.1 UX hypotheses and validation
 
 | Hypothesis | Affected user/task | Validation task | Success signal | Failure signal | Current evidence | Status/owner | UXH ID |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 
-### 7.2 Information architecture
+### 7.2 Target-user model-fit review
+
+Review candidate `FLOW/INT` before detailed interface derivation and candidate `UI/STATE` before `DEC-ASCII`. Record coverage even when no material gap is found. Create `UXGAP` only for a material mismatch, unsupported high-risk assumption, or unresolved uncertainty that can change the interaction.
+
+| Model-fit review coverage | Target user/scenario | Reviewed FLOW/INT/UI/STATE | Evidence status | Result | Rationale/limitation |
+| --- | --- | --- | --- | --- | --- |
+| Flow-model fit | | | | | |
+| Representation-model fit | | | | | |
+
+| Target user/scenario | Flow or interface point | User goal/expectation | Interface expression | Actual system behavior/consequence | Gap type | Severity | Evidence | Resolution/status | Related IDs | UXGAP ID |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+
+### 7.3 Information architecture
 
 ```text
 Product
@@ -337,7 +354,7 @@ Product
 | Level | Page/object | User purpose | Parent/context | Entry points | Return path | Role/visibility rule | Existing/new | IA ID |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 
-### 7.3 Navigation behavior
+### 7.4 Navigation behavior
 
 ```text
 [Entry]
@@ -351,7 +368,7 @@ Product
 | From | Trigger/link | Destination | Context carried | Back/return behavior | Permission/failure behavior | Related IDs | NAV ID |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 
-### 7.4 Primary task and decision flows
+### 7.5 Primary task and decision flows
 
 ```text
 [SCN/REQ Trigger]
@@ -367,7 +384,7 @@ Product
 | Actor | User intent | Entry/precondition | User or system action | Decision/guard | System response | Next step/state | Interruption/recovery | Related IDs | FLOW/step ID |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 
-### 7.5 Cross-role or asynchronous flow
+### 7.6 Cross-role or asynchronous flow
 
 > Repeat when the workflow changes owner, waits in the background, notifies another role, or requires re-entry.
 
@@ -391,10 +408,10 @@ ROLE-01 User          Product/System          ROLE-02 Reviewer
 
 ### 8.1 ASCII UX confirmation queue
 
-Confirm one dependency-ordered interaction slice at a time. Do not place candidate ASCII into the canonical chapters below until its confirmation record is complete.
+Confirm one dependency-ordered interaction slice at a time. Do not place candidate ASCII into the canonical chapters below until its confirmation record is complete. Do not confirm a slice while an affected Critical `UXGAP` remains open.
 
-| Order | Section or function | Confirmation scope | Status | Target chapter | Depends on | Included UI/STATE IDs | DEC ID |
-|---:|---|---|---|---|---|---|---|
+| Order | Section or function | Confirmation scope | Model-fit status | Status | Target chapter | Depends on | Included UI/STATE IDs | DEC ID |
+|---:|---|---|---|---|---|---|---|---|
 
 ## 9. Page and core-feature chapters
 
@@ -613,7 +630,7 @@ STATE-02 Processing
 
 ## 13. Traceability
 
-| Outcome | Coverage | BG/OBJ/SCN/REQ/STMT | ROLE/CON/UXH | IA/NAV/TASK/FLOW | PAGE/FUNC/SUB/INT | US/JS | UI/STATE | SYS/SPEC/NFR | AC |
+| Outcome | Coverage | BG/OBJ/SCN/REQ/STMT | ROLE/CON/UXH/UXGAP | IA/NAV/TASK/FLOW | PAGE/FUNC/SUB/INT | US/JS | UI/STATE | SYS/SPEC/NFR | AC |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 
 ## 14. Internal control appendix
@@ -652,6 +669,7 @@ STATE-02 Processing
 | Evidence and baseline | | | |
 | Requirement and trace | | | |
 | UX and interaction | | | |
+| Target-user model fit | | | |
 | Human-readable document | | | |
 
 ### 15.3 Delivered document structure

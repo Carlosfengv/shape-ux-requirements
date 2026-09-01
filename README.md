@@ -9,7 +9,7 @@
 | `$shape-ux-requirements` | 跨阶段编排与确认门控制 | 一份持续演进的端到端需求文档 |
 | `$shape-requirement-baseline` | 仓库证据、输入评估、问题框定、用户/场景、术语、需求与 Stories | `DEC-BASELINE` 确认的需求基线 |
 | `$shape-happy-paths` | 第一性原理推导、对抗性审查、成功路径分支与确认 | `FLOW-HP`、`DEC-HAPPY` |
-| `$shape-ascii-interactions` | 功能点、IA、任务流、交互逻辑、ASCII UI/状态及逐项确认 | `FUNC/IA/FLOW/INT/UI/STATE`、`DEC-ASCII` |
+| `$shape-ascii-interactions` | 功能点、IA、任务流、目标用户模型适配审查、交互逻辑、ASCII UI/状态及逐项确认 | `FUNC/IA/FLOW/INT/UI/STATE/UXH/UXGAP`、`DEC-ASCII` |
 | `$deliver-ux-requirements` | 规格、验收、追踪、Markdown 组装、校验、Review 与交付 | `SPEC/SYS/AC/NFR`、最终文件与交付摘要 |
 
 每个专业 Skill 都可以单独触发。只有请求跨越多个阶段时，才需要加载编排入口。
@@ -39,6 +39,7 @@ IA、流程和 ASCII 交互 ── DEC-ASCII
 - 从用户结果和不可删除的约束推导 Happy Path，不默认沿用当前页面顺序。
 - 对角色、权限、数据、生命周期、等待、跨角色协作和完成信号进行对抗性审查。
 - 用 ASCII 表达信息层级、任务流、决策、异步协作、页面结构和用户可见状态。
+- 根据明确目标用户和场景，在流程与界面两个检查点识别概念、执行、评估和后果鸿沟，并区分专家审查、所有者确认和代表性用户验证。
 - 把行为连接到规格、系统契约、验收标准和端到端追踪关系。
 - 默认生成一份 `ux-requirements.md`；只有独立所有权、评审、发布或明显阅读负担时才拆文件。
 
@@ -98,6 +99,14 @@ Codex 支持符号链接并会自动检测 Skill 变更；如未显示，重启 
 转换为 IA、任务流和逐项确认的 ASCII 交互。
 ```
 
+只审查现有交互流程：
+
+```text
+请使用 $shape-ascii-interactions，根据目标用户 ROLE 和场景 SCN
+审查这份现有 FLOW/INT/UI，识别模型到界面的鸿沟；先报告发现，
+不要自动重做或确认原流程。
+```
+
 只做最终交付：
 
 ```text
@@ -125,6 +134,7 @@ python3 scripts/validate_requirement_docs.py path/to/requirements.md
 ```bash
 python3 scripts/validate_requirement_docs.py path/to/requirements.md --final --profile baseline
 python3 scripts/validate_requirement_docs.py path/to/requirements.md --final --profile happy-path
+python3 scripts/validate_requirement_docs.py path/to/requirements.md --final --profile model-fit
 python3 scripts/validate_requirement_docs.py path/to/requirements.md --final --profile interaction
 python3 scripts/validate_requirement_docs.py path/to/requirements.md --final --profile delivery
 python3 scripts/validate_requirement_docs.py path/to/requirements.md --final --profile full
@@ -135,11 +145,12 @@ python3 scripts/validate_requirement_docs.py path/to/requirements.md --final --p
 | `structural` | Markdown、链接、占位符和基础结构 |
 | `baseline` | 基线所需实体、Story 上游追踪和 `DEC-BASELINE` |
 | `happy-path` | Baseline 加 `FLOW-HP` 依据、对抗审查、确认或豁免理由 |
-| `interaction` | Happy Path 加功能分解、IA、ASCII、交互与 `DEC-ASCII` |
+| `model-fit` | 审查模式所需目标用户、场景、交互范围、双阶段适配覆盖与 `UXGAP` 闭环 |
+| `interaction` | Happy Path 加功能分解、IA、双阶段模型适配审查、ASCII、交互与 `DEC-ASCII` |
 | `delivery` | Delivery profile、规格、验收、Review 和真实文件结构 |
 | `full` | 全阶段契约和端到端追踪 |
 
-校验器只能验证确定性的文档结构，不能替代对证据质量、产品决定、用户结果、可用性和无障碍约束的人工 Review。
+校验器只能验证确定性的文档结构、模型适配覆盖和 Critical 鸿沟是否闭环，不能判断界面是否真的符合用户心智模型，也不能替代对证据质量、产品决定、用户结果、可用性和无障碍约束的人工 Review。
 
 ## 仓库结构
 

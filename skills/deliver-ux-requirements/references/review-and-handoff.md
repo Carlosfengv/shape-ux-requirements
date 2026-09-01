@@ -54,6 +54,11 @@ Verify:
 Verify:
 
 - information architecture follows the user mental model rather than service boundaries;
+- every material interaction scope has flow-model fit review for a named `ROLE/SCN`, and every applicable `UI/STATE` scope has representation-model fit review;
+- model-fit claims identify their evidence as research/observation, owner confirmation, repository/document support, inference, assumption, unknown, or conflict;
+- every `UXGAP` traces to its target role, scenario, and affected flow/interaction/interface; no material mismatch was recorded only as generic prose;
+- no affected `UI/STATE` was confirmed while a Critical `UXGAP` remained open;
+- expert review, owner confirmation, and representative-user validation are reported as different evidence states;
 - each task has a clear trigger, context, next action, completion, exit, and recovery;
 - main, alternate, permission, failure, asynchronous, partial-success, stale, and recovery paths are covered when applicable;
 - every user-visible interaction appears in an ASCII UI/state frame;

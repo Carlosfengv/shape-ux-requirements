@@ -17,7 +17,7 @@ Read [references/artifact-contract.md](references/artifact-contract.md) before r
 | --- | --- |
 | Repository/current-state discovery, input readiness, problem framing, concepts, stories, baseline | `$shape-requirement-baseline` |
 | Candidate or detailed primary successful path, first-principles and adversarial review | `$shape-happy-paths` |
-| IA, navigation, task/decision flows, interaction logic, ASCII UI and state confirmation | `$shape-ascii-interactions` |
+| IA, navigation, task/decision flows, interaction logic, target-user model-fit audit, ASCII UI and state confirmation | `$shape-ascii-interactions` |
 | Specifications, acceptance, traceability, Markdown packaging, validation, review and handoff | `$deliver-ux-requirements` |
 
 Use only the relevant specialist for a narrow request. For end-to-end shaping, run the stages below in order.
@@ -28,7 +28,7 @@ Use only the relevant specialist for a narrow request. For end-to-end shaping, r
 2. Stop until the material baseline has `DEC-BASELINE` confirmation, unless the user explicitly requests a provisional continuation.
 3. Derive and adversarially review each primary `FLOW-HP` with `$shape-happy-paths`.
 4. Stop until material happy paths have `DEC-HAPPY` confirmation or an explicit Blocked/Not applicable rationale.
-5. Derive IA, task flows, interaction logic, `UI/STATE` frames, and sequential `DEC-ASCII` confirmations with `$shape-ascii-interactions`.
+5. Derive IA, task flows, interaction logic, and `UI/STATE` frames; review flow-model and representation-model fit for each material target `ROLE/SCN`; then complete sequential `DEC-ASCII` confirmations with `$shape-ascii-interactions`.
 6. Compose specifications, acceptance criteria, traceability, validation, and handoff with `$deliver-ux-requirements`.
 
 At each pause, offer a correction path and name the exact next stage and its expected output. Do not interpret approval of one stage as approval of the next.
@@ -40,6 +40,7 @@ At each pause, offer a correction path and name the exact next stage and its exp
 - Separate current implementation, documented intent, requested behavior, and resulting delta.
 - Preserve stable IDs and canonical definitions. Record changes to confirmed artifacts as `CHG` plus a new decision; never silently rewrite downstream meaning.
 - Keep pages and controls downstream of confirmed outcomes, stories, and happy paths.
+- Keep user-model evidence distinct from stakeholder preference. Record material concept, execution, evaluation, or consequence mismatches as `UXGAP`; do not claim user validation from owner or ASCII confirmation.
 - Keep user-visible behavior traceable through `REQ → US/JS → FLOW-HP → FUNC/IA/INT → UI/STATE → SPEC/AC` as applicable.
 - Default to a reader-first Markdown guide. Split files only for independent ownership, review, release, or material readability needs.
 

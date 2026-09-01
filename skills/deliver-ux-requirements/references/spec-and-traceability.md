@@ -114,7 +114,7 @@ Do not invent thresholds. Mark them as open decisions when absent.
 
 ## Traceability matrix
 
-| User outcome | Coverage status | BG/OBJ/SCN/REQ/STMT | ROLE/CON/UXH | TASK/FLOW-HP and branch FLOW | IA/NAV/PAGE/FUNC/SUB/INT | US/JS | UI/STATE | SYS/SPEC/NFR | AC | Baseline/Happy-path/ASCII DEC |
+| User outcome | Coverage status | BG/OBJ/SCN/REQ/STMT | ROLE/CON/UXH/UXGAP | TASK/FLOW-HP and branch FLOW | IA/NAV/PAGE/FUNC/SUB/INT | US/JS | UI/STATE | SYS/SPEC/NFR | AC | Baseline/Happy-path/ASCII DEC |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 
 Use these coverage statuses:
@@ -166,6 +166,7 @@ Find and report:
 - permission branches without feedback;
 - interactive frames without applicable accessibility, input, or adaptation constraints;
 - material UX hypotheses without evidence or a validation task;
+- material interaction scopes without model-fit coverage, `UXGAP` records without role/scenario/interaction trace, or confirmed UI with an open Critical gap;
 - assumptions presented as facts;
 - open questions omitted from downstream artifacts;
 - terms that drift across artifacts.

@@ -50,6 +50,7 @@ ALLOWED_ID_PREFIXES = {
     "TASK",
     "UI",
     "US",
+    "UXGAP",
     "UXH",
 }
 
@@ -130,6 +131,9 @@ DEFINITION_HEADERS: dict[str, set[str] | None] = {
     "用户/任务故事 ID": {"US", "JS"},
     "UXH ID": {"UXH"},
     "UX 假设 ID": {"UXH"},
+    "UXGAP ID": {"UXGAP"},
+    "UX GAP ID": {"UXGAP"},
+    "UX 鸿沟 ID": {"UXGAP"},
 }
 
 FULL_PROFILE_REQUIREMENTS = (
@@ -169,6 +173,11 @@ STAGE_PROFILE_REQUIREMENTS = {
         ({"IA"}, "information architecture"),
         ({"INT"}, "interaction behavior"),
         ({"UI"}, "ASCII UI/screen definition"),
+    ),
+    "model-fit": (
+        ({"ROLE"}, "target role"),
+        ({"SCN"}, "target scenario"),
+        ({"FLOW", "INT", "UI", "STATE"}, "reviewed interaction scope"),
     ),
     "delivery": (
         ({"SPEC"}, "behavior specification"),
@@ -210,6 +219,18 @@ STAGE_PROFILE_CODES = {
         "ORPHAN_INTERACTION_UI",
         "ORPHAN_UI_STORY",
         "MISSING_ASCII_CONFIRMATION",
+    },
+    "model-fit": {
+        "MISSING_MODEL_FIT_COVERAGE",
+        "MISSING_FLOW_MODEL_FIT_REVIEW",
+        "MISSING_REPRESENTATION_MODEL_FIT_REVIEW",
+        "INCOMPLETE_MODEL_FIT_COVERAGE",
+        "ORPHAN_MODEL_FIT_COVERAGE",
+        "MISSING_MODEL_FIT_RATIONALE",
+        "INCOMPLETE_UXGAP_RECORD",
+        "ORPHAN_UXGAP_CONTEXT",
+        "OPEN_CRITICAL_UXGAP",
+        "CONFIRMED_ASCII_WITH_OPEN_CRITICAL_UXGAP",
     },
     "delivery": {
         "MISSING_DELIVERY_PROFILE",
@@ -329,6 +350,41 @@ FINAL_ASCII_QUEUE_STATUSES = {
     "不适用",
     "已省略",
 }
+MODEL_FIT_COVERAGE_HEADERS = {
+    "MODEL-FIT REVIEW COVERAGE",
+    "MODEL FIT REVIEW COVERAGE",
+    "模型适配审查范围",
+}
+MODEL_FIT_RESULT_HEADERS = {"RESULT", "结果"}
+EVIDENCE_STATUS_HEADERS = {"EVIDENCE STATUS", "证据状态"}
+MODEL_FIT_RATIONALE_HEADERS = {
+    "RATIONALE/LIMITATION",
+    "RATIONALE / LIMITATION",
+    "理由/限制",
+    "理由或限制",
+}
+UXGAP_SEVERITY_HEADERS = {"SEVERITY", "严重度"}
+UXGAP_RESOLUTION_HEADERS = {
+    "RESOLUTION/STATUS",
+    "RESOLUTION / STATUS",
+    "解决/状态",
+    "修复与状态",
+}
+CRITICAL_UXGAP_SEVERITIES = {"CRITICAL", "关键", "严重"}
+CLOSED_CRITICAL_UXGAP_STATUSES = {
+    "RESOLVED",
+    "SUPERSEDED",
+    "已解决",
+    "已修复",
+    "已取代",
+}
+MODEL_FIT_WAIVER_RESULTS = {
+    "BLOCKED",
+    "NOT APPLICABLE",
+    "N/A",
+    "阻塞",
+    "不适用",
+}
 
 
 @dataclass(frozen=True)
@@ -372,6 +428,12 @@ class Analysis:
         default_factory=lambda: defaultdict(list)
     )
     ascii_queue_statuses: list[tuple[str, Site]] = field(default_factory=list)
+    model_fit_coverage: list[
+        tuple[str, str, str, str, set[str], Site]
+    ] = field(default_factory=list)
+    uxgap_records: dict[str, list[tuple[str, str, Site]]] = field(
+        default_factory=lambda: defaultdict(list)
+    )
 
     def merge(self, other: "Analysis") -> None:
         self.findings.extend(other.findings)
@@ -397,6 +459,9 @@ class Analysis:
         for stable_id, statuses in other.ascii_confirmation_statuses.items():
             self.ascii_confirmation_statuses[stable_id].extend(statuses)
         self.ascii_queue_statuses.extend(other.ascii_queue_statuses)
+        self.model_fit_coverage.extend(other.model_fit_coverage)
+        for stable_id, records in other.uxgap_records.items():
+            self.uxgap_records[stable_id].extend(records)
 
 
 def parse_args() -> argparse.Namespace:
@@ -416,6 +481,7 @@ def parse_args() -> argparse.Namespace:
             "baseline",
             "happy-path",
             "interaction",
+            "model-fit",
             "delivery",
             "full",
         ),
@@ -488,6 +554,32 @@ def is_confirmed_ascii_status(value: str) -> bool:
 
 def is_confirmed_happy_path_status(value: str) -> bool:
     return normalize_header(value) in CONFIRMED_HAPPY_PATH_STATUSES
+
+
+def is_flow_model_fit_layer(value: str) -> bool:
+    normalized = normalize_header(value)
+    return (
+        "FLOW-MODEL" in normalized
+        or "FLOW MODEL" in normalized
+        or "流程模型" in normalized
+    )
+
+
+def is_representation_model_fit_layer(value: str) -> bool:
+    normalized = normalize_header(value)
+    return (
+        "REPRESENTATION-MODEL" in normalized
+        or "REPRESENTATION MODEL" in normalized
+        or "界面表达模型" in normalized
+        or "表达模型" in normalized
+    )
+
+
+def is_open_critical_uxgap(severity_value: str, resolution: str) -> bool:
+    return (
+        normalize_header(severity_value) in CRITICAL_UXGAP_SEVERITIES
+        and normalize_header(resolution) not in CLOSED_CRITICAL_UXGAP_STATUSES
+    )
 
 
 def is_meaningful_rationale(value: str) -> bool:
@@ -581,6 +673,14 @@ def inspect_file(path: Path, final: bool) -> Analysis:
     happy_path_coverage_table = False
     happy_path_basis_required_columns: tuple[int, int] | None = None
     happy_path_adversarial_required_columns: tuple[int, int] | None = None
+    model_fit_coverage_table = False
+    model_fit_layer_column: int | None = None
+    model_fit_result_column: int | None = None
+    evidence_status_column: int | None = None
+    model_fit_rationale_column: int | None = None
+    uxgap_table = False
+    uxgap_severity_column: int | None = None
+    uxgap_resolution_column: int | None = None
 
     for line_number, line in enumerate(lines, start=1):
         stripped = line.strip()
@@ -615,6 +715,14 @@ def inspect_file(path: Path, final: bool) -> Analysis:
             happy_path_coverage_table = False
             happy_path_basis_required_columns = None
             happy_path_adversarial_required_columns = None
+            model_fit_coverage_table = False
+            model_fit_layer_column = None
+            model_fit_result_column = None
+            evidence_status_column = None
+            model_fit_rationale_column = None
+            uxgap_table = False
+            uxgap_severity_column = None
+            uxgap_resolution_column = None
             continue
 
         if in_fence:
@@ -780,6 +888,71 @@ def inspect_file(path: Path, final: bool) -> Analysis:
                     and STATUS_HEADERS & normalized_headers
                     and RATIONALE_HEADERS & normalized_headers
                 )
+                model_fit_layer_column = next(
+                    (
+                        index
+                        for index, header in enumerate(table_headers)
+                        if normalize_header(header) in MODEL_FIT_COVERAGE_HEADERS
+                    ),
+                    None,
+                )
+                model_fit_result_column = next(
+                    (
+                        index
+                        for index, header in enumerate(table_headers)
+                        if normalize_header(header) in MODEL_FIT_RESULT_HEADERS
+                    ),
+                    None,
+                )
+                evidence_status_column = next(
+                    (
+                        index
+                        for index, header in enumerate(table_headers)
+                        if normalize_header(header) in EVIDENCE_STATUS_HEADERS
+                    ),
+                    None,
+                )
+                model_fit_rationale_column = next(
+                    (
+                        index
+                        for index, header in enumerate(table_headers)
+                        if normalize_header(header) in MODEL_FIT_RATIONALE_HEADERS
+                    ),
+                    None,
+                )
+                model_fit_coverage_table = all(
+                    column is not None
+                    for column in (
+                        model_fit_layer_column,
+                        model_fit_result_column,
+                        evidence_status_column,
+                    )
+                )
+                uxgap_severity_column = next(
+                    (
+                        index
+                        for index, header in enumerate(table_headers)
+                        if normalize_header(header) in UXGAP_SEVERITY_HEADERS
+                    ),
+                    None,
+                )
+                uxgap_resolution_column = next(
+                    (
+                        index
+                        for index, header in enumerate(table_headers)
+                        if normalize_header(header) in UXGAP_RESOLUTION_HEADERS
+                    ),
+                    None,
+                )
+                uxgap_table = bool(
+                    any(
+                        normalize_header(header)
+                        in {"UXGAP ID", "UX GAP ID", "UX 鸿沟 ID"}
+                        for header in table_headers
+                    )
+                    and uxgap_severity_column is not None
+                    and uxgap_resolution_column is not None
+                )
             elif not is_separator_row(cells):
                 add_row_edges(analysis, line_ids)
                 happy_path_row_ids = {
@@ -836,6 +1009,54 @@ def inspect_file(path: Path, final: bool) -> Analysis:
                     analysis.happy_path_coverage.append(
                         (coverage_status, coverage_rationale, site)
                     )
+
+                if model_fit_coverage_table:
+                    layer = (
+                        cells[model_fit_layer_column].strip()
+                        if model_fit_layer_column is not None
+                        and model_fit_layer_column < len(cells)
+                        else ""
+                    )
+                    result = (
+                        cells[model_fit_result_column].strip()
+                        if model_fit_result_column is not None
+                        and model_fit_result_column < len(cells)
+                        else ""
+                    )
+                    evidence_status = (
+                        cells[evidence_status_column].strip()
+                        if evidence_status_column is not None
+                        and evidence_status_column < len(cells)
+                        else ""
+                    )
+                    rationale = (
+                        cells[model_fit_rationale_column].strip()
+                        if model_fit_rationale_column is not None
+                        and model_fit_rationale_column < len(cells)
+                        else ""
+                    )
+                    analysis.model_fit_coverage.append(
+                        (layer, result, evidence_status, rationale, set(line_ids), site)
+                    )
+
+                if uxgap_table:
+                    severity_value = (
+                        cells[uxgap_severity_column].strip()
+                        if uxgap_severity_column is not None
+                        and uxgap_severity_column < len(cells)
+                        else ""
+                    )
+                    resolution = (
+                        cells[uxgap_resolution_column].strip()
+                        if uxgap_resolution_column is not None
+                        and uxgap_resolution_column < len(cells)
+                        else ""
+                    )
+                    for stable_id in defined_ids_in_row:
+                        if prefix_of(stable_id) == "UXGAP":
+                            analysis.uxgap_records[stable_id].append(
+                                (severity_value, resolution, site)
+                            )
 
                 for stable_id in line_ids:
                     if stable_id.startswith("DEC-ASCII-"):
@@ -912,6 +1133,14 @@ def inspect_file(path: Path, final: bool) -> Analysis:
             happy_path_coverage_table = False
             happy_path_basis_required_columns = None
             happy_path_adversarial_required_columns = None
+            model_fit_coverage_table = False
+            model_fit_layer_column = None
+            model_fit_result_column = None
+            evidence_status_column = None
+            model_fit_rationale_column = None
+            uxgap_table = False
+            uxgap_severity_column = None
+            uxgap_resolution_column = None
 
         for match in LINK_RE.finditer(line):
             destination = local_link_destination(path, match.group(1))
@@ -1057,7 +1286,8 @@ def semantic_findings(
         included_stages = {
             "baseline": ("baseline",),
             "happy-path": ("baseline", "happy-path"),
-            "interaction": ("baseline", "happy-path", "interaction"),
+            "interaction": ("baseline", "happy-path", "interaction", "model-fit"),
+            "model-fit": ("model-fit",),
             "delivery": ("delivery",),
         }[profile]
         allowed_codes = set(COMMON_STAGE_CODES)
@@ -1238,6 +1468,109 @@ def semantic_findings(
                     f"full profile has no canonical {label} definition",
                 )
             )
+
+    if not analysis.model_fit_coverage:
+        findings.append(
+            Finding(
+                strict_severity,
+                "MISSING_MODEL_FIT_COVERAGE",
+                fallback_file,
+                1,
+                "full profile requires target-user model-fit review coverage",
+            )
+        )
+    else:
+        if {"FLOW", "INT"} & present_prefixes and not any(
+            is_flow_model_fit_layer(layer)
+            for layer, _result, _evidence, _rationale, _ids, _site
+            in analysis.model_fit_coverage
+        ):
+            findings.append(
+                Finding(
+                    strict_severity,
+                    "MISSING_FLOW_MODEL_FIT_REVIEW",
+                    fallback_file,
+                    1,
+                    "full profile has FLOW/INT definitions but no flow-model fit coverage row",
+                )
+            )
+        if {"UI", "STATE"} & present_prefixes and not any(
+            is_representation_model_fit_layer(layer)
+            for layer, _result, _evidence, _rationale, _ids, _site
+            in analysis.model_fit_coverage
+        ):
+            findings.append(
+                Finding(
+                    strict_severity,
+                    "MISSING_REPRESENTATION_MODEL_FIT_REVIEW",
+                    fallback_file,
+                    1,
+                    "full profile has UI/STATE definitions but no representation-model fit coverage row",
+                )
+            )
+
+        for (
+            layer,
+            result,
+            evidence,
+            rationale,
+            ids,
+            coverage_site,
+        ) in analysis.model_fit_coverage:
+            prefixes = {prefix_of(stable_id) for stable_id in ids}
+            if not result.strip() or not evidence.strip():
+                findings.append(
+                    Finding(
+                        strict_severity,
+                        "INCOMPLETE_MODEL_FIT_COVERAGE",
+                        coverage_site.file,
+                        coverage_site.line,
+                        "model-fit coverage requires non-empty result and evidence status",
+                    )
+                )
+            if "ROLE" not in prefixes or "SCN" not in prefixes:
+                findings.append(
+                    Finding(
+                        strict_severity,
+                        "ORPHAN_MODEL_FIT_COVERAGE",
+                        coverage_site.file,
+                        coverage_site.line,
+                        "model-fit coverage must reference an explicit ROLE and SCN",
+                    )
+                )
+            if is_flow_model_fit_layer(layer) and not ({"FLOW", "INT"} & prefixes):
+                findings.append(
+                    Finding(
+                        strict_severity,
+                        "ORPHAN_MODEL_FIT_COVERAGE",
+                        coverage_site.file,
+                        coverage_site.line,
+                        "flow-model fit coverage must reference affected FLOW or INT IDs",
+                    )
+                )
+            if is_representation_model_fit_layer(layer) and not ({"UI", "STATE"} & prefixes):
+                findings.append(
+                    Finding(
+                        strict_severity,
+                        "ORPHAN_MODEL_FIT_COVERAGE",
+                        coverage_site.file,
+                        coverage_site.line,
+                        "representation-model fit coverage must reference affected UI or STATE IDs",
+                    )
+                )
+            if (
+                normalize_header(result) in MODEL_FIT_WAIVER_RESULTS
+                and not is_meaningful_rationale(rationale)
+            ):
+                findings.append(
+                    Finding(
+                        strict_severity,
+                        "MISSING_MODEL_FIT_RATIONALE",
+                        coverage_site.file,
+                        coverage_site.line,
+                        f"model-fit result {result or '(empty)'} requires a concrete rationale or limitation",
+                    )
+                )
 
     happy_path_ids = sorted(
         stable_id
@@ -1553,6 +1886,69 @@ def semantic_findings(
                         f"{stable_id} does not trace to an ASCII UI/STATE frame",
                     )
                 )
+        elif stable_prefix == "UXGAP":
+            records = analysis.uxgap_records.get(stable_id, [])
+            if not records or any(
+                not severity_value.strip() or not resolution.strip()
+                for severity_value, resolution, _site in records
+            ):
+                findings.append(
+                    Finding(
+                        strict_severity,
+                        "INCOMPLETE_UXGAP_RECORD",
+                        first.file,
+                        first.line,
+                        f"{stable_id} requires explicit severity and resolution/status",
+                    )
+                )
+            if not (
+                reachable_prefix(stable_id, {"ROLE"}, analysis.edges)
+                and reachable_prefix(stable_id, {"SCN"}, analysis.edges)
+                and reachable_prefix(
+                    stable_id, {"FLOW", "INT", "UI", "STATE"}, analysis.edges
+                )
+            ):
+                findings.append(
+                    Finding(
+                        strict_severity,
+                        "ORPHAN_UXGAP_CONTEXT",
+                        first.file,
+                        first.line,
+                        f"{stable_id} must trace to ROLE, SCN, and an affected FLOW/INT/UI/STATE",
+                    )
+                )
+            open_critical = any(
+                is_open_critical_uxgap(severity_value, resolution)
+                for severity_value, resolution, _site in records
+            )
+            if open_critical:
+                findings.append(
+                    Finding(
+                        strict_severity,
+                        "OPEN_CRITICAL_UXGAP",
+                        first.file,
+                        first.line,
+                        f"{stable_id} is Critical and must be Resolved or Superseded before final confirmation",
+                    )
+                )
+                affected_ui_ids = {
+                    neighbor
+                    for neighbor in analysis.edges.get(stable_id, set())
+                    if prefix_of(neighbor) in {"UI", "STATE"}
+                }
+                if any(
+                    analysis.edges.get(ui_id, set()) & confirmed_ascii_decisions
+                    for ui_id in affected_ui_ids
+                ):
+                    findings.append(
+                        Finding(
+                            strict_severity,
+                            "CONFIRMED_ASCII_WITH_OPEN_CRITICAL_UXGAP",
+                            first.file,
+                            first.line,
+                            f"{stable_id} affects UI/STATE already covered by a confirmed DEC-ASCII record",
+                        )
+                    )
         elif stable_prefix == "CHG":
             if not reachable_prefix(
                 stable_id,

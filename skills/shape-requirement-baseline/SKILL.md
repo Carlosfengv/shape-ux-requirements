@@ -13,7 +13,7 @@ Produce a trustworthy requirement/story baseline and stop before detailed soluti
 - When current public category or comparable-product evidence matters, read [references/industry-and-product-research.md](references/industry-and-product-research.md).
 - Always read [references/intake-readiness.md](references/intake-readiness.md) before judging readiness.
 - Read [references/problem-framing.md](references/problem-framing.md) for background, objectives, people, scenarios, scope, and success measures.
-- Read [references/concept-language.md](references/concept-language.md) when terminology or mental models matter.
+- Read [references/concept-language.md](references/concept-language.md) when terminology or mental models matter, and always when downstream work will evaluate a flow against target-user expectations.
 - Read [references/story-shaping.md](references/story-shaping.md) before producing `REQ`, `TASK`, or `US/JS`.
 - Read [references/confirmation-gate.md](references/confirmation-gate.md) before asking for baseline approval.
 
@@ -32,6 +32,6 @@ Use assets only for a requested reusable or persisted artifact. Default to the a
 
 ## Output contract
 
-The canonical baseline contains `SRC/STMT`, current-versus-requested delta, `BG/OBJ`, `ROLE/AUD`, `SCN`, `CON/UXH`, scope/non-goals, `REQ`, `TASK`, canonical `US/JS`, assumptions, conflicts, questions, and baseline status. Preserve existing stable IDs when unambiguous.
+The canonical baseline contains `SRC/STMT`, current-versus-requested delta, `BG/OBJ`, `ROLE/AUD`, `SCN`, `CON`, concept-specific evidence, scope/non-goals, `REQ`, `TASK`, canonical `US/JS`, assumptions, conflicts, questions, and baseline status. Preserve existing stable IDs when unambiguous. Route material cross-concept or task-level user-model claims to the downstream canonical `UXH` register rather than defining them twice.
 
 Stop after the confirmation handoff. Do not generate detailed `FLOW-HP`, `FUNC`, `IA`, `PAGE`, `INT`, `UI/STATE`, specifications, or exhaustive acceptance criteria in this skill.

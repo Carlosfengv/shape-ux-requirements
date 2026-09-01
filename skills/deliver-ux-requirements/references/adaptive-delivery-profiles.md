@@ -67,7 +67,7 @@ After confirmation, update the same file:
 ```text
 ux-requirements.md
 ├── Confirmed baseline and change record
-├── Experience overview and ASCII confirmation queue
+├── Experience overview, target-user model-fit review, and ASCII confirmation queue
 ├── Page, function, section, and task chapters
 │   └── confirmed ASCII + local specifications + acceptance criteria
 ├── Cross-function rules and necessary appendices

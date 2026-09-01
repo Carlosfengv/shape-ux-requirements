@@ -8,14 +8,14 @@ Use this contract whenever work moves between two or more Shape UX Requirements 
 | --- | --- | --- | --- |
 | Requirement baseline | User input plus available repository/source evidence | Evidence ledger, current/requested delta, problem, objectives, users, scenarios, concepts, scope, `REQ`, `TASK`, `US/JS` | `DEC-BASELINE` |
 | Happy paths | Confirmed or explicitly provisional baseline | One reviewed `FLOW-HP` per material primary scenario, linked branch intents | `DEC-HAPPY` |
-| ASCII interactions | Confirmed baseline and material `FLOW-HP` | `FUNC`, `IA`, `NAV`, task/decision `FLOW`, `INT`, `UI`, `STATE`, UX hypotheses | `DEC-ASCII` |
+| ASCII interactions | Confirmed baseline and material `FLOW-HP`, or explicit `ROLE/SCN` plus supplied interactions for audit-only work | `FUNC`, `IA`, `NAV`, task/decision `FLOW`, `INT`, `UI`, `STATE`, UX hypotheses, model-fit coverage, material `UXGAP` findings | `DEC-ASCII` for shaped/confirmed interaction slices; no automatic confirmation in audit-only work |
 | Delivery | All planned upstream artifacts and confirmation records | `SPEC`, `SYS`, `AC`, `NFR`, traceability, review record, final files | Delivery status |
 
 If an input gate is not satisfied, stop or continue only as an explicitly provisional artifact that lists the missing decision and affected downstream work.
 
 ## Stable IDs
 
-Use these prefixes consistently: `SRC`, `STMT`, `BG`, `OBJ`, `AUD`, `SCN`, `ROLE`, `CON`, `UXH`, `REQ`, `Q`, `US`, `JS`, `TASK`, `FLOW`, `FUNC`, `IA`, `NAV`, `PAGE`, `SUB`, `INT`, `UI`, `STATE`, `SPEC`, `SYS`, `AC`, `NFR`, `DRIFT`, `DEC`, `CHG`, `CFLT`, and `CST`.
+Use these prefixes consistently: `SRC`, `STMT`, `BG`, `OBJ`, `AUD`, `SCN`, `ROLE`, `CON`, `UXH`, `UXGAP`, `REQ`, `Q`, `US`, `JS`, `TASK`, `FLOW`, `FUNC`, `IA`, `NAV`, `PAGE`, `SUB`, `INT`, `UI`, `STATE`, `SPEC`, `SYS`, `AC`, `NFR`, `DRIFT`, `DEC`, `CHG`, `CFLT`, and `CST`.
 
 Specialized decisions use the `DEC` prefix with a semantic segment:
 
@@ -24,6 +24,8 @@ Specialized decisions use the `DEC` prefix with a semantic segment:
 - `DEC-ASCII-###`: ASCII interaction confirmation.
 
 An ID has one canonical definition. Other documents reference it instead of copying an independently editable definition.
+
+`UXH` records a material claim about recognition, findability, expected sequence, comprehension, risk perception, or completion that still needs evidence or validation. `UXGAP` records an observed or suspected material mismatch between a named target user's model, the interface expression, and actual product/system behavior. Do not create `UXGAP` rows merely to show that a reviewed step passed.
 
 ## Handoff record
 

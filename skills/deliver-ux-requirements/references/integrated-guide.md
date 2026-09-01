@@ -222,6 +222,7 @@ Use appendices for:
 - global lifecycle and state definitions;
 - extended terminology dictionary;
 - UX hypotheses and validation plan;
+- target-user model-fit coverage, material `UXGAP` findings, and validation status;
 - information architecture and cross-page task flows;
 - data, synchronization, audit, and retention requirements;
 - interaction-to-system contracts that apply across several tasks;

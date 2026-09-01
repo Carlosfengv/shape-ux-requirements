@@ -69,6 +69,7 @@ Classify each finding:
 - Link an alternate-success path when another normal success route is material but not primary.
 - Link failure, exit, or recovery intent for exceptional conditions.
 - Record a downstream `UXH` when the issue concerns discoverability, comprehension, ordering, or interface efficiency.
+- Route an observed or suspected mismatch between the named target user's expected sequence/consequence and the candidate interaction to downstream model-fit review. Do not define canonical `UXGAP` findings until an affected `FLOW/INT/UI/STATE` exists.
 
 ## Detail without committing to screens
 
